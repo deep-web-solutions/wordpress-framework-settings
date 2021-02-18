@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "63694158e3a10c61141c6ede36a29d0b",
+    "content-hash": "e7dd8822d307de01e484e041d6752727",
     "packages": [
         {
             "name": "deep-web-solutions/wp-framework-bootstrapper",
@@ -164,12 +164,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deep-web-solutions/wordpress-framework-utilities.git",
-                "reference": "8835162899931d28e8180cce057dcba1e78e2abf"
+                "reference": "44ac4d80b5aa4df34782e0bbf8cd6fcfd8ba2d46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deep-web-solutions/wordpress-framework-utilities/zipball/8835162899931d28e8180cce057dcba1e78e2abf",
-                "reference": "8835162899931d28e8180cce057dcba1e78e2abf",
+                "url": "https://api.github.com/repos/deep-web-solutions/wordpress-framework-utilities/zipball/44ac4d80b5aa4df34782e0bbf8cd6fcfd8ba2d46",
+                "reference": "44ac4d80b5aa4df34782e0bbf8cd6fcfd8ba2d46",
                 "shasum": ""
             },
             "require": {
@@ -238,7 +238,62 @@
                 "source": "https://github.com/deep-web-solutions/wordpress-framework-utilities/tree/master",
                 "issues": "https://github.com/deep-web-solutions/wordpress-framework-utilities/issues"
             },
-            "time": "2021-02-16T16:15:54+00:00"
+            "time": "2021-02-18T12:13:31+00:00"
+        },
+        {
+            "name": "guzzlehttp/promises",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/promises.git",
+                "reference": "60d379c243457e073cff02bc323a2a86cb355631"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/60d379c243457e073cff02bc323a2a86cb355631",
+                "reference": "60d379c243457e073cff02bc323a2a86cb355631",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "^4.4 || ^5.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Promise\\": "src/"
+                },
+                "files": [
+                    "src/functions_include.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Guzzle promises library",
+            "keywords": [
+                "promise"
+            ],
+            "support": {
+                "issues": "https://github.com/guzzle/promises/issues",
+                "source": "https://github.com/guzzle/promises/tree/1.4.0"
+            },
+            "time": "2020-09-30T07:37:28+00:00"
         },
         {
             "name": "psr/log",
@@ -1734,6 +1789,88 @@
             "time": "2020-12-07T18:04:37+00:00"
         },
         {
+            "name": "deep-web-solutions/wp-framework-core",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/deep-web-solutions/wordpress-framework-core.git",
+                "reference": "8492fb7da019a38309c98565772e7c455003357b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/deep-web-solutions/wordpress-framework-core/zipball/8492fb7da019a38309c98565772e7c455003357b",
+                "reference": "8492fb7da019a38309c98565772e7c455003357b",
+                "shasum": ""
+            },
+            "require": {
+                "deep-web-solutions/wp-framework-bootstrapper": "master@dev",
+                "deep-web-solutions/wp-framework-helpers": "master@dev",
+                "deep-web-solutions/wp-framework-utilities": "master@dev"
+            },
+            "require-dev": {
+                "codeception/module-asserts": "^1.0",
+                "codeception/module-cli": "^1.0",
+                "codeception/module-db": "^1.0",
+                "codeception/module-filesystem": "^1.0",
+                "codeception/module-phpbrowser": "^1.0",
+                "codeception/module-webdriver": "^1.0",
+                "codeception/util-universalframework": "^1.0",
+                "dealerdirect/phpcodesniffer-composer-installer": "*",
+                "lucatume/wp-browser": "^2.4",
+                "object-calisthenics/phpcs-calisthenics-rules": "*",
+                "php-di/php-di": "~6.1.0",
+                "phpcompatibility/php-compatibility": "*",
+                "phpcompatibility/phpcompatibility-wp": "*",
+                "phpmd/phpmd": "*",
+                "sllh/composer-versions-check": "*",
+                "squizlabs/php_codesniffer": "^3.5",
+                "wp-coding-standards/wpcs": "*"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DeepWebSolutions\\Framework\\Core\\": "src/includes"
+                },
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "": "tests/_support"
+                }
+            },
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Antonius Hegyes",
+                    "email": "a.hegyes@deep-web-solutions.com",
+                    "homepage": "https://www.linkedin.com/in/tonyhegyes",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/deep-web-solutions/wordpress-framework-core/graphs/contributors"
+                }
+            ],
+            "description": "A set of related classes to kick start WordPress development.",
+            "homepage": "https://www.deep-web-solutions.com",
+            "keywords": [
+                "Deep Web Solutions",
+                "core",
+                "framework",
+                "wordpress"
+            ],
+            "support": {
+                "source": "https://github.com/deep-web-solutions/wordpress-framework-core/tree/master",
+                "issues": "https://github.com/deep-web-solutions/wordpress-framework-core/issues"
+            },
+            "time": "2021-02-18T12:20:34+00:00"
+        },
+        {
             "name": "dg/mysql-dump",
             "version": "v1.5.1",
             "source": {
@@ -2306,61 +2443,6 @@
                 }
             ],
             "time": "2020-10-10T11:47:56+00:00"
-        },
-        {
-            "name": "guzzlehttp/promises",
-            "version": "1.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/guzzle/promises.git",
-                "reference": "60d379c243457e073cff02bc323a2a86cb355631"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/60d379c243457e073cff02bc323a2a86cb355631",
-                "reference": "60d379c243457e073cff02bc323a2a86cb355631",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5"
-            },
-            "require-dev": {
-                "symfony/phpunit-bridge": "^4.4 || ^5.1"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.4-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\Promise\\": "src/"
-                },
-                "files": [
-                    "src/functions_include.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Dowling",
-                    "email": "mtdowling@gmail.com",
-                    "homepage": "https://github.com/mtdowling"
-                }
-            ],
-            "description": "Guzzle promises library",
-            "keywords": [
-                "promise"
-            ],
-            "support": {
-                "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/1.4.0"
-            },
-            "time": "2020-09-30T07:37:28+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -10925,7 +11007,8 @@
     "stability-flags": {
         "deep-web-solutions/wp-framework-bootstrapper": 20,
         "deep-web-solutions/wp-framework-helpers": 20,
-        "deep-web-solutions/wp-framework-utilities": 20
+        "deep-web-solutions/wp-framework-utilities": 20,
+        "deep-web-solutions/wp-framework-core": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

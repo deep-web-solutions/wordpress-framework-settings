@@ -3,7 +3,7 @@
 namespace DeepWebSolutions\Framework\Settings\Adapters;
 
 use DeepWebSolutions\Framework\Settings\Exceptions\NotSupported;
-use DeepWebSolutions\Framework\Settings\Interfaces\Actions\Providerable;
+use DeepWebSolutions\Framework\Settings\Interfaces\Actions\Adapterable;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -15,10 +15,10 @@ defined( 'ABSPATH' ) || exit;
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.de>
  * @package DeepWebSolutions\Framework\Settings\Adapters
  *
- * @see     Providerable
+ * @see     Adapterable
  * @see     https://metabox.io/
  */
-class MetaBox implements Providerable {
+class MetaBox implements Adapterable {
 	// region CREATE
 
 	/**
@@ -90,7 +90,7 @@ class MetaBox implements Providerable {
 	 *
 	 * @return  void
 	 */
-	public function register_settings_page_group( string $group_id, string $group_title, array $fields, string $page, array $params ): void {
+	public function register_settings_group( string $group_id, string $group_title, array $fields, string $page, array $params ): void {
 		$this->register_generic_group( $group_id, $group_title, $fields, array( 'settings_pages' => $page ) + $params );
 	}
 

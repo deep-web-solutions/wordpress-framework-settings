@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.de>
  * @package DeepWebSolutions\Framework\Settings\Interfaces
  */
-interface Providerable {
+interface Adapterable {
 	// region CREATE
 
 	/**
@@ -66,7 +66,7 @@ interface Providerable {
 	 *
 	 * @return  mixed
 	 */
-	public function register_settings_page_group( string $group_id, string $group_title, array $fields, string $page, array $params );
+	public function register_settings_group( string $group_id, string $group_title, array $fields, string $page, array $params );
 
 	/**
 	 * Registers a group of settings.
@@ -175,9 +175,9 @@ interface Providerable {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string      $field_id       The ID of the settings field to remove from the database. Empty string to delete the whole group.
-	 * @param   string      $settings_id    The ID of the settings group to delete the field from.
-	 * @param   array       $params         Other parameters required for the adapter to work.
+	 * @param   string  $field_id       The ID of the settings field to remove from the database. Empty string to delete the whole group.
+	 * @param   string  $settings_id    The ID of the settings group to delete the field from.
+	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
 	 * @return  mixed
 	 */

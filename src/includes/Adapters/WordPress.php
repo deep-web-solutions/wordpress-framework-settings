@@ -3,7 +3,7 @@
 namespace DeepWebSolutions\Framework\Settings\Adapters;
 
 use DeepWebSolutions\Framework\Settings\Exceptions\NotSupported;
-use DeepWebSolutions\Framework\Settings\Interfaces\Actions\Providerable;
+use DeepWebSolutions\Framework\Settings\Interfaces\Actions\Adapterable;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -15,9 +15,9 @@ defined( 'ABSPATH' ) || exit;
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.de>
  * @package DeepWebSolutions\Framework\Settings\Adapters
  *
- * @see     Providerable
+ * @see     Adapterable
  */
-class WordPress implements Providerable {
+class WordPress implements Adapterable {
 	// region CREATE
 
 	/**
@@ -125,7 +125,7 @@ class WordPress implements Providerable {
 	 *
 	 * @return  void
 	 */
-	public function register_settings_page_group( string $group_id, string $group_title, array $fields, string $page, array $params = array() ): void {
+	public function register_settings_group( string $group_id, string $group_title, array $fields, string $page, array $params = array() ): void {
 		$params = wp_parse_args(
 			$params,
 			array(

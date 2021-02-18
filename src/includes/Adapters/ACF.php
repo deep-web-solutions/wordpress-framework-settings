@@ -3,7 +3,7 @@
 namespace DeepWebSolutions\Framework\Settings\Adapters;
 
 use DeepWebSolutions\Framework\Helpers\PHP\Strings;
-use DeepWebSolutions\Framework\Settings\Interfaces\Actions\Providerable;
+use DeepWebSolutions\Framework\Settings\Interfaces\Actions\Adapterable;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -15,10 +15,10 @@ defined( 'ABSPATH' ) || exit;
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.de>
  * @package DeepWebSolutions\Framework\Settings\Adapters
  *
- * @see     Providerable
+ * @see     Adapterable
  * @see     https://www.advancedcustomfields.com/
  */
-class ACF implements Providerable {
+class ACF implements Adapterable {
 	// region CREATE
 
 	/**
@@ -37,6 +37,10 @@ class ACF implements Providerable {
 	 * @return  array|null  The validated and final page settings or null on failure.
 	 */
 	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params = array() ): ?array {
+		if ( ! function_exists( 'acf_add_options_sub_page' ) ) {
+			return null; // ACF Pro required.
+		}
+
 		$result = acf_add_options_page(
 			array(
 				'page_title' => $page_title,
@@ -69,6 +73,10 @@ class ACF implements Providerable {
 	 * @return  array|null  The validated and final page settings or null on failure.
 	 */
 	public function register_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params = array() ): ?array {
+		if ( ! function_exists( 'acf_add_options_sub_page' ) ) {
+			return null; // ACF Pro required.
+		}
+
 		$result = acf_add_options_sub_page(
 			array( 'parent_slug' => $parent_slug ) + array(
 				'page_title' => $page_title,
@@ -94,7 +102,7 @@ class ACF implements Providerable {
 	 *
 	 * @return  bool
 	 */
-	public function register_settings_page_group( string $group_id, string $group_title, array $fields, string $page, array $params = array() ): bool {
+	public function register_settings_group( string $group_id, string $group_title, array $fields, string $page, array $params = array() ): bool {
 		return $this->register_generic_group(
 			$group_id,
 			$group_title,
@@ -237,7 +245,7 @@ class ACF implements Providerable {
 	 *
 	 * @return  bool
 	 */
-	public function update_settings_value( string $field_id, $value, string $setting_id = null, array $params = array() ): bool {
+	public function update_settings_value( string $field_id, $value, string $settings_id = null, array $params = array() ): bool {
 		return $this->update_field_value( $field_id, 'options', $value, $params );
 	}
 
@@ -300,7 +308,7 @@ class ACF implements Providerable {
 	public function delete_field( string $field_id, $object_id = false, array $params = array() ): bool {
 		$params = wp_parse_args( $params, array( 'sub_field' => false ) );
 
-		return $params['sub_field']
+		return boolval( $params['sub_field'] )
 			? delete_sub_field( $field_id, $object_id )
 			: delete_field( $field_id, $object_id );
 	}

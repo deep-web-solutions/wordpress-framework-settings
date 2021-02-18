@@ -33,6 +33,10 @@
       "url": "https://github.com/deep-web-solutions/wordpress-framework-utilities"
     },
     {
+      "type": "vcs",
+      "url": "https://github.com/deep-web-solutions/wordpress-framework-core"
+    },
+    {
       "type": "package",
       "package": {
         "name": "advanced-custom-fields/advanced-custom-fields-pro",
@@ -52,9 +56,12 @@
   "require": {
     "deep-web-solutions/wp-framework-bootstrapper": "master@dev",
     "deep-web-solutions/wp-framework-helpers": "master@dev",
-    "deep-web-solutions/wp-framework-utilities": "master@dev"
+    "deep-web-solutions/wp-framework-utilities": "master@dev",
+    "guzzlehttp/promises": "~1.4.0"
   },
   "require-dev": {
+    "deep-web-solutions/wp-framework-core": "master@dev",
+
     "php-di/php-di": "~6.1.0",
     "wpmetabox/meta-box": ">=5.3.8",
     "advanced-custom-fields/advanced-custom-fields-pro": "*",
