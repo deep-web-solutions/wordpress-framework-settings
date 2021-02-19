@@ -129,7 +129,7 @@ interface Adapterable {
 	 *
 	 * @return  mixed
 	 */
-	public function get_field_value( string $field_id, $object_id, array $params = array() );
+	public function get_field_value( string $field_id, $object_id, array $params );
 
 	// endregion
 
