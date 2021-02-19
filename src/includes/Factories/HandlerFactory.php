@@ -4,6 +4,8 @@ namespace DeepWebSolutions\Framework\Settings\Factories;
 
 use DeepWebSolutions\Framework\Helpers\WordPress\Requests;
 use DeepWebSolutions\Framework\Settings\Abstracts\Handler;
+use DeepWebSolutions\Framework\Settings\Adapters\NOOP as NOOPAdapter;
+use DeepWebSolutions\Framework\Settings\Adapters\WordPress as WordPressAdapter;
 use DeepWebSolutions\Framework\Settings\Handlers\NOOP;
 use DeepWebSolutions\Framework\Settings\Handlers\WordPress;
 use DeepWebSolutions\Framework\Utilities\Services\LoggingService;
@@ -61,8 +63,8 @@ class HandlerFactory {
 	 */
 	public function __construct( LoggingService $logging_service ) {
 		$this->set_logging_service( $logging_service );
-		$this->handlers['noop']      = new NOOP();
-		$this->handlers['wordpress'] = new WordPress();
+		$this->handlers['noop']      = new NOOP( new NOOPAdapter(), $logging_service );
+		$this->handlers['wordpress'] = new WordPress( new WordPressAdapter(), $logging_service );
 	}
 
 	// endregion

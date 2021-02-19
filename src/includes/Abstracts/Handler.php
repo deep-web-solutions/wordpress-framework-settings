@@ -2,11 +2,13 @@
 
 namespace DeepWebSolutions\Framework\Settings\Abstracts;
 
+use DeepWebSolutions\Framework\Helpers\WordPress\Hooks;
 use DeepWebSolutions\Framework\Settings\Interfaces\Actions\Adapterable;
 use DeepWebSolutions\Framework\Utilities\Services\LoggingService;
 use DeepWebSolutions\Framework\Utilities\Services\Traits\Logging;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Promise\Utils;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -74,14 +76,11 @@ abstract class Handler implements Adapterable {
 	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): PromiseInterface {
 		$promise = new Promise();
 
-		$this->resolve_promise(
+		$this->defer_promise_resolve(
 			$promise,
 			'register_menu_page',
-			function() use ( $promise, $page_title, $menu_title, $menu_slug, $capability, $params ) {
-				$promise->resolve(
-					$this->get_adapter()->register_menu_page( $page_title, $menu_title, $menu_slug, $capability, $params )
-				);
-			}
+			array( $this->get_adapter(), 'register_menu_page' ),
+			array( $page_title, $menu_title, $menu_slug, $capability, $params )
 		);
 
 		return $promise;
@@ -107,14 +106,11 @@ abstract class Handler implements Adapterable {
 	public function register_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): PromiseInterface {
 		$promise = new Promise();
 
-		$this->resolve_promise(
+		$this->defer_promise_resolve(
 			$promise,
 			'register_submenu_page',
-			function() use ( $promise, $parent_slug, $page_title, $menu_title, $menu_slug, $capability, $params ) {
-				$promise->resolve(
-					$this->get_adapter()->register_submenu_page( $parent_slug, $page_title, $menu_title, $menu_slug, $capability, $params )
-				);
-			}
+			array( $this->get_adapter(), 'register_submenu_page' ),
+			array( $parent_slug, $page_title, $menu_title, $menu_slug, $capability, $params )
 		);
 
 		return $promise;
@@ -137,14 +133,11 @@ abstract class Handler implements Adapterable {
 	public function register_settings_group( string $group_id, string $group_title, array $fields, string $page, array $params ): PromiseInterface {
 		$promise = new Promise();
 
-		$this->resolve_promise(
+		$this->defer_promise_resolve(
 			$promise,
 			'register_settings_group',
-			function() use ( $promise, $group_id, $group_title, $fields, $page, $params ) {
-				$promise->resolve(
-					$this->get_adapter()->register_settings_group( $group_id, $group_title, $fields, $page, $params )
-				);
-			}
+			array( $this->get_adapter(), 'register_settings_group' ),
+			array( $group_id, $group_title, $fields, $page, $params )
 		);
 
 		return $promise;
@@ -166,14 +159,11 @@ abstract class Handler implements Adapterable {
 	public function register_generic_group( string $group_id, string $group_title, array $fields, array $params ): PromiseInterface {
 		$promise = new Promise();
 
-		$this->resolve_promise(
+		$this->defer_promise_resolve(
 			$promise,
 			'register_generic_group',
-			function() use ( $promise, $group_id, $group_title, $fields, $params ) {
-				$promise->resolve(
-					$this->get_adapter()->register_generic_group( $group_id, $group_title, $fields, $params )
-				);
-			}
+			array( $this->get_adapter(), 'register_generic_group' ),
+			array( $group_id, $group_title, $fields, $params )
 		);
 
 		return $promise;
@@ -196,14 +186,11 @@ abstract class Handler implements Adapterable {
 	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params ): PromiseInterface {
 		$promise = new Promise();
 
-		$this->resolve_promise(
+		$this->defer_promise_resolve(
 			$promise,
 			'register_field',
-			function() use ( $promise, $group_id, $field_id, $field_title, $field_type, $params ) {
-				$promise->resolve(
-					$this->get_adapter()->register_field( $group_id, $field_id, $field_title, $field_type, $params )
-				);
-			}
+			array( $this->get_adapter(), 'register_field' ),
+			array( $group_id, $field_id, $field_title, $field_type, $params )
 		);
 
 		return $promise;
@@ -224,14 +211,11 @@ abstract class Handler implements Adapterable {
 	public function get_setting_value( string $field_id, string $settings_id, array $params ): PromiseInterface {
 		$promise = new Promise();
 
-		$this->resolve_promise(
+		$this->defer_promise_resolve(
 			$promise,
 			'get_setting_value',
-			function() use ( $promise, $field_id, $settings_id, $params ) {
-				$promise->resolve(
-					$this->get_adapter()->get_setting_value( $field_id, $settings_id, $params )
-				);
-			}
+			array( $this->get_adapter(), 'get_setting_value' ),
+			array( $field_id, $settings_id, $params )
 		);
 
 		return $promise;
@@ -252,14 +236,11 @@ abstract class Handler implements Adapterable {
 	public function get_field_value( string $field_id, $object_id, array $params = array() ): PromiseInterface {
 		$promise = new Promise();
 
-		$this->resolve_promise(
+		$this->defer_promise_resolve(
 			$promise,
 			'get_field_value',
-			function() use ( $promise, $field_id, $object_id, $params ) {
-				$promise->resolve(
-					$this->get_adapter()->get_field_value( $field_id, $object_id, $params )
-				);
-			}
+			array( $this->get_adapter(), 'get_field_value' ),
+			array( $field_id, $object_id, $params )
 		);
 
 		return $promise;
@@ -281,14 +262,11 @@ abstract class Handler implements Adapterable {
 	public function update_settings_value( string $field_id, $value, string $settings_id, array $params ): PromiseInterface {
 		$promise = new Promise();
 
-		$this->resolve_promise(
+		$this->defer_promise_resolve(
 			$promise,
 			'update_settings_value',
-			function() use ( $promise, $field_id, $value, $settings_id, $params ) {
-				$promise->resolve(
-					$this->get_adapter()->update_settings_value( $field_id, $value, $settings_id, $params )
-				);
-			}
+			array( $this->get_adapter(), 'update_settings_value' ),
+			array( $field_id, $value, $settings_id, $params )
 		);
 
 		return $promise;
@@ -310,14 +288,11 @@ abstract class Handler implements Adapterable {
 	public function update_field_value( string $field_id, $value, $object_id, array $params ): PromiseInterface {
 		$promise = new Promise();
 
-		$this->resolve_promise(
+		$this->defer_promise_resolve(
 			$promise,
 			'update_field_value',
-			function() use ( $promise, $field_id, $value, $object_id, $params ) {
-				$promise->resolve(
-					$this->get_adapter()->update_field_value( $field_id, $value, $object_id, $params )
-				);
-			}
+			array( $this->get_adapter(), 'update_field_value' ),
+			array( $field_id, $value, $object_id, $params )
 		);
 
 		return $promise;
@@ -338,14 +313,11 @@ abstract class Handler implements Adapterable {
 	public function delete_setting( string $field_id, string $settings_id, array $params ): PromiseInterface {
 		$promise = new Promise();
 
-		$this->resolve_promise(
+		$this->defer_promise_resolve(
 			$promise,
-			'delete_setting',
-			function() use ( $promise, $field_id, $settings_id, $params ) {
-				$promise->resolve(
-					$this->get_adapter()->delete_setting( $field_id, $settings_id, $params )
-				);
-			}
+			'delete_field',
+			array( $this->get_adapter(), 'delete_setting' ),
+			array( $field_id, $settings_id, $params )
 		);
 
 		return $promise;
@@ -366,14 +338,11 @@ abstract class Handler implements Adapterable {
 	public function delete_field( string $field_id, $object_id, array $params ): PromiseInterface {
 		$promise = new Promise();
 
-		$this->resolve_promise(
+		$this->defer_promise_resolve(
 			$promise,
 			'delete_field',
-			function() use ( $promise, $field_id, $object_id, $params ) {
-				$promise->resolve(
-					$this->get_adapter()->delete_field( $field_id, $object_id, $params )
-				);
-			}
+			array( $this->get_adapter(), 'delete_field' ),
+			array( $field_id, $object_id, $params )
 		);
 
 		return $promise;
@@ -428,20 +397,54 @@ abstract class Handler implements Adapterable {
 	// region HELPERS
 
 	/**
+	 * Defers attempting to resolve the promise on the next priority of the current hook. This gives a chance to
+	 * enqueue callables onto the promise.
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
+	 * @param   Promise     $promise    The promise to resolve.
+	 * @param   string      $context    The CRUD action trying to be performed.
+	 * @param   callable    $func       The function that returns the value to pass on.
+	 * @param   array       $args       The arguments to pass on to the function.
+	 */
+	protected function defer_promise_resolve( Promise $promise, string $context, callable $func, array $args ): void {
+		add_action(
+			current_action(),
+			function() use ( $promise, $context, $func, $args ) {
+				$this->resolve_promise(
+					$context,
+					function() use ( $promise, $func, $args ) {
+						$promise->resolve(
+							call_user_func_array( $func, $args )
+						);
+
+						Utils::queue()->run(); // Run any callables immediately.
+					}
+				);
+
+				if ( ! empty( func_get_args() ) ) {
+					return func_get_arg( 0 ); // In case the current action is a filter.
+				}
+			},
+			Hooks::get_current_hook_priority() + 1
+		);
+	}
+
+	/**
 	 * Resolves a promise either on the spot, or at a later point when the settings framework is ready.
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   Promise     $promise    Promise to resolve.
-	 * @param   string      $context    The context of the promise (probably the CRUD action trying to be performed).
-	 * @param   callable    $func       The function that returns the value to pass on.
+	 * @param   string      $context    The CRUD action trying to be performed.
+	 * @param   callable    $func       The function to call in order to resolve the promise.
 	 */
-	protected function resolve_promise( Promise $promise, string $context, callable $func ): void {
+	protected function resolve_promise( string $context, callable $func ): void {
 		$hook = $this->get_action_hook( $context );
 
 		if ( did_action( $hook ) || doing_action( $hook ) ) {
-			$promise->resolve( call_user_func( $func ) );
+			call_user_func( $func );
 		} else {
 			add_action( $hook, $func );
 		}
