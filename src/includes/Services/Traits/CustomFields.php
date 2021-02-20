@@ -54,6 +54,8 @@ trait CustomFields {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
+	 * @SuppressWarnings(PHPMD.LongVariable)
+	 *
 	 * @param   CustomFieldsService     $custom_fields_service      The custom fields service instance to use from now on.
 	 */
 	public function set_custom_fields_service( CustomFieldsService $custom_fields_service ): void {
@@ -69,6 +71,8 @@ trait CustomFields {
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
+	 *
+	 * @SuppressWarnings(PHPMD.LongVariable)
 	 *
 	 * @param   CustomFieldsService     $custom_fields_service      Instance of the custom fields service.
 	 */

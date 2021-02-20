@@ -5,7 +5,6 @@ namespace DeepWebSolutions\Framework\Settings\Services;
 use DeepWebSolutions\Framework\Settings\Factories\HandlerFactory;
 use DeepWebSolutions\Framework\Settings\Factories\Traits\Handler;
 use DeepWebSolutions\Framework\Settings\Utilities\ActionResponse;
-use GuzzleHttp\Promise\PromiseInterface;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -15,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  * @since   1.0.0
  * @version 1.0.0
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
- * @package DeepWebSolutions\Framework\Settings\Services
+ * @package DeepWebSolutions\WP-Framework\Settings\Services
  */
 class CustomFieldsService {
 	use Handler;

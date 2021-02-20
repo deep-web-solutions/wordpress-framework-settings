@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) || exit;
  * @since   1.0.0
  * @version 1.0.0
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
- * @package DeepWebSolutions\Framework\Settings\Abstracts
+ * @package DeepWebSolutions\WP-Framework\Settings\Abstracts
  */
 abstract class Handler implements Adapterable {
 	use Logging;

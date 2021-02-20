@@ -27,6 +27,8 @@ trait CustomFields {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
+	 * @SuppressWarnings(PHPMD.LongVariable)
+	 *
 	 * @param   CustomFieldsService     $custom_fields_service      Instance of the custom fields service.
 	 *
 	 * @return  SetupFailure|null
