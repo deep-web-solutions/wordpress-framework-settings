@@ -409,7 +409,7 @@ abstract class Handler implements Adapterable {
 	 * @param   array       $args       The arguments to pass on to the function.
 	 */
 	protected function defer_promise_resolve( Promise $promise, string $context, callable $func, array $args ): void {
-		Hooks::enqueue_on_next_tick(
+		Hooks::enqueue_temp_on_next_tick(
 			function() use ( $promise, $context, $func, $args ) {
 				$this->resolve_promise(
 					$context,
