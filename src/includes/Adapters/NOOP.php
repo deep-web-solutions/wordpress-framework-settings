@@ -118,7 +118,7 @@ class NOOP implements Adapterable {
 	 * Noop implementation.
 	 *
 	 * @since   1.0.0
-	 * @ver     1.0.0
+	 * @version 1.0.0
 	 *
 	 * @param   string          $field_id       The ID of the field within the settings to read from the database.
 	 * @param   string|null     $settings_id    NOT USED BY THE ACF ADAPTER.
@@ -134,7 +134,7 @@ class NOOP implements Adapterable {
 	 * Noop implementation.
 	 *
 	 * @since   1.0.0
-	 * @ver     1.0.0
+	 * @version 1.0.0
 	 *
 	 * @param   string              $field_id       The ID of the field to read from the database.
 	 * @param   false|string|int    $object_id      The ID of the object the data is for.

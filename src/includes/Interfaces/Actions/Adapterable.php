@@ -107,7 +107,7 @@ interface Adapterable {
 	 * Reads a setting's value from the database.
 	 *
 	 * @since   1.0.0
-	 * @ver     1.0.0
+	 * @version 1.0.0
 	 *
 	 * @param   string  $field_id       The ID of the field within the settings to read from the database.
 	 * @param   string  $settings_id    The ID of the settings group to read from the database.
@@ -121,7 +121,7 @@ interface Adapterable {
 	 * Reads a field's value from the database.
 	 *
 	 * @since   1.0.0
-	 * @ver     1.0.0
+	 * @version 1.0.0
 	 *
 	 * @param   string  $field_id       The ID of the field to read from the database.
 	 * @param   mixed   $object_id      The ID of the object the data is for.

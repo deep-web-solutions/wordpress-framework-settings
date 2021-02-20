@@ -123,9 +123,9 @@ class WordPress implements Adapterable {
 	 * @param   string  $page           The settings page on which the group's fields should be displayed.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  void
+	 * @return  true
 	 */
-	public function register_settings_group( string $group_id, string $group_title, array $fields, string $page, array $params = array() ): void {
+	public function register_settings_group( string $group_id, string $group_title, array $fields, string $page, array $params = array() ): bool {
 		$params = wp_parse_args(
 			$params,
 			array(
@@ -147,6 +147,8 @@ class WordPress implements Adapterable {
 
 			add_settings_field( $field['id'], $field['title'], $field['callback'], $page, $group_id, $field['args'] );
 		}
+
+		return true;
 	}
 
 	/**
@@ -183,9 +185,9 @@ class WordPress implements Adapterable {
 	 * @param   string  $field_type     The type of custom field being registered.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  void
+	 * @return  true
 	 */
-	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params ): void {
+	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params ): bool {
 		$params          = wp_parse_args(
 			$params,
 			array(
@@ -204,6 +206,8 @@ class WordPress implements Adapterable {
 
 		register_setting( $group_id, $field_id, array( 'type' => $field_type ) + $params['setting'] );
 		add_settings_field( $field_id, $field_title, $params['field']['callback'], $params['field']['page'], $group_id, $params['field']['args'] );
+
+		return true;
 	}
 
 	// endregion
@@ -214,7 +218,7 @@ class WordPress implements Adapterable {
 	 * Reads a setting's value from the database using WP's API.
 	 *
 	 * @since   1.0.0
-	 * @ver     1.0.0
+	 * @version 1.0.0
 	 *
 	 * @param   string|null     $field_id       The ID of the field within the settings to read from the database.
 	 * @param   string          $settings_id    The ID of the settings group to read from the database.
@@ -250,7 +254,7 @@ class WordPress implements Adapterable {
 	 * Reads a field's value from the database using WP's API.
 	 *
 	 * @since   1.0.0
-	 * @ver     1.0.0
+	 * @version 1.0.0
 	 *
 	 * @param   string  $field_id       The ID of the field to read from the database.
 	 * @param   int     $object_id      The ID of the object the data is for.

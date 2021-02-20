@@ -162,9 +162,9 @@ class ACF implements Adapterable {
 	 * @param   string  $field_type     The type of custom field being registered.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  void
+	 * @return  true
 	 */
-	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params = array() ): void {
+	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params = array() ): bool {
 		$group_id = Strings::starts_with( $group_id, 'group_' ) || Strings::starts_with( $group_id, 'field_' ) ? $group_id : "group_{$group_id}";
 		$field_id = Strings::starts_with( $group_id, 'field_' ) ? $field_id : "field_{$field_id}";
 		$params   = wp_parse_args( $params, array( 'name' => '' ) );
@@ -178,6 +178,8 @@ class ACF implements Adapterable {
 				'parent' => $group_id,
 			) + $params
 		);
+
+		return true;
 	}
 
 	// endregion
@@ -190,7 +192,7 @@ class ACF implements Adapterable {
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 *
 	 * @since   1.0.0
-	 * @ver     1.0.0
+	 * @version 1.0.0
 	 *
 	 * @param   string          $field_id       The ID of the field within the settings to read from the database.
 	 * @param   string|null     $settings_id    NOT USED BY THE ACF ADAPTER.
@@ -208,7 +210,7 @@ class ACF implements Adapterable {
 	 * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
 	 *
 	 * @since   1.0.0
-	 * @ver     1.0.0
+	 * @version 1.0.0
 	 *
 	 * @param   string              $field_id       The ID of the field to read from the database.
 	 * @param   false|string|int    $object_id      The ID of the object the data is for.

@@ -4,6 +4,7 @@ namespace DeepWebSolutions\Framework\Settings\Services;
 
 use DeepWebSolutions\Framework\Settings\Factories\HandlerFactory;
 use DeepWebSolutions\Framework\Settings\Factories\Traits\Handler;
+use DeepWebSolutions\Framework\Settings\Utilities\ActionResponse;
 use GuzzleHttp\Promise\PromiseInterface;
 
 defined( 'ABSPATH' ) || exit;
@@ -49,9 +50,9 @@ class CustomFieldsService {
 	 * @param   array   $fields         The fields to be registered with the group.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  PromiseInterface
+	 * @return  ActionResponse
 	 */
-	public function register_generic_group( string $handler, string $group_id, string $group_title, array $fields, array $params ): PromiseInterface {
+	public function register_generic_group( string $handler, string $group_id, string $group_title, array $fields, array $params ): ActionResponse {
 		$handler = $this->get_settings_handler_factory()->get_handler( $handler );
 		return $handler->register_generic_group( $group_id, $group_title, $fields, $params );
 	}
@@ -69,9 +70,9 @@ class CustomFieldsService {
 	 * @param   string  $field_type     The type of custom field being registered.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  PromiseInterface
+	 * @return  ActionResponse
 	 */
-	public function register_field( string $handler, string $group_id, string $field_id, string $field_title, string $field_type, array $params ): PromiseInterface {
+	public function register_field( string $handler, string $group_id, string $field_id, string $field_title, string $field_type, array $params ): ActionResponse {
 		$handler = $this->get_settings_handler_factory()->get_handler( $handler );
 		return $handler->register_field( $group_id, $field_id, $field_title, $field_type, $params );
 	}
@@ -80,16 +81,16 @@ class CustomFieldsService {
 	 * Reads a field's value from the database using the API of the given adapter.
 	 *
 	 * @since   1.0.0
-	 * @ver     1.0.0
+	 * @version 1.0.0
 	 *
 	 * @param   string  $handler        The name of the settings framework handler to use.
 	 * @param   string  $field_id       The ID of the field to read from the database.
 	 * @param   mixed   $object_id      The ID of the object the data is for.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  PromiseInterface
+	 * @return  ActionResponse
 	 */
-	public function get_field_value( string $handler, string $field_id, $object_id, array $params = array() ): PromiseInterface {
+	public function get_field_value( string $handler, string $field_id, $object_id, array $params = array() ): ActionResponse {
 		$handler = $this->get_settings_handler_factory()->get_handler( $handler );
 		return $handler->get_field_value( $field_id, $object_id, $params );
 	}
@@ -106,9 +107,9 @@ class CustomFieldsService {
 	 * @param   mixed   $object_id      The ID of the object the update is for.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  PromiseInterface
+	 * @return  ActionResponse
 	 */
-	public function update_field_value( string $handler, string $field_id, $value, $object_id, array $params ): PromiseInterface {
+	public function update_field_value( string $handler, string $field_id, $value, $object_id, array $params ): ActionResponse {
 		$handler = $this->get_settings_handler_factory()->get_handler( $handler );
 		return $handler->update_field_value( $field_id, $value, $object_id, $params );
 	}
@@ -124,9 +125,9 @@ class CustomFieldsService {
 	 * @param   mixed   $object_id  The ID of the object the deletion is for.
 	 * @param   array   $params     Other parameters required for the adapter to work.
 	 *
-	 * @return  PromiseInterface
+	 * @return  ActionResponse
 	 */
-	public function delete_field( string $handler, string $field_id, $object_id, array $params ): PromiseInterface {
+	public function delete_field( string $handler, string $field_id, $object_id, array $params ): ActionResponse {
 		$handler = $this->get_settings_handler_factory()->get_handler( $handler );
 		return $handler->delete_field( $field_id, $object_id, $params );
 	}

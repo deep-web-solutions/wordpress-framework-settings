@@ -4,7 +4,7 @@ namespace DeepWebSolutions\Framework\Settings\Services;
 
 use DeepWebSolutions\Framework\Settings\Factories\HandlerFactory;
 use DeepWebSolutions\Framework\Settings\Factories\Traits\Handler;
-use GuzzleHttp\Promise\PromiseInterface;
+use DeepWebSolutions\Framework\Settings\Utilities\ActionResponse;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -52,9 +52,9 @@ class SettingsService {
 	 * @param   string  $capability     The capability required for this menu to be displayed to the user.
 	 * @param   array   $params         Other params required for the adapter to work.
 	 *
-	 * @return  PromiseInterface
+	 * @return  ActionResponse
 	 */
-	public function register_menu_page( string $handler, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): PromiseInterface {
+	public function register_menu_page( string $handler, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): ActionResponse {
 		$handler = $this->get_settings_handler_factory()->get_handler( $handler );
 		return $handler->register_menu_page( $page_title, $menu_title, $menu_slug, $capability, $params );
 	}
@@ -75,9 +75,9 @@ class SettingsService {
 	 * @param   string  $capability     The capability required for this menu to be displayed to the user.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  PromiseInterface
+	 * @return  ActionResponse
 	 */
-	public function register_submenu_page( string $handler, string $parent_slug, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): PromiseInterface {
+	public function register_submenu_page( string $handler, string $parent_slug, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): ActionResponse {
 		$handler = $this->get_settings_handler_factory()->get_handler( $handler );
 		return $handler->register_submenu_page( $parent_slug, $page_title, $menu_title, $menu_slug, $capability, $params );
 	}
@@ -95,9 +95,9 @@ class SettingsService {
 	 * @param   string  $page           The settings page on which the group's fields should be displayed.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  PromiseInterface
+	 * @return  ActionResponse
 	 */
-	public function register_settings_group( string $handler, string $group_id, string $group_title, array $fields, string $page, array $params ): PromiseInterface {
+	public function register_settings_group( string $handler, string $group_id, string $group_title, array $fields, string $page, array $params ): ActionResponse {
 		$handler = $this->get_settings_handler_factory()->get_handler( $handler );
 		return $handler->register_settings_group( $group_id, $group_title, $fields, $page, $params );
 	}
@@ -115,9 +115,9 @@ class SettingsService {
 	 * @param   string  $field_type     The type of custom field being registered.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  PromiseInterface
+	 * @return  ActionResponse
 	 */
-	public function register_field( string $handler, string $group_id, string $field_id, string $field_title, string $field_type, array $params ): PromiseInterface {
+	public function register_field( string $handler, string $group_id, string $field_id, string $field_title, string $field_type, array $params ): ActionResponse {
 		$handler = $this->get_settings_handler_factory()->get_handler( $handler );
 		return $handler->register_field( $group_id, $field_id, $field_title, $field_type, $params );
 	}
@@ -126,16 +126,16 @@ class SettingsService {
 	 * Reads a setting's value from the database using the API of the given adapter.
 	 *
 	 * @since   1.0.0
-	 * @ver     1.0.0
+	 * @version 1.0.0
 	 *
 	 * @param   string  $handler        The name of the settings framework handler to use.
 	 * @param   string  $field_id       The ID of the field within the settings to read from the database.
 	 * @param   string  $settings_id    The ID of the settings group to read from the database.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  PromiseInterface
+	 * @return  ActionResponse
 	 */
-	public function get_setting_value( string $handler, string $field_id, string $settings_id, array $params ): PromiseInterface {
+	public function get_setting_value( string $handler, string $field_id, string $settings_id, array $params ): ActionResponse {
 		$handler = $this->get_settings_handler_factory()->get_handler( $handler );
 		return $handler->get_setting_value( $field_id, $settings_id, $params );
 	}
@@ -152,9 +152,9 @@ class SettingsService {
 	 * @param   string  $settings_id    The ID of the settings group to update.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  PromiseInterface
+	 * @return  ActionResponse
 	 */
-	public function update_settings_value( string $handler, string $field_id, $value, string $settings_id, array $params ): PromiseInterface {
+	public function update_settings_value( string $handler, string $field_id, $value, string $settings_id, array $params ): ActionResponse {
 		$handler = $this->get_settings_handler_factory()->get_handler( $handler );
 		return $handler->update_settings_value( $field_id, $value, $settings_id, $params );
 	}
@@ -170,9 +170,9 @@ class SettingsService {
 	 * @param   string  $settings_id    The ID of the settings group to delete the field from.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  PromiseInterface
+	 * @return  ActionResponse
 	 */
-	public function delete_setting( string $handler, string $field_id, string $settings_id, array $params ): PromiseInterface {
+	public function delete_setting( string $handler, string $field_id, string $settings_id, array $params ): ActionResponse {
 		$handler = $this->get_settings_handler_factory()->get_handler( $handler );
 		return $handler->delete_setting( $field_id, $settings_id, $params );
 	}

@@ -4,6 +4,7 @@ namespace DeepWebSolutions\Framework\Settings\Abstracts;
 
 use DeepWebSolutions\Framework\Helpers\WordPress\Hooks;
 use DeepWebSolutions\Framework\Settings\Interfaces\Actions\Adapterable;
+use DeepWebSolutions\Framework\Settings\Utilities\ActionResponse;
 use DeepWebSolutions\Framework\Utilities\Services\LoggingService;
 use DeepWebSolutions\Framework\Utilities\Services\Traits\Logging;
 use GuzzleHttp\Promise\Promise;
@@ -63,6 +64,9 @@ abstract class Handler implements Adapterable {
 	/**
 	 * Registers a new WordPress admin page.
 	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
 	 * @param   string  $page_title     The text to be displayed in the title tags of the page when the menu is selected.
 	 * @param   string  $menu_title     The text to be used for the menu.
 	 * @param   string  $menu_slug      The slug name to refer to this menu by. Should be unique for this menu page and only
@@ -71,19 +75,14 @@ abstract class Handler implements Adapterable {
 	 * @param   string  $capability     The capability required for this menu to be displayed to the user.
 	 * @param   array   $params         Other params required for the adapter to work.
 	 *
-	 * @return  Promise
+	 * @return  ActionResponse
 	 */
-	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): PromiseInterface {
-		$promise = new Promise();
-
-		$this->defer_promise_resolve(
-			$promise,
+	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): ActionResponse {
+		return $this->create_action_response(
 			'register_menu_page',
 			array( $this->get_adapter(), 'register_menu_page' ),
 			array( $page_title, $menu_title, $menu_slug, $capability, $params )
 		);
-
-		return $promise;
 	}
 
 	/**
@@ -101,19 +100,14 @@ abstract class Handler implements Adapterable {
 	 * @param   string  $capability     The capability required for this menu to be displayed to the user.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  Promise
+	 * @return  ActionResponse
 	 */
-	public function register_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): PromiseInterface {
-		$promise = new Promise();
-
-		$this->defer_promise_resolve(
-			$promise,
+	public function register_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): ActionResponse {
+		return $this->create_action_response(
 			'register_submenu_page',
 			array( $this->get_adapter(), 'register_submenu_page' ),
 			array( $parent_slug, $page_title, $menu_title, $menu_slug, $capability, $params )
 		);
-
-		return $promise;
 	}
 
 	/**
@@ -128,19 +122,14 @@ abstract class Handler implements Adapterable {
 	 * @param   string  $page           The settings page on which the group's fields should be displayed.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  Promise
+	 * @return  ActionResponse
 	 */
-	public function register_settings_group( string $group_id, string $group_title, array $fields, string $page, array $params ): PromiseInterface {
-		$promise = new Promise();
-
-		$this->defer_promise_resolve(
-			$promise,
+	public function register_settings_group( string $group_id, string $group_title, array $fields, string $page, array $params ): ActionResponse {
+		return $this->create_action_response(
 			'register_settings_group',
 			array( $this->get_adapter(), 'register_settings_group' ),
 			array( $group_id, $group_title, $fields, $page, $params )
 		);
-
-		return $promise;
 	}
 
 	/**
@@ -154,19 +143,14 @@ abstract class Handler implements Adapterable {
 	 * @param   array   $fields         The fields to be registered with the group.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  Promise
+	 * @return  ActionResponse
 	 */
-	public function register_generic_group( string $group_id, string $group_title, array $fields, array $params ): PromiseInterface {
-		$promise = new Promise();
-
-		$this->defer_promise_resolve(
-			$promise,
+	public function register_generic_group( string $group_id, string $group_title, array $fields, array $params ): ActionResponse {
+		return $this->create_action_response(
 			'register_generic_group',
 			array( $this->get_adapter(), 'register_generic_group' ),
 			array( $group_id, $group_title, $fields, $params )
 		);
-
-		return $promise;
 	}
 
 	/**
@@ -181,69 +165,54 @@ abstract class Handler implements Adapterable {
 	 * @param   string  $field_type     The type of custom field being registered.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  Promise
+	 * @return  ActionResponse
 	 */
-	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params ): PromiseInterface {
-		$promise = new Promise();
-
-		$this->defer_promise_resolve(
-			$promise,
+	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params ): ActionResponse {
+		return $this->create_action_response(
 			'register_field',
 			array( $this->get_adapter(), 'register_field' ),
 			array( $group_id, $field_id, $field_title, $field_type, $params )
 		);
-
-		return $promise;
 	}
 
 	/**
 	 * Reads a setting's value from the database.
 	 *
 	 * @since   1.0.0
-	 * @ver     1.0.0
+	 * @version 1.0.0
 	 *
 	 * @param   string  $field_id       The ID of the field within the settings to read from the database.
 	 * @param   string  $settings_id    The ID of the settings group to read from the database.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  Promise
+	 * @return  ActionResponse
 	 */
-	public function get_setting_value( string $field_id, string $settings_id, array $params ): PromiseInterface {
-		$promise = new Promise();
-
-		$this->defer_promise_resolve(
-			$promise,
+	public function get_setting_value( string $field_id, string $settings_id, array $params ): ActionResponse {
+		return $this->create_action_response(
 			'get_setting_value',
 			array( $this->get_adapter(), 'get_setting_value' ),
 			array( $field_id, $settings_id, $params )
 		);
-
-		return $promise;
 	}
 
 	/**
 	 * Reads a field's value from the database.
 	 *
 	 * @since   1.0.0
-	 * @ver     1.0.0
+	 * @version 1.0.0
 	 *
 	 * @param   string  $field_id       The ID of the field to read from the database.
 	 * @param   mixed   $object_id      The ID of the object the data is for.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  Promise
+	 * @return  ActionResponse
 	 */
-	public function get_field_value( string $field_id, $object_id, array $params = array() ): PromiseInterface {
-		$promise = new Promise();
-
-		$this->defer_promise_resolve(
-			$promise,
+	public function get_field_value( string $field_id, $object_id, array $params = array() ): ActionResponse {
+		return $this->create_action_response(
 			'get_field_value',
 			array( $this->get_adapter(), 'get_field_value' ),
 			array( $field_id, $object_id, $params )
 		);
-
-		return $promise;
 	}
 
 	/**
@@ -257,19 +226,14 @@ abstract class Handler implements Adapterable {
 	 * @param   string  $settings_id    The ID of the settings group to update.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  Promise
+	 * @return  ActionResponse
 	 */
-	public function update_settings_value( string $field_id, $value, string $settings_id, array $params ): PromiseInterface {
-		$promise = new Promise();
-
-		$this->defer_promise_resolve(
-			$promise,
+	public function update_settings_value( string $field_id, $value, string $settings_id, array $params ): ActionResponse {
+		return $this->create_action_response(
 			'update_settings_value',
 			array( $this->get_adapter(), 'update_settings_value' ),
 			array( $field_id, $value, $settings_id, $params )
 		);
-
-		return $promise;
 	}
 
 	/**
@@ -283,19 +247,14 @@ abstract class Handler implements Adapterable {
 	 * @param   mixed   $object_id      The ID of the object the update is for.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  Promise
+	 * @return  ActionResponse
 	 */
-	public function update_field_value( string $field_id, $value, $object_id, array $params ): PromiseInterface {
-		$promise = new Promise();
-
-		$this->defer_promise_resolve(
-			$promise,
+	public function update_field_value( string $field_id, $value, $object_id, array $params ): ActionResponse {
+		return $this->create_action_response(
 			'update_field_value',
 			array( $this->get_adapter(), 'update_field_value' ),
 			array( $field_id, $value, $object_id, $params )
 		);
-
-		return $promise;
 	}
 
 	/**
@@ -308,19 +267,14 @@ abstract class Handler implements Adapterable {
 	 * @param   string      $settings_id    The ID of the settings group to delete the field from.
 	 * @param   array       $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  Promise
+	 * @return  ActionResponse
 	 */
-	public function delete_setting( string $field_id, string $settings_id, array $params ): PromiseInterface {
-		$promise = new Promise();
-
-		$this->defer_promise_resolve(
-			$promise,
+	public function delete_setting( string $field_id, string $settings_id, array $params ): ActionResponse {
+		return $this->create_action_response(
 			'delete_field',
 			array( $this->get_adapter(), 'delete_setting' ),
 			array( $field_id, $settings_id, $params )
 		);
-
-		return $promise;
 	}
 
 	/**
@@ -333,19 +287,14 @@ abstract class Handler implements Adapterable {
 	 * @param   mixed   $object_id  The ID of the object the deletion is for.
 	 * @param   array   $params     Other parameters required for the adapter to work.
 	 *
-	 * @return  Promise
+	 * @return  ActionResponse
 	 */
-	public function delete_field( string $field_id, $object_id, array $params ): PromiseInterface {
-		$promise = new Promise();
-
-		$this->defer_promise_resolve(
-			$promise,
+	public function delete_field( string $field_id, $object_id, array $params ): ActionResponse {
+		return $this->create_action_response(
 			'delete_field',
 			array( $this->get_adapter(), 'delete_field' ),
 			array( $field_id, $object_id, $params )
 		);
-
-		return $promise;
 	}
 
 	// endregion
@@ -397,54 +346,38 @@ abstract class Handler implements Adapterable {
 	// region HELPERS
 
 	/**
-	 * Defers attempting to resolve the promise on the next priority of the current hook. This gives a chance to
-	 * enqueue callables onto the promise.
+	 * Instantiates an ActionResponse object either with the value of the settings API's action result or with a promise
+	 * to return the value after the API's initialization.
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   Promise     $promise    The promise to resolve.
-	 * @param   string      $context    The CRUD action trying to be performed.
-	 * @param   callable    $func       The function that returns the value to pass on.
-	 * @param   array       $args       The arguments to pass on to the function.
-	 */
-	protected function defer_promise_resolve( Promise $promise, string $context, callable $func, array $args ): void {
-		Hooks::enqueue_temp_on_next_tick(
-			function() use ( $promise, $context, $func, $args ) {
-				$this->resolve_promise(
-					$context,
-					function() use ( $promise, $func, $args ) {
-						$promise->resolve(
-							call_user_func_array( $func, $args )
-						);
-
-						Utils::queue()->run(); // Run any callables immediately.
-					}
-				);
-
-				if ( ! empty( func_get_args() ) && doing_filter() ) {
-					return func_get_arg( 0 ); // In case the current action is a filter.
-				}
-			}
-		);
-	}
-
-	/**
-	 * Resolves a promise either on the spot, or at a later point when the settings framework is ready.
+	 * @param   string      $context        The settings API action being performed.
+	 * @param   callable    $return_value   The callable that generates the return value.
+	 * @param   array       $args           Arguments to pass on to the callable.
 	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @param   string      $context    The CRUD action trying to be performed.
-	 * @param   callable    $func       The function to call in order to resolve the promise.
+	 * @return  ActionResponse
 	 */
-	protected function resolve_promise( string $context, callable $func ): void {
+	protected function create_action_response( string $context, callable $return_value, array $args ): ActionResponse {
 		$hook = $this->get_action_hook( $context );
 
 		if ( did_action( $hook ) || doing_action( $hook ) ) {
-			call_user_func( $func );
+			$return_value = call_user_func_array( $return_value, $args );
+			return ( $return_value instanceof PromiseInterface )
+				? new ActionResponse( null, $return_value )
+				: new ActionResponse( $return_value, null );
 		} else {
-			add_action( $hook, $func );
+			$promise = new Promise();
+
+			Hooks::enqueue_temp(
+				$hook,
+				function() use ( $promise, $return_value, $args ) {
+					$promise->resolve( call_user_func_array( $return_value, $args ) );
+					Utils::queue()->run(); // Run any callables immediately.
+				}
+			);
+
+			return new ActionResponse( null, $promise );
 		}
 	}
 

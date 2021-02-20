@@ -34,10 +34,10 @@ class MetaBox implements Adapterable {
 	 *
 	 * @see     https://docs.metabox.io/extensions/mb-settings-page/
 	 *
-	 * @return  void
+	 * @return  bool
 	 */
-	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): void {
-		add_filter(
+	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): bool {
+		return add_filter(
 			'mb_settings_pages',
 			function ( $settings_pages ) use ( $page_title, $menu_title, $menu_slug, $capability, $params ) {
 				$settings_pages[] = array(
@@ -68,10 +68,10 @@ class MetaBox implements Adapterable {
 	 *
 	 * @see     https://docs.metabox.io/extensions/mb-settings-page/
 	 *
-	 * @return  void
+	 * @return  bool
 	 */
-	public function register_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): void {
-		$this->register_menu_page( $page_title, $menu_title, $menu_slug, $capability, array( 'parent' => $parent_slug ) + $params );
+	public function register_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): bool {
+		return $this->register_menu_page( $page_title, $menu_title, $menu_slug, $capability, array( 'parent' => $parent_slug ) + $params );
 	}
 
 	/**
@@ -88,10 +88,10 @@ class MetaBox implements Adapterable {
 	 *
 	 * @see     https://docs.metabox.io/extensions/mb-settings-page/
 	 *
-	 * @return  void
+	 * @return  bool
 	 */
-	public function register_settings_group( string $group_id, string $group_title, array $fields, string $page, array $params ): void {
-		$this->register_generic_group( $group_id, $group_title, $fields, array( 'settings_pages' => $page ) + $params );
+	public function register_settings_group( string $group_id, string $group_title, array $fields, string $page, array $params ): bool {
+		return $this->register_generic_group( $group_id, $group_title, $fields, array( 'settings_pages' => $page ) + $params );
 	}
 
 	/**
@@ -107,10 +107,10 @@ class MetaBox implements Adapterable {
 	 *
 	 * @see     https://docs.metabox.io/extensions/mb-settings-page/
 	 *
-	 * @return  void
+	 * @return  bool
 	 */
-	public function register_generic_group( string $group_id, string $group_title, array $fields, array $params ): void {
-		add_filter(
+	public function register_generic_group( string $group_id, string $group_title, array $fields, array $params ): bool {
+		return add_filter(
 			'rwmb_meta_boxes',
 			function ( $meta_boxes ) use ( $group_id, $group_title, $fields, $params ) {
 				$meta_boxes[] = array(
@@ -135,10 +135,10 @@ class MetaBox implements Adapterable {
 	 * @param   string  $field_type     The type of custom field being registered.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  void
+	 * @return  bool
 	 */
-	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params = array() ): void {
-		add_filter(
+	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params = array() ): bool {
+		return add_filter(
 			'rwmb_meta_boxes',
 			function( $meta_boxes ) use ( $group_id, $field_id, $field_title, $field_type, $params ) {
 				foreach ( $meta_boxes as $k => $meta_box ) {
@@ -163,7 +163,7 @@ class MetaBox implements Adapterable {
 	 * Reads a setting's value from the database using Meta Box's API.
 	 *
 	 * @since   1.0.0
-	 * @ver     1.0.0
+	 * @version 1.0.0
 	 *
 	 * @param   string  $field_id       The ID of the field within the settings to read from the database.
 	 * @param   string  $settings_id    The ID of the settings group to read from the database.
@@ -182,7 +182,7 @@ class MetaBox implements Adapterable {
 	 * Reads a field's value from the database using Meta Box's API.
 	 *
 	 * @since   1.0.0
-	 * @ver     1.0.0
+	 * @version 1.0.0
 	 *
 	 * @param   string  $field_id       The ID of the field to read from the database.
 	 * @param   mixed   $object_id      The ID of the object the data is for.
@@ -209,13 +209,13 @@ class MetaBox implements Adapterable {
 	 * @param   string  $settings_id    The ID of the settings group to update.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  void
+	 * @return  true
 	 */
-	public function update_settings_value( string $field_id, $value, string $settings_id, array $params ): void {
+	public function update_settings_value( string $field_id, $value, string $settings_id, array $params ): bool {
 		$params                = wp_parse_args( $params, array( 'network' => false ) );
 		$params['object_type'] = ( is_multisite() && $params['network'] ) ? 'network_setting' : 'setting';
 
-		$this->update_field_value( $field_id, $value, $settings_id, $params );
+		return $this->update_field_value( $field_id, $value, $settings_id, $params );
 	}
 
 	/**
@@ -229,10 +229,11 @@ class MetaBox implements Adapterable {
 	 * @param   mixed   $object_id      The ID of the object the update is for.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  void
+	 * @return  true
 	 */
-	public function update_field_value( string $field_id, $value, $object_id, array $params ): void {
+	public function update_field_value( string $field_id, $value, $object_id, array $params ): bool {
 		rwmb_set_meta( $object_id, $field_id, $value, $params );
+		return true;
 	}
 
 	// endregion

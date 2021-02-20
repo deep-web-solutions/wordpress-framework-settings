@@ -85,12 +85,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deep-web-solutions/wordpress-framework-helpers.git",
-                "reference": "7b1a1ae028703992743665b14d6eff81cb2d6916"
+                "reference": "721f9873c8dab39efe73eb80156976a0e9914c09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deep-web-solutions/wordpress-framework-helpers/zipball/7b1a1ae028703992743665b14d6eff81cb2d6916",
-                "reference": "7b1a1ae028703992743665b14d6eff81cb2d6916",
+                "url": "https://api.github.com/repos/deep-web-solutions/wordpress-framework-helpers/zipball/721f9873c8dab39efe73eb80156976a0e9914c09",
+                "reference": "721f9873c8dab39efe73eb80156976a0e9914c09",
                 "shasum": ""
             },
             "require": {
@@ -156,7 +156,7 @@
                 "source": "https://github.com/deep-web-solutions/wordpress-framework-helpers/tree/master",
                 "issues": "https://github.com/deep-web-solutions/wordpress-framework-helpers/issues"
             },
-            "time": "2021-02-20T02:14:00+00:00"
+            "time": "2021-02-20T11:36:10+00:00"
         },
         {
             "name": "deep-web-solutions/wp-framework-utilities",
@@ -1944,12 +1944,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deep-web-solutions/wordpress-framework-core.git",
-                "reference": "d1854839c0b7f23168f3543f15b6d84954698216"
+                "reference": "1da0757236fc1c24882f60cae2bb5a06f3cef50d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deep-web-solutions/wordpress-framework-core/zipball/d1854839c0b7f23168f3543f15b6d84954698216",
-                "reference": "d1854839c0b7f23168f3543f15b6d84954698216",
+                "url": "https://api.github.com/repos/deep-web-solutions/wordpress-framework-core/zipball/1da0757236fc1c24882f60cae2bb5a06f3cef50d",
+                "reference": "1da0757236fc1c24882f60cae2bb5a06f3cef50d",
                 "shasum": ""
             },
             "require": {
@@ -2018,7 +2018,7 @@
                 "source": "https://github.com/deep-web-solutions/wordpress-framework-core/tree/master",
                 "issues": "https://github.com/deep-web-solutions/wordpress-framework-core/issues"
             },
-            "time": "2021-02-19T17:11:30+00:00"
+            "time": "2021-02-20T03:37:43+00:00"
         },
         {
             "name": "dg/mysql-dump",
