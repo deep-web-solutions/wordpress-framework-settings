@@ -409,8 +409,7 @@ abstract class Handler implements Adapterable {
 	 * @param   array       $args       The arguments to pass on to the function.
 	 */
 	protected function defer_promise_resolve( Promise $promise, string $context, callable $func, array $args ): void {
-		add_action(
-			current_action(),
+		Hooks::enqueue_on_next_tick(
 			function() use ( $promise, $context, $func, $args ) {
 				$this->resolve_promise(
 					$context,
@@ -423,11 +422,10 @@ abstract class Handler implements Adapterable {
 					}
 				);
 
-				if ( ! empty( func_get_args() ) ) {
+				if ( ! empty( func_get_args() ) && doing_filter() ) {
 					return func_get_arg( 0 ); // In case the current action is a filter.
 				}
-			},
-			Hooks::get_current_hook_priority() + 1
+			}
 		);
 	}
 
