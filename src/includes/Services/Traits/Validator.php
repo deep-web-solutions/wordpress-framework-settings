@@ -89,7 +89,7 @@ trait Validator {
 	 *
 	 * @param   ValidatorService     $validator_service     The validator service instance to use from now on.
 	 */
-	public function set_settings_service( ValidatorService $validator_service ): void {
+	public function set_validator_service( ValidatorService $validator_service ): void {
 		$this->settings_validator_service = $validator_service;
 	}
 
