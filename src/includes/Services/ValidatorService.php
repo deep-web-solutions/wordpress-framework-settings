@@ -187,6 +187,18 @@ class ValidatorService {
 	}
 
 	/**
+	 * Retrieves a list of all default values.
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
+	 * @return  array
+	 */
+	public function get_known_default_values(): array {
+		return $this->default_values->getKnownEntryNames();
+	}
+
+	/**
 	 * Retrieves the supported options for a given key.
 	 *
 	 * @since   1.0.0
@@ -198,6 +210,18 @@ class ValidatorService {
 	 */
 	public function get_supported_options( string $key ) {
 		return $this->get_container_value( $this->supported_options, $key );
+	}
+
+	/**
+	 * Retrieves a list of all supported options.
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
+	 * @return  array
+	 */
+	public function get_known_supported_options(): array {
+		return $this->supported_options->getKnownEntryNames();
 	}
 
 	// endregion
