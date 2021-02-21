@@ -29,8 +29,8 @@ trait ValidatedSettings {
 	 * @version 1.0.0
 	 *
 	 * @param   string  $handler        The name of the settings framework handler to use.
-	 * @param   string  $field_id       The ID of the field within the settings to update.
-	 * @param   string  $settings_id    The ID of the settings group to update.
+	 * @param   string  $field_id       The ID of the field within the settings to get.
+	 * @param   string  $settings_id    The ID of the settings group to get.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
 	 * @throws  NotFound        Thrown if no suitable values were found in the defaults and/or options container(s).
