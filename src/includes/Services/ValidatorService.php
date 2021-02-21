@@ -2,6 +2,7 @@
 
 namespace DeepWebSolutions\Framework\Settings\Services;
 
+use DeepWebSolutions\Framework\Helpers\PHP\Arrays;
 use DeepWebSolutions\Framework\Helpers\PHP\Filtering;
 use DeepWebSolutions\Framework\Settings\Exceptions\NotFound;
 use DI\Container;
@@ -88,11 +89,7 @@ class ValidatorService {
 	 * @return  bool
 	 */
 	public function validate_boolean_value( $value, string $key ): bool {
-		$default = $this->get_default_value( $key );
-		if ( $default instanceof NotFound ) {
-			throw $default;
-		}
-
+		$default = $this->get_default_value_or_throw( $key );
 		return Filtering::validate_boolean( $value, $default );
 	}
 
@@ -110,11 +107,7 @@ class ValidatorService {
 	 * @return  int
 	 */
 	public function validate_integer_value( $value, string $key ): int {
-		$default = $this->get_default_value( $key );
-		if ( $default instanceof NotFound ) {
-			throw $default;
-		}
-
+		$default = $this->get_default_value_or_throw( $key );
 		return Filtering::validate_integer( $value, $default );
 	}
 
@@ -132,11 +125,7 @@ class ValidatorService {
 	 * @return  float
 	 */
 	public function validate_float_value( $value, string $key ): float {
-		$default = $this->get_default_value( $key );
-		if ( $default instanceof NotFound ) {
-			throw $default;
-		}
-
+		$default = $this->get_default_value_or_throw( $key );
 		return Filtering::validate_float( $value, $default );
 	}
 
@@ -151,16 +140,12 @@ class ValidatorService {
 	 * @return  callable
 	 */
 	public function validate_callback_value( $value, string $key ): callable {
-		$default = $this->get_default_value( $key );
-		if ( $default instanceof NotFound ) {
-			throw $default;
-		}
-
+		$default = $this->get_default_value_or_throw( $key );
 		return Filtering::validate_callback( $value, $default );
 	}
 
 	/**
-	 * Validates a given value as a callable.
+	 * Validates a given value as a valid option.
 	 *
 	 * @param   mixed   $value          The value to validate.
 	 * @param   string  $options_key    The composite key to retrieve the supported values.
@@ -171,14 +156,11 @@ class ValidatorService {
 	 * @return  mixed
 	 */
 	public function validate_supported_value( $value, string $options_key, string $default_key ) {
-		$default = $this->get_default_value( $default_key );
-		if ( $default instanceof NotFound ) {
-			throw $default;
-		}
+		$default          = $this->get_default_value_or_throw( $default_key );
+		$supported_values = $this->get_supported_options_or_throw( $options_key );
 
-		$supported_values = $this->get_supported_options( $options_key );
-		if ( $supported_values instanceof NotFound ) {
-			throw $supported_values;
+		if ( Arrays::has_string_keys( $supported_values ) ) {
+			$supported_values = array_keys( $supported_values );
 		}
 
 		return Filtering::validate_allowed_value( $value, $supported_values, $default );
@@ -287,6 +269,50 @@ class ValidatorService {
 		} else {
 			return new NotFound();
 		}
+	}
+
+	/**
+	 * Retrieves the default value for a given key or throws the exception if not found.
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
+	 * @param   string  $key    The key inside the container.
+	 *
+	 * @throws  NotFound    Thrown when the default value or the supported values were not found inside the containers.
+	 *
+	 * @noinspection PhpMissingReturnTypeInspection
+	 *
+	 * @return  mixed
+	 */
+	protected function get_default_value_or_throw( string $key ) {
+		$default = $this->get_default_value( $key );
+		if ( $default instanceof NotFound ) {
+			throw $default;
+		}
+
+		return $default;
+	}
+
+	/**
+	 * Retrieves the supported options for a given key or throws the exception if not found.
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
+	 * @param   string  $key    The key inside the container.
+	 *
+	 * @throws  NotFound    Thrown when the default value or the supported values were not found inside the containers.
+	 *
+	 * @return  array
+	 */
+	protected function get_supported_options_or_throw( string $key ): array {
+		$options = $this->get_supported_options( $key );
+		if ( $options instanceof NotFound ) {
+			throw $options;
+		}
+
+		return $options;
 	}
 
 	// endregion
