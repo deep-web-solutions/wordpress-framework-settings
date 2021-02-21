@@ -89,7 +89,7 @@ class CustomFieldsService {
 	 *
 	 * @return  ActionResponse
 	 */
-	public function get_field_value( string $handler, string $field_id, $object_id, array $params = array() ): ActionResponse {
+	public function get_field_value( string $handler, string $field_id, $object_id, array $params ): ActionResponse {
 		$handler = $this->get_settings_handler_factory()->get_handler( $handler );
 		return $handler->get_field_value( $field_id, $object_id, $params );
 	}
