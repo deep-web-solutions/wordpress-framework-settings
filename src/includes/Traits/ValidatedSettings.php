@@ -38,7 +38,7 @@ trait ValidatedSettings {
 	 *
 	 * @return ActionResponse
 	 */
-	public function get_validated_setting( string $handler, string $field_id, string $settings_id, array $params ): ActionResponse {
+	public function get_validated_setting_value( string $handler, string $field_id, string $settings_id, array $params ): ActionResponse {
 		$value = $this->get_setting_value( $handler, $field_id, $settings_id, $params );
 		$args  = wp_parse_args(
 			$params['validator'],
@@ -83,7 +83,7 @@ trait ValidatedSettings {
 	 *
 	 * @return  ActionResponse
 	 */
-	public function update_validated_setting( string $handler, string $field_id, $value, string $settings_id, array $params ): ActionResponse {
+	public function update_validated_setting_value( string $handler, string $field_id, $value, string $settings_id, array $params ): ActionResponse {
 		$args  = wp_parse_args(
 			$params['validator'],
 			array(
