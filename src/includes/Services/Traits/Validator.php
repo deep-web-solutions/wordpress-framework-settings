@@ -131,7 +131,7 @@ trait Validator {
 				return $validator->validate_supported_value( $value, $params['options_key'] ?? '', $default_key );
 			case ValidationTypes::CUSTOM:
 				if ( isset( $params['callable'] ) && is_callable( $params['callable'] ) ) {
-					return call_user_func_array( $params['callable'], array( $value ) + ( $params['args'] ?? array() ) );
+					return call_user_func_array( $params['callable'], array( $value, $default_key ) + ( $params['args'] ?? array() ) );
 				} else {
 					throw new NotSupported( 'Custom validation requires a valid callable' );
 				}
