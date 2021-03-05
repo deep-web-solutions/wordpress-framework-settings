@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
  * @package DeepWebSolutions\WP-Framework\Settings\Utilities
  */
-class ActionResponse {
+class SettingsActionResponse {
 	// region FIELDS AND CONSTANTS
 
 	/**

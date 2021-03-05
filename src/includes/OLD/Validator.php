@@ -4,7 +4,7 @@ namespace DeepWebSolutions\Framework\Settings\Services\Traits;
 
 use DeepWebSolutions\Framework\Settings\Exceptions\NotFound;
 use DeepWebSolutions\Framework\Settings\Exceptions\NotSupported;
-use DeepWebSolutions\Framework\Settings\Services\ValidatorService;
+use DeepWebSolutions\Framework\Settings\Services\ValidationService;
 use DeepWebSolutions\Framework\Settings\Utilities\ValidationTypes;
 
 defined( 'ABSPATH' ) || exit;
@@ -27,9 +27,9 @@ trait Validator {
 	 * @version 1.0.0
 	 *
 	 * @access  protected
-	 * @var     ValidatorService
+	 * @var     ValidationService
 	 */
-	protected ValidatorService $settings_validator_service;
+	protected ValidationService $settings_validator_service;
 
 	// endregion
 
@@ -41,9 +41,9 @@ trait Validator {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @return  ValidatorService
+	 * @return  ValidationService
 	 */
-	protected function get_validator_service(): ValidatorService {
+	protected function get_validator_service(): ValidationService {
 		return $this->settings_validator_service;
 	}
 
@@ -87,9 +87,9 @@ trait Validator {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   ValidatorService     $validator_service     The validator service instance to use from now on.
+	 * @param   ValidationService $validator_service The validator service instance to use from now on.
 	 */
-	public function set_validator_service( ValidatorService $validator_service ): void {
+	public function set_validator_service( ValidationService $validator_service ): void {
 		$this->settings_validator_service = $validator_service;
 	}
 
@@ -103,7 +103,7 @@ trait Validator {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @see     ValidationTypes
+	 * @see     SettingsValidationTypesEnum
 	 *
 	 * @throws  NotFound        Thrown if no suitable values were found in the defaults and/or options container(s).
 	 * @throws  NotSupported    Thrown if the validation type requested is not supported.

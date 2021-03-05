@@ -2,8 +2,8 @@
 
 namespace DeepWebSolutions\Framework\Settings\Adapters;
 
-use DeepWebSolutions\Framework\Settings\Exceptions\NotSupported;
-use DeepWebSolutions\Framework\Settings\Interfaces\Actions\Adapterable;
+use DeepWebSolutions\Framework\Helpers\WordPress\Misc;
+use DeepWebSolutions\Framework\Settings\SettingsAdapterInterface;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -12,12 +12,10 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since   1.0.0
  * @version 1.0.0
- * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.de>
+ * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
  * @package DeepWebSolutions\WP-Framework\Settings\Adapters
- *
- * @see     Adapterable
  */
-class WordPress implements Adapterable {
+class WordPressAdapter implements SettingsAdapterInterface {
 	// region CREATE
 
 	/**
@@ -125,7 +123,7 @@ class WordPress implements Adapterable {
 	 *
 	 * @return  true
 	 */
-	public function register_settings_group( string $group_id, string $group_title, array $fields, string $page, array $params = array() ): bool {
+	public function register_options_group( string $group_id, string $group_title, array $fields, string $page, array $params = array() ): bool {
 		$params = wp_parse_args(
 			$params,
 			array(
@@ -152,7 +150,8 @@ class WordPress implements Adapterable {
 	}
 
 	/**
-	 * Registers a group of settings using WP's API.
+	 * Registers a group of settings using WP's API. This only supports registering text-based fields inside WordPress'
+	 * 'Custom Fields' meta box. If you need something more, please use another framework or craft your own meta boxes.
 	 *
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 *
@@ -164,13 +163,14 @@ class WordPress implements Adapterable {
 	 * @param   array   $fields         The fields to be registered with the group.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @throws  NotSupported    The WordPress API does NOT support adding settings in random places, e.g. on posts or taxonomy terms.
-	 *                          Use a settings framework or craft your own using WP's meta boxes API.
-	 *
 	 * @return  void
 	 */
 	public function register_generic_group( string $group_id, string $group_title, array $fields, array $params = array() ): void {
-		throw new NotSupported();
+		if ( false !== _get_meta_table( $group_id ) ) {
+			foreach ( $fields as $field ) {
+				register_meta( $group_id, $field['key'] ?? '', $field );
+			}
+		}
 	}
 
 	/**
@@ -188,26 +188,33 @@ class WordPress implements Adapterable {
 	 * @return  true
 	 */
 	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params ): bool {
-		$params          = wp_parse_args(
-			$params,
-			array(
-				'setting' => array(),
-				'field'   => array(),
-			)
-		);
-		$params['field'] = wp_parse_args(
-			$params['field'],
-			array(
-				'callback' => '',
-				'page'     => '',
-				'args'     => array(),
-			)
-		);
+		if ( false === _get_meta_table( $group_id ) ) {
+			$params = Misc::wp_parse_args_recursive(
+				$params,
+				array(
+					'setting' => array(),
+					'field'   => array(
+						'callback' => '',
+						'page'     => '',
+						'args'     => array(),
+					),
+				)
+			);
 
-		register_setting( $group_id, $field_id, array( 'type' => $field_type ) + $params['setting'] );
-		add_settings_field( $field_id, $field_title, $params['field']['callback'], $params['field']['page'], $group_id, $params['field']['args'] );
+			register_setting( $group_id, $field_id, array( 'type' => $field_type ) + $params['setting'] );
+			add_settings_field( $field_id, $field_title, $params['field']['callback'], $params['field']['page'], $group_id, $params['field']['args'] );
 
-		return true;
+			return true;
+		} else {
+			return register_meta(
+				$group_id,
+				$field_id,
+				array(
+					'description' => $field_title,
+					'type'        => $field_type,
+				) + $params
+			);
+		}
 	}
 
 	// endregion
@@ -226,7 +233,7 @@ class WordPress implements Adapterable {
 	 *
 	 * @return  mixed
 	 */
-	public function get_setting_value( string $field_id, string $settings_id, array $params = array() ) {
+	public function get_option_value( string $field_id, string $settings_id, array $params = array() ) {
 		if ( is_multisite() ) {
 			$params = wp_parse_args(
 				$params,
@@ -294,7 +301,7 @@ class WordPress implements Adapterable {
 	 *
 	 * @return  bool
 	 */
-	public function update_settings_value( string $field_id, $value, string $settings_id, array $params = array() ): bool {
+	public function update_option_value( string $field_id, $value, string $settings_id, array $params = array() ): bool {
 		if ( is_multisite() ) {
 			$params = wp_parse_args(
 				$params,
@@ -306,7 +313,7 @@ class WordPress implements Adapterable {
 			);
 
 			if ( ! is_null( $field_id ) ) {
-				$options              = $this->get_setting_value( null, $settings_id, $params );
+				$options              = $this->get_option_value( null, $settings_id, $params );
 				$options[ $field_id ] = $value;
 				$value                = $options;
 			}
@@ -318,7 +325,7 @@ class WordPress implements Adapterable {
 			$params = wp_parse_args( $params, array( 'autoload' => null ) );
 
 			if ( ! is_null( $field_id ) ) {
-				$options              = $this->get_setting_value( null, $settings_id, $params );
+				$options              = $this->get_option_value( null, $settings_id, $params );
 				$options[ $field_id ] = $value;
 				$value                = $options;
 			}
@@ -370,7 +377,7 @@ class WordPress implements Adapterable {
 	 *
 	 * @return  bool
 	 */
-	public function delete_setting( string $field_id, string $settings_id, array $params = array() ): bool {
+	public function delete_option( string $field_id, string $settings_id, array $params = array() ): bool {
 		$params = wp_parse_args(
 			$params,
 			array(
@@ -380,9 +387,9 @@ class WordPress implements Adapterable {
 		);
 
 		if ( ! empty( $field_id ) ) {
-			$options = $this->get_setting_value( null, $settings_id, $params );
+			$options = $this->get_option_value( null, $settings_id, $params );
 			unset( $options[ $field_id ] );
-			return $this->update_settings_value( null, $options, $settings_id, $params );
+			return $this->update_option_value( null, $options, $settings_id, $params );
 		} elseif ( is_multisite() ) {
 			return ( false === $params['network_id'] )
 				? delete_blog_option( $params['blog_id'], $settings_id )

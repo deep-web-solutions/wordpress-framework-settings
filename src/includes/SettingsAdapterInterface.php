@@ -1,18 +1,18 @@
 <?php
 
-namespace DeepWebSolutions\Framework\Settings\Interfaces\Actions;
+namespace DeepWebSolutions\Framework\Settings;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Handles the registration and interaction with settings pages.
+ * Describes an instance that can interact with a settings framework.
  *
  * @since   1.0.0
  * @version 1.0.0
- * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.de>
- * @package DeepWebSolutions\WP-Framework\Settings\Interfaces
+ * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
+ * @package DeepWebSolutions\WP-Framework\Settings
  */
-interface Adapterable {
+interface SettingsAdapterInterface {
 	// region CREATE
 
 	/**
@@ -66,7 +66,7 @@ interface Adapterable {
 	 *
 	 * @return  mixed
 	 */
-	public function register_settings_group( string $group_id, string $group_title, array $fields, string $page, array $params );
+	public function register_options_group( string $group_id, string $group_title, array $fields, string $page, array $params );
 
 	/**
 	 * Registers a group of settings.
@@ -115,7 +115,7 @@ interface Adapterable {
 	 *
 	 * @return  mixed
 	 */
-	public function get_setting_value( string $field_id, string $settings_id, array $params );
+	public function get_option_value( string $field_id, string $settings_id, array $params );
 
 	/**
 	 * Reads a field's value from the database.
@@ -148,7 +148,7 @@ interface Adapterable {
 	 *
 	 * @return  mixed
 	 */
-	public function update_settings_value( string $field_id, $value, string $settings_id, array $params );
+	public function update_option_value( string $field_id, $value, string $settings_id, array $params );
 
 	/**
 	 * Updates a field's value.
@@ -181,7 +181,7 @@ interface Adapterable {
 	 *
 	 * @return  mixed
 	 */
-	public function delete_setting( string $field_id, string $settings_id, array $params );
+	public function delete_option( string $field_id, string $settings_id, array $params );
 
 	/**
 	 * Deletes a field's value from the database.

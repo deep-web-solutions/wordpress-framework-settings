@@ -2,9 +2,7 @@
 
 namespace DeepWebSolutions\Framework\Settings\Handlers;
 
-use DeepWebSolutions\Framework\Settings\Abstracts\Handler;
-use DeepWebSolutions\Framework\Settings\Adapters\MetaBox as MetaBoxAdapter;
-use DeepWebSolutions\Framework\Utilities\Services\LoggingService;
+use DeepWebSolutions\Framework\Settings\Adapters\MetaBoxAdapter;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -16,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
  * @package DeepWebSolutions\WP-Framework\Settings\Handlers
  */
-class MetaBox extends Handler {
+class MetaBoxHandler extends AbstractHandler {
 	// region MAGIC METHODS
 
 	/**
@@ -25,16 +23,27 @@ class MetaBox extends Handler {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   MetaBoxAdapter  $adapter            Instance of the adapter to the Meta Box settings framework.
-	 * @param   LoggingService  $logging_service    Instance of the logging service.
+	 * @param   MetaBoxAdapter  $adapter    Instance of the adapter to the Meta Box settings framework.
 	 */
-	public function __construct( MetaBoxAdapter $adapter, LoggingService $logging_service ) { // phpcs:ignore
-		parent::__construct( $adapter, $logging_service );
+	public function __construct( MetaBoxAdapter $adapter ) { // phpcs:ignore
+		parent::__construct( $adapter );
 	}
 
 	// endregion
 
 	// region INHERITED METHODS
+
+	/**
+	 * Returns a unique name of the handler.
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
+	 * @return  string
+	 */
+	public function get_name(): string {
+		return 'meta-box';
+	}
 
 	/**
 	 * Returns the hook on which the Meta Box framework is ready to be used.
@@ -54,20 +63,6 @@ class MetaBox extends Handler {
 			default:
 				return 'plugins_loaded';
 		}
-	}
-
-	/**
-	 * Gets the instance of the settings framework adapter. Overwriting this method has no value other than helping
-	 * with auto-complete in IDEs.
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @return  MetaBoxAdapter
-	 */
-	public function get_adapter(): MetaBoxAdapter { // phpcs:ignore
-		/* @noinspection PhpIncompatibleReturnTypeInspection */
-		return parent::get_adapter();
 	}
 
 	// endregion

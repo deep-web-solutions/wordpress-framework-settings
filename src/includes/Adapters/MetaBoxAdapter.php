@@ -2,8 +2,8 @@
 
 namespace DeepWebSolutions\Framework\Settings\Adapters;
 
-use DeepWebSolutions\Framework\Settings\Exceptions\NotSupported;
-use DeepWebSolutions\Framework\Settings\Interfaces\Actions\Adapterable;
+use DeepWebSolutions\Framework\Foundations\Exceptions\NotSupportedException;
+use DeepWebSolutions\Framework\Settings\SettingsAdapterInterface;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -12,13 +12,12 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since   1.0.0
  * @version 1.0.0
- * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.de>
+ * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
  * @package DeepWebSolutions\WP-Framework\Settings\Adapters
  *
- * @see     Adapterable
  * @see     https://metabox.io/
  */
-class MetaBox implements Adapterable {
+class MetaBoxAdapter implements SettingsAdapterInterface {
 	// region CREATE
 
 	/**
@@ -90,7 +89,7 @@ class MetaBox implements Adapterable {
 	 *
 	 * @return  bool
 	 */
-	public function register_settings_group( string $group_id, string $group_title, array $fields, string $page, array $params ): bool {
+	public function register_options_group( string $group_id, string $group_title, array $fields, string $page, array $params ): bool {
 		return $this->register_generic_group( $group_id, $group_title, $fields, array( 'settings_pages' => $page ) + $params );
 	}
 
@@ -171,7 +170,7 @@ class MetaBox implements Adapterable {
 	 *
 	 * @return  mixed
 	 */
-	public function get_setting_value( string $field_id, string $settings_id, array $params ) {
+	public function get_option_value( string $field_id, string $settings_id, array $params ) {
 		$params                = wp_parse_args( $params, array( 'network' => false ) );
 		$params['object_type'] = ( is_multisite() && $params['network'] ) ? 'network_setting' : 'setting';
 
@@ -211,7 +210,7 @@ class MetaBox implements Adapterable {
 	 *
 	 * @return  true
 	 */
-	public function update_settings_value( string $field_id, $value, string $settings_id, array $params ): bool {
+	public function update_option_value( string $field_id, $value, string $settings_id, array $params ): bool {
 		$params                = wp_parse_args( $params, array( 'network' => false ) );
 		$params['object_type'] = ( is_multisite() && $params['network'] ) ? 'network_setting' : 'setting';
 
@@ -252,12 +251,12 @@ class MetaBox implements Adapterable {
 	 * @param   string      $settings_id    The ID of the settings group to delete the field from.
 	 * @param   array       $params         Other parameters required for the adapter to work.
 	 *
-	 * @throws  NotSupported    The Meta Box plugin does NOT implement any functions for deleting values. Use the WP provider.
+	 * @throws  NotSupportedException       The Meta Box plugin does NOT implement any functions for deleting values. Use the WP adapter.
 	 *
 	 * @return  void
 	 */
-	public function delete_setting( string $field_id, string $settings_id, array $params ) {
-		throw new NotSupported();
+	public function delete_option( string $field_id, string $settings_id, array $params ) {
+		throw new NotSupportedException();
 	}
 
 	/**
@@ -272,12 +271,12 @@ class MetaBox implements Adapterable {
 	 * @param   mixed   $object_id  The ID of the object the deletion is for.
 	 * @param   array   $params     Other parameters required for the adapter to work.
 	 *
-	 * @throws  NotSupported    The Meta Box plugin does NOT implement any functions for deleting values. Use the WP provider.
+	 * @throws  NotSupportedException       The Meta Box plugin does NOT implement any functions for deleting values. Use the WP adapter.
 	 *
 	 * @return  void
 	 */
 	public function delete_field( string $field_id, $object_id, array $params ) {
-		throw new NotSupported();
+		throw new NotSupportedException();
 	}
 
 	// endregion

@@ -1,12 +1,11 @@
 <?php
 
-namespace DeepWebSolutions\Framework\Settings\Abstracts;
+namespace DeepWebSolutions\Framework\Settings\Handlers;
 
 use DeepWebSolutions\Framework\Helpers\WordPress\Hooks;
-use DeepWebSolutions\Framework\Settings\Interfaces\Actions\Adapterable;
-use DeepWebSolutions\Framework\Settings\Utilities\ActionResponse;
-use DeepWebSolutions\Framework\Utilities\Services\LoggingService;
-use DeepWebSolutions\Framework\Utilities\Services\Traits\Logging;
+use DeepWebSolutions\Framework\Settings\SettingsAdapterInterface;
+use DeepWebSolutions\Framework\Settings\SettingsHandlerInterface;
+use DeepWebSolutions\Framework\Settings\Utilities\SettingsActionResponse;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Promise\Utils;
@@ -14,47 +13,47 @@ use GuzzleHttp\Promise\Utils;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Wrapper for the setting frameworks adapters. Since the settings frameworks have individual hooks that they are active
- * on, all calls are wrapped in a Promise -- that way, one can register calls that depend on the value without fear
- * of them not having returned anything useful. Also, different frameworks handle update/delete operations differently and
- * a handler should also try to mitigate that as much as possible.
+ * Handles performing actions against a settings framework's API.
+ *
+ * Since the settings frameworks have individual hooks that they are active on, all calls are wrapped in a Promise.
+ * That way, one can register calls that depend on the return value at any point in the plugin's lifecycle without fear
+ * of the action not having returned anything useful or throwing an error.
+ *
+ * Moreover, different frameworks handle update/delete operations differently and a handler should also try to mitigate
+ * that as much as possible.
  *
  * @since   1.0.0
  * @version 1.0.0
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
- * @package DeepWebSolutions\WP-Framework\Settings\Abstracts
+ * @package DeepWebSolutions\WP-Framework\Settings\Handlers
  */
-abstract class Handler implements Adapterable {
-	use Logging;
-
+abstract class AbstractHandler implements SettingsHandlerInterface {
 	// region FIELDS AND CONSTANTS
 
 	/**
-	 * Instance of the adapter to the settings framework.
+	 * Settings adapter to use for performing the actions.
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @var     Adapterable
+	 * @var     SettingsAdapterInterface
 	 */
-	protected Adapterable $adapter;
+	protected SettingsAdapterInterface $adapter;
 
 	// endregion
 
 	// region MAGIC METHODS
 
 	/**
-	 * Handler constructor.
+	 * AbstractHandler constructor.
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   Adapterable     $adapter            Instance of a settings framework adapter.
-	 * @param   LoggingService  $logging_service    Instance of the logging service.
+	 * @param   SettingsAdapterInterface    $adapter    Settings adapter to use.
 	 */
-	public function __construct( Adapterable $adapter, LoggingService $logging_service ) {
-		$this->set_adapter( $adapter );
-		$this->set_logging_service( $logging_service );
+	public function __construct( SettingsAdapterInterface $adapter ) {
+		$this->adapter = $adapter;
 	}
 
 	// endregion
@@ -75,12 +74,12 @@ abstract class Handler implements Adapterable {
 	 * @param   string  $capability     The capability required for this menu to be displayed to the user.
 	 * @param   array   $params         Other params required for the adapter to work.
 	 *
-	 * @return  ActionResponse
+	 * @return  SettingsActionResponse
 	 */
-	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): ActionResponse {
+	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): SettingsActionResponse {
 		return $this->create_action_response(
 			'register_menu_page',
-			array( $this->get_adapter(), 'register_menu_page' ),
+			array( $this->adapter, 'register_menu_page' ),
 			array( $page_title, $menu_title, $menu_slug, $capability, $params )
 		);
 	}
@@ -100,12 +99,12 @@ abstract class Handler implements Adapterable {
 	 * @param   string  $capability     The capability required for this menu to be displayed to the user.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  ActionResponse
+	 * @return  SettingsActionResponse
 	 */
-	public function register_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): ActionResponse {
+	public function register_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): SettingsActionResponse {
 		return $this->create_action_response(
 			'register_submenu_page',
-			array( $this->get_adapter(), 'register_submenu_page' ),
+			array( $this->adapter, 'register_submenu_page' ),
 			array( $parent_slug, $page_title, $menu_title, $menu_slug, $capability, $params )
 		);
 	}
@@ -122,12 +121,12 @@ abstract class Handler implements Adapterable {
 	 * @param   string  $page           The settings page on which the group's fields should be displayed.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  ActionResponse
+	 * @return  SettingsActionResponse
 	 */
-	public function register_settings_group( string $group_id, string $group_title, array $fields, string $page, array $params ): ActionResponse {
+	public function register_options_group( string $group_id, string $group_title, array $fields, string $page, array $params ): SettingsActionResponse {
 		return $this->create_action_response(
 			'register_settings_group',
-			array( $this->get_adapter(), 'register_settings_group' ),
+			array( $this->adapter, 'register_options_group' ),
 			array( $group_id, $group_title, $fields, $page, $params )
 		);
 	}
@@ -143,12 +142,12 @@ abstract class Handler implements Adapterable {
 	 * @param   array   $fields         The fields to be registered with the group.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  ActionResponse
+	 * @return  SettingsActionResponse
 	 */
-	public function register_generic_group( string $group_id, string $group_title, array $fields, array $params ): ActionResponse {
+	public function register_generic_group( string $group_id, string $group_title, array $fields, array $params ): SettingsActionResponse {
 		return $this->create_action_response(
 			'register_generic_group',
-			array( $this->get_adapter(), 'register_generic_group' ),
+			array( $this->adapter, 'register_generic_group' ),
 			array( $group_id, $group_title, $fields, $params )
 		);
 	}
@@ -165,12 +164,12 @@ abstract class Handler implements Adapterable {
 	 * @param   string  $field_type     The type of custom field being registered.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  ActionResponse
+	 * @return  SettingsActionResponse
 	 */
-	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params ): ActionResponse {
+	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params ): SettingsActionResponse {
 		return $this->create_action_response(
 			'register_field',
-			array( $this->get_adapter(), 'register_field' ),
+			array( $this->adapter, 'register_field' ),
 			array( $group_id, $field_id, $field_title, $field_type, $params )
 		);
 	}
@@ -185,12 +184,12 @@ abstract class Handler implements Adapterable {
 	 * @param   string  $settings_id    The ID of the settings group to read from the database.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  ActionResponse
+	 * @return  SettingsActionResponse
 	 */
-	public function get_setting_value( string $field_id, string $settings_id, array $params ): ActionResponse {
+	public function get_option_value( string $field_id, string $settings_id, array $params ): SettingsActionResponse {
 		return $this->create_action_response(
 			'get_setting_value',
-			array( $this->get_adapter(), 'get_setting_value' ),
+			array( $this->adapter, 'get_option_value' ),
 			array( $field_id, $settings_id, $params )
 		);
 	}
@@ -205,12 +204,12 @@ abstract class Handler implements Adapterable {
 	 * @param   mixed   $object_id      The ID of the object the data is for.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  ActionResponse
+	 * @return  SettingsActionResponse
 	 */
-	public function get_field_value( string $field_id, $object_id, array $params = array() ): ActionResponse {
+	public function get_field_value( string $field_id, $object_id, array $params = array() ): SettingsActionResponse {
 		return $this->create_action_response(
 			'get_field_value',
-			array( $this->get_adapter(), 'get_field_value' ),
+			array( $this->adapter, 'get_field_value' ),
 			array( $field_id, $object_id, $params )
 		);
 	}
@@ -226,12 +225,12 @@ abstract class Handler implements Adapterable {
 	 * @param   string  $settings_id    The ID of the settings group to update.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  ActionResponse
+	 * @return  SettingsActionResponse
 	 */
-	public function update_settings_value( string $field_id, $value, string $settings_id, array $params ): ActionResponse {
+	public function update_option_value( string $field_id, $value, string $settings_id, array $params ): SettingsActionResponse {
 		return $this->create_action_response(
 			'update_settings_value',
-			array( $this->get_adapter(), 'update_settings_value' ),
+			array( $this->adapter, 'update_option_value' ),
 			array( $field_id, $value, $settings_id, $params )
 		);
 	}
@@ -247,12 +246,12 @@ abstract class Handler implements Adapterable {
 	 * @param   mixed   $object_id      The ID of the object the update is for.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  ActionResponse
+	 * @return  SettingsActionResponse
 	 */
-	public function update_field_value( string $field_id, $value, $object_id, array $params ): ActionResponse {
+	public function update_field_value( string $field_id, $value, $object_id, array $params ): SettingsActionResponse {
 		return $this->create_action_response(
 			'update_field_value',
-			array( $this->get_adapter(), 'update_field_value' ),
+			array( $this->adapter, 'update_field_value' ),
 			array( $field_id, $value, $object_id, $params )
 		);
 	}
@@ -267,12 +266,12 @@ abstract class Handler implements Adapterable {
 	 * @param   string      $settings_id    The ID of the settings group to delete the field from.
 	 * @param   array       $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  ActionResponse
+	 * @return  SettingsActionResponse
 	 */
-	public function delete_setting( string $field_id, string $settings_id, array $params ): ActionResponse {
+	public function delete_option( string $field_id, string $settings_id, array $params ): SettingsActionResponse {
 		return $this->create_action_response(
 			'delete_field',
-			array( $this->get_adapter(), 'delete_setting' ),
+			array( $this->adapter, 'delete_option' ),
 			array( $field_id, $settings_id, $params )
 		);
 	}
@@ -287,12 +286,12 @@ abstract class Handler implements Adapterable {
 	 * @param   mixed   $object_id  The ID of the object the deletion is for.
 	 * @param   array   $params     Other parameters required for the adapter to work.
 	 *
-	 * @return  ActionResponse
+	 * @return  SettingsActionResponse
 	 */
-	public function delete_field( string $field_id, $object_id, array $params ): ActionResponse {
+	public function delete_field( string $field_id, $object_id, array $params ): SettingsActionResponse {
 		return $this->create_action_response(
 			'delete_field',
-			array( $this->get_adapter(), 'delete_field' ),
+			array( $this->adapter, 'delete_field' ),
 			array( $field_id, $object_id, $params )
 		);
 	}
@@ -300,18 +299,6 @@ abstract class Handler implements Adapterable {
 	// endregion
 
 	// region GETTERS
-
-	/**
-	 * Gets the instance of the settings framework adapter.
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @return  Adapterable
-	 */
-	public function get_adapter(): Adapterable {
-		return $this->adapter;
-	}
 
 	/**
 	 * Returns the hook on which the settings framework is ready to be used.
@@ -327,27 +314,11 @@ abstract class Handler implements Adapterable {
 
 	// endregion
 
-	// region SETTERS
-
-	/**
-	 * Sets the settings framework adapter.
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @param   Adapterable     $adapter    Instance of the settings adapter to use from now on.
-	 */
-	public function set_adapter( Adapterable $adapter ): void {
-		$this->adapter = $adapter;
-	}
-
-	// endregion
-
 	// region HELPERS
 
 	/**
-	 * Instantiates an ActionResponse object either with the value of the settings API's action result or with a promise
-	 * to return the value after the API's initialization.
+	 * Instantiates a SettingsActionResponse object either with the value of the settings API's action result or with
+	 * a promise to return the value after the API's initialization.
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
@@ -356,16 +327,16 @@ abstract class Handler implements Adapterable {
 	 * @param   callable    $return_value   The callable that generates the return value.
 	 * @param   array       $args           Arguments to pass on to the callable.
 	 *
-	 * @return  ActionResponse
+	 * @return  SettingsActionResponse
 	 */
-	protected function create_action_response( string $context, callable $return_value, array $args ): ActionResponse {
+	protected function create_action_response( string $context, callable $return_value, array $args ): SettingsActionResponse {
 		$hook = $this->get_action_hook( $context );
 
 		if ( did_action( $hook ) || doing_action( $hook ) ) {
 			$return_value = call_user_func_array( $return_value, $args );
 			return ( $return_value instanceof PromiseInterface )
-				? new ActionResponse( null, $return_value )
-				: new ActionResponse( $return_value, null );
+				? new SettingsActionResponse( null, $return_value )
+				: new SettingsActionResponse( $return_value, null );
 		} else {
 			$promise = new Promise();
 
@@ -377,7 +348,7 @@ abstract class Handler implements Adapterable {
 				}
 			);
 
-			return new ActionResponse( null, $promise );
+			return new SettingsActionResponse( null, $promise );
 		}
 	}
 

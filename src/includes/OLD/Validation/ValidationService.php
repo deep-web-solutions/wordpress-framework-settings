@@ -1,25 +1,25 @@
 <?php
 
-namespace DeepWebSolutions\Framework\Settings\Services;
+namespace DeepWebSolutions\Framework\Settings\Validation;
 
-use DeepWebSolutions\Framework\Helpers\PHP\Arrays;
-use DeepWebSolutions\Framework\Helpers\PHP\Filtering;
-use DeepWebSolutions\Framework\Settings\Exceptions\NotFound;
-use DI\Container;
+use DeepWebSolutions\Framework\Foundations\Exceptions\InexistentPropertyException;
+use DeepWebSolutions\Framework\Helpers\DataTypes\Arrays;
+use DeepWebSolutions\Framework\Helpers\Security\Validation;
 use DI\ContainerBuilder;
 use Exception;
+use Psr\Container\ContainerInterface;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Validates that a setting's value is valid.
+ * Validates that a setting's value is good to use.
  *
  * @since   1.0.0
  * @version 1.0.0
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
- * @package DeepWebSolutions\WP-Framework\Settings\Services
+ * @package DeepWebSolutions\WP-Framework\Settings\Validation
  */
-class ValidatorService {
+class ValidationService {
 	// region FIELDS AND CONSTANTS
 
 	/**
@@ -28,9 +28,9 @@ class ValidatorService {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @var     Container
+	 * @var     ContainerInterface
 	 */
-	protected Container $supported_options;
+	protected ContainerInterface $supported_options;
 
 	/**
 	 * Container for storing the default settings' values.
@@ -38,9 +38,9 @@ class ValidatorService {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @var     Container
+	 * @var     ContainerInterface
 	 */
-	protected Container $default_values;
+	protected ContainerInterface $default_values;
 
 	// endregion
 
@@ -62,13 +62,13 @@ class ValidatorService {
 		foreach ( $options_config as $definitions ) {
 			$container_builder->addDefinitions( $definitions );
 		}
-		$this->supported_options = $container_builder->build();
+		// $this->supported_options = $container_builder->build();
 
 		$container_builder = new ContainerBuilder();
 		foreach ( $defaults_config as $definitions ) {
 			$container_builder->addDefinitions( $definitions );
 		}
-		$this->default_values = $container_builder->build();
+		// $this->default_values = $container_builder->build();
 	}
 
 	// endregion
@@ -84,13 +84,13 @@ class ValidatorService {
 	 * @param   mixed   $value  The value to validate.
 	 * @param   string  $key    The composite key to retrieve the default value.
 	 *
-	 * @throws  NotFound    Thrown when the default value was not found inside the container.
+	 * @throws  InexistentPropertyException     Thrown when the default value was not found inside the container.
 	 *
 	 * @return  bool
 	 */
 	public function validate_boolean_value( $value, string $key ): bool {
 		$default = $this->get_default_value_or_throw( $key );
-		return Filtering::validate_boolean( $value, $default );
+		return Validation::validate_boolean( $value, $default );
 	}
 
 	/**
@@ -102,13 +102,13 @@ class ValidatorService {
 	 * @param   mixed   $value  The value to validate.
 	 * @param   string  $key    The composite key to retrieve the default value.
 	 *
-	 * @throws  NotFound    Thrown when the default value was not found inside the container.
+	 * @throws  InexistentPropertyException     Thrown when the default value was not found inside the container.
 	 *
 	 * @return  int
 	 */
 	public function validate_integer_value( $value, string $key ): int {
 		$default = $this->get_default_value_or_throw( $key );
-		return Filtering::validate_integer( $value, $default );
+		return Validation::validate_integer( $value, $default );
 	}
 
 	/**
@@ -120,13 +120,13 @@ class ValidatorService {
 	 * @param   mixed   $value  The value to validate.
 	 * @param   string  $key    The composite key to retrieve the default value.
 	 *
-	 * @throws  NotFound    Thrown when the default value was not found inside the container.
+	 * @throws  InexistentPropertyException     Thrown when the default value was not found inside the container.
 	 *
 	 * @return  float
 	 */
 	public function validate_float_value( $value, string $key ): float {
 		$default = $this->get_default_value_or_throw( $key );
-		return Filtering::validate_float( $value, $default );
+		return Validation::validate_float( $value, $default );
 	}
 
 	/**
@@ -135,13 +135,13 @@ class ValidatorService {
 	 * @param   mixed   $value  The value to validate.
 	 * @param   string  $key    The composite key to retrieve the default value.
 	 *
-	 * @throws  NotFound    Thrown when the default value was not found inside the container.
+	 * @throws  InexistentPropertyException     Thrown when the default value was not found inside the container.
 	 *
 	 * @return  callable
 	 */
 	public function validate_callback_value( $value, string $key ): callable {
 		$default = $this->get_default_value_or_throw( $key );
-		return Filtering::validate_callback( $value, $default );
+		return Validation::validate_callback( $value, $default );
 	}
 
 	/**
@@ -151,7 +151,7 @@ class ValidatorService {
 	 * @param   string  $options_key    The composite key to retrieve the supported values.
 	 * @param   string  $default_key    The composite key to retrieve the default value.
 	 *
-	 * @throws  NotFound    Thrown when the default value or the supported values were not found inside the containers.
+	 * @throws  InexistentPropertyException     Thrown when the default value or the supported values were not found inside the containers.
 	 *
 	 * @return  mixed
 	 */
@@ -163,7 +163,7 @@ class ValidatorService {
 			$supported_values = array_keys( $supported_values );
 		}
 
-		return Filtering::validate_allowed_value( $value, $supported_values, $default );
+		return Validation::validate_allowed_value( $value, $supported_values, $default );
 	}
 
 	// endregion
@@ -179,8 +179,7 @@ class ValidatorService {
 	 * @param   string  $key    The key inside the container.
 	 *
 	 * @noinspection PhpMissingReturnTypeInspection
-	 *
-	 * @return  NotFound|mixed
+	 * @return  InexistentPropertyException|mixed
 	 */
 	public function get_default_value( string $key ) {
 		return $this->get_container_value( $this->default_values, $key );
@@ -206,7 +205,7 @@ class ValidatorService {
 	 *
 	 * @param   string  $key    The key inside the container.
 	 *
-	 * @return  NotFound|array
+	 * @return  InexistentPropertyException|array
 	 */
 	public function get_supported_options( string $key ) {
 		return $this->get_container_value( $this->supported_options, $key );
@@ -265,33 +264,30 @@ class ValidatorService {
 	/**
 	 * Retrieves a value from a given container.
 	 *
-	 * @param   Container   $container  The container to retrieve the value from.
-	 * @param   string      $key        Composite key of the value to retrieve.
+	 * @param   ContainerInterface      $container      The container to retrieve the value from.
+	 * @param   string                  $key            Composite key of the value to retrieve.
 	 *
-	 * @noinspection PhpDocMissingThrowsInspection
 	 * @noinspection PhpMissingReturnTypeInspection
-	 *
-	 * @return  NotFound|mixed
+	 * @return  InexistentPropertyException|mixed
 	 */
-	protected function get_container_value( Container $container, string $key ) {
+	protected function get_container_value( ContainerInterface $container, string $key ) {
 		$boom = explode( '/', $key );
 		$key  = array_shift( $boom );
 
 		if ( $container->has( $key ) ) {
-			/* @noinspection PhpUnhandledExceptionInspection */
 			$value = $container->get( $key );
 
 			foreach ( $boom as $key ) {
 				if ( isset( $value[ $key ] ) ) {
 					$value = $value[ $key ];
 				} else {
-					return new NotFound();
+					return new InexistentPropertyException();
 				}
 			}
 
 			return $value;
 		} else {
-			return new NotFound();
+			return new InexistentPropertyException();
 		}
 	}
 
@@ -303,15 +299,13 @@ class ValidatorService {
 	 *
 	 * @param   string  $key    The key inside the container.
 	 *
-	 * @throws  NotFound    Thrown when the default value or the supported values were not found inside the containers.
-	 *
-	 * @noinspection PhpMissingReturnTypeInspection
+	 * @throws  InexistentPropertyException     Thrown when the default value or the supported values were not found inside the containers.
 	 *
 	 * @return  mixed
 	 */
 	protected function get_default_value_or_throw( string $key ) {
 		$default = $this->get_default_value( $key );
-		if ( $default instanceof NotFound ) {
+		if ( $default instanceof InexistentPropertyException ) {
 			throw $default;
 		}
 
@@ -326,13 +320,13 @@ class ValidatorService {
 	 *
 	 * @param   string  $key    The key inside the container.
 	 *
-	 * @throws  NotFound    Thrown when the default value or the supported values were not found inside the containers.
+	 * @throws  InexistentPropertyException     Thrown when the default value or the supported values were not found inside the containers.
 	 *
 	 * @return  array
 	 */
 	protected function get_supported_options_or_throw( string $key ): array {
 		$options = $this->get_supported_options( $key );
-		if ( $options instanceof NotFound ) {
+		if ( $options instanceof InexistentPropertyException ) {
 			throw $options;
 		}
 

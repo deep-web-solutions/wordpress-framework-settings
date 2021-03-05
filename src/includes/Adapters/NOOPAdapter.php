@@ -2,7 +2,7 @@
 
 namespace DeepWebSolutions\Framework\Settings\Adapters;
 
-use DeepWebSolutions\Framework\Settings\Interfaces\Actions\Adapterable;
+use DeepWebSolutions\Framework\Settings\SettingsAdapterInterface;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -11,16 +11,16 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since   1.0.0
  * @version 1.0.0
- * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.de>
+ * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
  * @package DeepWebSolutions\WP-Framework\Settings\Adapters
- *
- * @see     Adapterable
  */
-class NOOP implements Adapterable {
+class NOOPAdapter implements SettingsAdapterInterface {
 	// region CREATE
 
 	/**
 	 * Noop implementation.
+	 *
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 *
 	 * @param   string  $page_title     The text to be displayed in the title tags of the page when the menu is selected.
 	 * @param   string  $menu_title     The text to be used for the menu.
@@ -41,6 +41,8 @@ class NOOP implements Adapterable {
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
+	 *
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 *
 	 * @param   string  $parent_slug    The slug name for the parent menu (or the file name of a standard WordPress admin page).
 	 * @param   string  $page_title     The text to be displayed in the title tags of the page when the menu is selected.
@@ -63,6 +65,8 @@ class NOOP implements Adapterable {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 *
 	 * @param   string  $group_id       The ID of the settings group.
 	 * @param   string  $group_title    The title of the settings group.
 	 * @param   array   $fields         The fields to be registered with the group.
@@ -71,7 +75,7 @@ class NOOP implements Adapterable {
 	 *
 	 * @return  null
 	 */
-	public function register_settings_group( string $group_id = '', string $group_title = '', array $fields = array(), string $page = '', array $params = array() ) {
+	public function register_options_group( string $group_id = '', string $group_title = '', array $fields = array(), string $page = '', array $params = array() ) {
 		return null;
 	}
 
@@ -80,6 +84,8 @@ class NOOP implements Adapterable {
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
+	 *
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 *
 	 * @param   string  $group_id       The ID of the settings group.
 	 * @param   string  $group_title    The title of the settings group.
@@ -97,6 +103,8 @@ class NOOP implements Adapterable {
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
+	 *
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 *
 	 * @param   string  $group_id       The ID of the parent group that the dynamically added field belongs to.
 	 * @param   string  $field_id       The ID of the newly registered field.
@@ -120,13 +128,15 @@ class NOOP implements Adapterable {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 *
 	 * @param   string          $field_id       The ID of the field within the settings to read from the database.
 	 * @param   string|null     $settings_id    NOT USED BY THE ACF ADAPTER.
 	 * @param   array           $params         Other parameters required for the adapter to work.
 	 *
 	 * @return  null
 	 */
-	public function get_setting_value( string $field_id = '', string $settings_id = '', array $params = array() ) {
+	public function get_option_value( string $field_id = '', string $settings_id = '', array $params = array() ) {
 		return $this->get_field_value( $field_id, 'options', $params );
 	}
 
@@ -135,6 +145,8 @@ class NOOP implements Adapterable {
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
+	 *
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 *
 	 * @param   string              $field_id       The ID of the field to read from the database.
 	 * @param   false|string|int    $object_id      The ID of the object the data is for.
@@ -156,6 +168,8 @@ class NOOP implements Adapterable {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 *
 	 * @param   string          $field_id       The ID of the field within the settings to update.
 	 * @param   mixed           $value          The new value of the setting.
 	 * @param   string|null     $settings_id    NOT USED BY THE ACF ADAPTER.
@@ -163,7 +177,7 @@ class NOOP implements Adapterable {
 	 *
 	 * @return  null
 	 */
-	public function update_settings_value( string $field_id = '', $value = '', string $settings_id = '', array $params = array() ) {
+	public function update_option_value( string $field_id = '', $value = '', string $settings_id = '', array $params = array() ) {
 		return null;
 	}
 
@@ -172,6 +186,8 @@ class NOOP implements Adapterable {
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
+	 *
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 *
 	 * @param   string              $field_id       The ID of the field to update.
 	 * @param   mixed               $value          The new value of the setting.
@@ -194,13 +210,15 @@ class NOOP implements Adapterable {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 *
 	 * @param   string          $field_id       The ID of the settings field to remove from the database.
 	 * @param   string|null     $settings_id    NOT USED BY THE ACF ADAPTER.
 	 * @param   array           $params         Other parameters required for the adapter to work.
 	 *
 	 * @return  null
 	 */
-	public function delete_setting( string $field_id = '', string $settings_id = '', array $params = array() ) {
+	public function delete_option( string $field_id = '', string $settings_id = '', array $params = array() ) {
 		return null;
 	}
 
@@ -209,6 +227,8 @@ class NOOP implements Adapterable {
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
+	 *
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 *
 	 * @param   string              $field_id       The ID of the field to delete from the database.
 	 * @param   false|string|int    $object_id      The ID of the object the deletion is for.

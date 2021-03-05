@@ -2,8 +2,8 @@
 
 namespace DeepWebSolutions\Framework\Settings\Adapters;
 
-use DeepWebSolutions\Framework\Helpers\PHP\Strings;
-use DeepWebSolutions\Framework\Settings\Interfaces\Actions\Adapterable;
+use DeepWebSolutions\Framework\Helpers\DataTypes\Strings;
+use DeepWebSolutions\Framework\Settings\SettingsAdapterInterface;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -12,13 +12,12 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since   1.0.0
  * @version 1.0.0
- * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.de>
+ * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
  * @package DeepWebSolutions\WP-Framework\Settings\Adapters
  *
- * @see     Adapterable
  * @see     https://www.advancedcustomfields.com/
  */
-class ACF implements Adapterable {
+class ACFAdapter implements SettingsAdapterInterface {
 	// region CREATE
 
 	/**
@@ -37,7 +36,7 @@ class ACF implements Adapterable {
 	 * @return  array|null  The validated and final page settings or null on failure.
 	 */
 	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params = array() ): ?array {
-		if ( ! function_exists( 'acf_add_options_sub_page' ) ) {
+		if ( ! function_exists( 'acf_add_options_page' ) ) {
 			return null; // ACF Pro required.
 		}
 
@@ -102,7 +101,7 @@ class ACF implements Adapterable {
 	 *
 	 * @return  bool
 	 */
-	public function register_settings_group( string $group_id, string $group_title, array $fields, string $page, array $params = array() ): bool {
+	public function register_options_group( string $group_id, string $group_title, array $fields, string $page, array $params = array() ): bool {
 		return $this->register_generic_group(
 			$group_id,
 			$group_title,
@@ -200,7 +199,7 @@ class ACF implements Adapterable {
 	 *
 	 * @return  mixed
 	 */
-	public function get_setting_value( string $field_id, string $settings_id = null, array $params = array() ) {
+	public function get_option_value( string $field_id, string $settings_id = null, array $params = array() ) {
 		return $this->get_field_value( $field_id, 'options', $params );
 	}
 
@@ -247,7 +246,7 @@ class ACF implements Adapterable {
 	 *
 	 * @return  bool
 	 */
-	public function update_settings_value( string $field_id, $value, string $settings_id = null, array $params = array() ): bool {
+	public function update_option_value( string $field_id, $value, string $settings_id = null, array $params = array() ): bool {
 		return $this->update_field_value( $field_id, 'options', $value, $params );
 	}
 
@@ -289,7 +288,7 @@ class ACF implements Adapterable {
 	 *
 	 * @return  bool
 	 */
-	public function delete_setting( string $field_id, string $settings_id = null, array $params = array() ): bool {
+	public function delete_option( string $field_id, string $settings_id = null, array $params = array() ): bool {
 		return $this->delete_field( $field_id, array( 'post_id' => 'options' ) + $params );
 	}
 
