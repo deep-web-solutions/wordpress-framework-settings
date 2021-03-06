@@ -11,7 +11,7 @@ use DeepWebSolutions\Framework\Utilities\DependencyInjection\ContainerAwareInter
 
 defined( 'ABSPATH' ) || exit;
 
-trait SetupSettings {
+trait SetupSettingsTrait {
 	// region TRAITS
 
 	use SettingsServiceRegisterTrait;
