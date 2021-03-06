@@ -38,7 +38,7 @@ trait InitializeSettingsServiceTrait {
 	 *
 	 * @return  InitializationFailureException|null
 	 */
-	public function initialize_assets_service(): ?InitializationFailureException {
+	public function initialize_settings_service(): ?InitializationFailureException {
 		if ( $this instanceof ChildInterface && $this->get_parent() instanceof SettingsServiceAwareInterface ) {
 			/* @noinspection PhpUndefinedMethodInspection */
 			$service = $this->get_parent()->get_settings_service();
