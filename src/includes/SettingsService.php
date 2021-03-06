@@ -366,9 +366,9 @@ class SettingsService implements LoggingServiceAwareInterface, PluginAwareInterf
 		$plugin = $this->get_plugin();
 		if ( $plugin instanceof ContainerAwareInterface ) {
 			$container = $plugin->get_container();
-			$handlers += array( $container->get( NOOPHandler::class ), $container->get( WordPressHandler::class ) );
+			$handlers += array( $container->get( WordPressHandler::class ) );
 		} else {
-			$handlers += array( new NOOPHandler( new NOOPAdapter() ), new WordPressHandler( new WordPressAdapter() ) );
+			$handlers += array( new WordPressHandler( new WordPressAdapter() ) );
 		}
 
 		$this->set_handlers( $handlers );
