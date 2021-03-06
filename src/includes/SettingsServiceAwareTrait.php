@@ -2,7 +2,7 @@
 
 namespace DeepWebSolutions\Framework\Settings;
 
-use DeepWebSolutions\Framework\Settings\Utilities\SettingsActionResponse;
+use DeepWebSolutions\Framework\Settings\Actions\SettingsActionResponse;
 
 defined( 'ABSPATH' ) || exit;
 

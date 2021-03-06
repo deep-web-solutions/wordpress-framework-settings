@@ -1,6 +1,6 @@
 <?php
 
-namespace DeepWebSolutions\Framework\Settings\Utilities;
+namespace DeepWebSolutions\Framework\Settings\Actions;
 
 use GuzzleHttp\Promise\PromiseInterface;
 
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
  * @since   1.0.0
  * @version 1.0.0
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
- * @package DeepWebSolutions\WP-Framework\Settings\Utilities
+ * @package DeepWebSolutions\WP-Framework\Settings\Actions
  */
 class SettingsActionResponse {
 	// region FIELDS AND CONSTANTS

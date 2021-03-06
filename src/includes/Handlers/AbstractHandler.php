@@ -3,9 +3,9 @@
 namespace DeepWebSolutions\Framework\Settings\Handlers;
 
 use DeepWebSolutions\Framework\Helpers\WordPress\Hooks;
+use DeepWebSolutions\Framework\Settings\Actions\SettingsActionResponse;
 use DeepWebSolutions\Framework\Settings\SettingsAdapterInterface;
 use DeepWebSolutions\Framework\Settings\SettingsHandlerInterface;
-use DeepWebSolutions\Framework\Settings\Utilities\SettingsActionResponse;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Promise\Utils;
