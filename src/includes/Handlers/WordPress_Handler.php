@@ -2,30 +2,31 @@
 
 namespace DeepWebSolutions\Framework\Settings\Handlers;
 
-use DeepWebSolutions\Framework\Settings\Adapters\MetaBoxAdapter;
+use DeepWebSolutions\Framework\Settings\Adapters\WordPress_Adapter;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Handles the interoperability layer between the DWS framework and the Meta Box settings framework.
+ * Handles the interoperability layer between the DWS framework and the WordPress Settings API.
  *
  * @since   1.0.0
  * @version 1.0.0
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
  * @package DeepWebSolutions\WP-Framework\Settings\Handlers
  */
-class MetaBoxHandler extends AbstractHandler {
+class WordPress_Handler extends AbstractHandler {
 	// region MAGIC METHODS
 
 	/**
-	 * Meta Box Handler constructor.
+	 * WordPress Handler constructor.
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   MetaBoxAdapter  $adapter    Instance of the adapter to the Meta Box settings framework.
+	 * @param   WordPress_Adapter|null      $adapter    Instance of the adapter to the WordPress Settings API.
 	 */
-	public function __construct( MetaBoxAdapter $adapter ) { // phpcs:ignore
+	public function __construct( ?WordPress_Adapter $adapter = null ) { // phpcs:ignore
+		$adapter = $adapter ?? new WordPress_Adapter();
 		parent::__construct( $adapter );
 	}
 
@@ -42,27 +43,22 @@ class MetaBoxHandler extends AbstractHandler {
 	 * @return  string
 	 */
 	public function get_name(): string {
-		return 'meta-box';
+		return 'wordpress'; // phpcs:ignore
 	}
 
 	/**
-	 * Returns the hook on which the Meta Box framework is ready to be used.
+	 * Returns the hook on which the WordPress Settings API is ready to be used.
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 * @param   string  $context    The action being executed.
 	 *
 	 * @return  string
 	 */
 	public function get_action_hook( string $context ): string {
-		switch ( $context ) {
-			case 'update_field_value':
-			case 'update_settings_value':
-				return 'wp_loaded'; // @see https://docs.metabox.io/rwmb-set-meta/
-			default:
-				return 'plugins_loaded';
-		}
+		return 'init';
 	}
 
 	// endregion

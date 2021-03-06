@@ -2,30 +2,31 @@
 
 namespace DeepWebSolutions\Framework\Settings\Handlers;
 
-use DeepWebSolutions\Framework\Settings\Adapters\ACFAdapter;
+use DeepWebSolutions\Framework\Settings\Adapters\MetaBox_Adapter;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Handles the interoperability layer between the DWS framework and the ACF settings framework.
+ * Handles the interoperability layer between the DWS framework and the Meta Box settings framework.
  *
  * @since   1.0.0
  * @version 1.0.0
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
  * @package DeepWebSolutions\WP-Framework\Settings\Handlers
  */
-class ACFHandler extends AbstractHandler {
+class MetaBox_Handler extends AbstractHandler {
 	// region MAGIC METHODS
 
 	/**
-	 * ACF Handler constructor.
+	 * Meta Box Handler constructor.
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   ACFAdapter      $adapter    Instance of the adapter to the ACF settings framework.
+	 * @param   MetaBox_Adapter|null    $adapter    Instance of the adapter to the Meta Box settings framework.
 	 */
-	public function __construct( ACFAdapter $adapter ) { // phpcs:ignore
+	public function __construct( ?MetaBox_Adapter $adapter = null ) { // phpcs:ignore
+		$adapter = $adapter ?? new MetaBox_Adapter();
 		parent::__construct( $adapter );
 	}
 
@@ -42,22 +43,27 @@ class ACFHandler extends AbstractHandler {
 	 * @return  string
 	 */
 	public function get_name(): string {
-		return 'acf';
+		return 'meta-box';
 	}
 
 	/**
-	 * Returns the hook on which the ACF framework is ready to be used.
+	 * Returns the hook on which the Meta Box framework is ready to be used.
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 * @param   string  $context    The action being executed.
 	 *
 	 * @return  string
 	 */
 	public function get_action_hook( string $context ): string {
-		return 'acf/include_fields';
+		switch ( $context ) {
+			case 'update_field_value':
+			case 'update_settings_value':
+				return 'wp_loaded'; // @see https://docs.metabox.io/rwmb-set-meta/
+			default:
+				return 'plugins_loaded';
+		}
 	}
 
 	// endregion

@@ -6,10 +6,7 @@ use DeepWebSolutions\Framework\Foundations\Plugin\PluginAwareInterface;
 use DeepWebSolutions\Framework\Foundations\Plugin\PluginAwareTrait;
 use DeepWebSolutions\Framework\Foundations\Plugin\PluginInterface;
 use DeepWebSolutions\Framework\Settings\Actions\SettingsActionResponse;
-use DeepWebSolutions\Framework\Settings\Adapters\NOOPAdapter;
-use DeepWebSolutions\Framework\Settings\Adapters\WordPressAdapter;
-use DeepWebSolutions\Framework\Settings\Handlers\NOOPHandler;
-use DeepWebSolutions\Framework\Settings\Handlers\WordPressHandler;
+use DeepWebSolutions\Framework\Settings\Handlers\WordPress_Handler;
 use DeepWebSolutions\Framework\Utilities\DependencyInjection\ContainerAwareInterface;
 use DeepWebSolutions\Framework\Utilities\Logging\LoggingService;
 use DeepWebSolutions\Framework\Utilities\Logging\LoggingServiceAwareInterface;
@@ -366,9 +363,9 @@ class SettingsService implements LoggingServiceAwareInterface, PluginAwareInterf
 		$plugin = $this->get_plugin();
 		if ( $plugin instanceof ContainerAwareInterface ) {
 			$container = $plugin->get_container();
-			$handlers += array( $container->get( WordPressHandler::class ) );
+			$handlers += array( $container->get( WordPress_Handler::class ) );
 		} else {
-			$handlers += array( new WordPressHandler( new WordPressAdapter() ) );
+			$handlers += array( new WordPress_Handler() );
 		}
 
 		$this->set_handlers( $handlers );

@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @see     https://metabox.io/
  */
-class MetaBoxAdapter implements SettingsAdapterInterface {
+class MetaBox_Adapter implements SettingsAdapterInterface {
 	// region CREATE
 
 	/**

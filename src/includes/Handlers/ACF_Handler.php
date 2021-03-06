@@ -2,30 +2,31 @@
 
 namespace DeepWebSolutions\Framework\Settings\Handlers;
 
-use DeepWebSolutions\Framework\Settings\Adapters\WordPressAdapter;
+use DeepWebSolutions\Framework\Settings\Adapters\ACF_Adapter;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Handles the interoperability layer between the DWS framework and the WordPress Settings API.
+ * Handles the interoperability layer between the DWS framework and the ACF settings framework.
  *
  * @since   1.0.0
  * @version 1.0.0
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
  * @package DeepWebSolutions\WP-Framework\Settings\Handlers
  */
-class WordPressHandler extends AbstractHandler {
+class ACF_Handler extends AbstractHandler {
 	// region MAGIC METHODS
 
 	/**
-	 * WordPress Handler constructor.
+	 * ACF Handler constructor.
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   WordPressAdapter    $adapter    Instance of the adapter to the WordPress Settings API.
+	 * @param   ACF_Adapter|null    $adapter    Instance of the adapter to the ACF settings framework.
 	 */
-	public function __construct( WordPressAdapter $adapter ) { // phpcs:ignore
+	public function __construct( ?ACF_Adapter $adapter = null ) { // phpcs:ignore
+		$adapter = $adapter ?? new ACF_Adapter();
 		parent::__construct( $adapter );
 	}
 
@@ -42,11 +43,11 @@ class WordPressHandler extends AbstractHandler {
 	 * @return  string
 	 */
 	public function get_name(): string {
-		return 'wordpress'; // phpcs:ignore
+		return 'acf';
 	}
 
 	/**
-	 * Returns the hook on which the WordPress Settings API is ready to be used.
+	 * Returns the hook on which the ACF framework is ready to be used.
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
@@ -57,7 +58,7 @@ class WordPressHandler extends AbstractHandler {
 	 * @return  string
 	 */
 	public function get_action_hook( string $context ): string {
-		return 'init';
+		return 'acf/include_fields';
 	}
 
 	// endregion

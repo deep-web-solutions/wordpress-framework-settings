@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @see     https://www.advancedcustomfields.com/
  */
-class ACFAdapter implements SettingsAdapterInterface {
+class ACF_Adapter implements SettingsAdapterInterface {
 	// region CREATE
 
 	/**

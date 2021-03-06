@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
  * @package DeepWebSolutions\WP-Framework\Settings\Adapters
  */
-class WordPressAdapter implements SettingsAdapterInterface {
+class WordPress_Adapter implements SettingsAdapterInterface {
 	// region CREATE
 
 	/**
