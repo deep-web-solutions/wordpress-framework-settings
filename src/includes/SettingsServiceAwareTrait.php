@@ -174,9 +174,9 @@ trait SettingsServiceAwareTrait {
 	 * @param   string  $settings_id    The ID of the settings group to read from the database.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  SettingsActionResponse
+	 * @return  mixed
 	 */
-	public function get_option_value( string $handler, string $field_id, string $settings_id, array $params ): SettingsActionResponse {
+	public function get_option_value( string $handler, string $field_id, string $settings_id, array $params ) {
 		return $this->get_settings_service()->get_option_value( $handler, $field_id, $settings_id, $params );
 	}
 
@@ -191,9 +191,9 @@ trait SettingsServiceAwareTrait {
 	 * @param   mixed   $object_id      The ID of the object the data is for.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  SettingsActionResponse
+	 * @return  mixed
 	 */
-	public function get_field_value( string $handler, string $field_id, $object_id, array $params ): SettingsActionResponse {
+	public function get_field_value( string $handler, string $field_id, $object_id, array $params ) {
 		return $this->get_settings_service()->get_field_value( $handler, $field_id, $object_id, $params );
 	}
 
@@ -209,9 +209,9 @@ trait SettingsServiceAwareTrait {
 	 * @param   string  $settings_id    The ID of the settings group to update.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  SettingsActionResponse
+	 * @return  mixed
 	 */
-	public function update_option_value( string $handler, string $field_id, $value, string $settings_id, array $params ): SettingsActionResponse {
+	public function update_option_value( string $handler, string $field_id, $value, string $settings_id, array $params ) {
 		return $this->get_settings_service()->update_option_value( $handler, $field_id, $value, $settings_id, $params );
 	}
 
@@ -227,9 +227,9 @@ trait SettingsServiceAwareTrait {
 	 * @param   mixed   $object_id      The ID of the object the update is for.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  SettingsActionResponse
+	 * @return  mixed
 	 */
-	public function update_field_value( string $handler, string $field_id, $value, $object_id, array $params ): SettingsActionResponse {
+	public function update_field_value( string $handler, string $field_id, $value, $object_id, array $params ) {
 		return $this->get_settings_service()->update_field_value( $handler, $field_id, $value, $object_id, $params );
 	}
 
@@ -244,9 +244,9 @@ trait SettingsServiceAwareTrait {
 	 * @param   string  $settings_id    The ID of the settings group to delete the field from.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  SettingsActionResponse
+	 * @return  mixed
 	 */
-	public function delete_option( string $handler, string $field_id, string $settings_id, array $params ): SettingsActionResponse {
+	public function delete_option( string $handler, string $field_id, string $settings_id, array $params ) {
 		return $this->get_settings_service()->delete_option( $handler, $field_id, $settings_id, $params );
 	}
 
@@ -261,9 +261,9 @@ trait SettingsServiceAwareTrait {
 	 * @param   mixed   $object_id  The ID of the object the deletion is for.
 	 * @param   array   $params     Other parameters required for the adapter to work.
 	 *
-	 * @return  SettingsActionResponse
+	 * @return  mixed
 	 */
-	public function delete_field( string $handler, string $field_id, $object_id, array $params ): SettingsActionResponse {
+	public function delete_field( string $handler, string $field_id, $object_id, array $params ) {
 		return $this->get_settings_service()->delete_field( $handler, $field_id, $object_id, $params );
 	}
 

@@ -78,7 +78,6 @@ abstract class AbstractHandler implements SettingsHandlerInterface {
 	 */
 	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): SettingsActionResponse {
 		return $this->create_action_response(
-			'register_menu_page',
 			array( $this->adapter, 'register_menu_page' ),
 			array( $page_title, $menu_title, $menu_slug, $capability, $params )
 		);
@@ -103,7 +102,6 @@ abstract class AbstractHandler implements SettingsHandlerInterface {
 	 */
 	public function register_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): SettingsActionResponse {
 		return $this->create_action_response(
-			'register_submenu_page',
 			array( $this->adapter, 'register_submenu_page' ),
 			array( $parent_slug, $page_title, $menu_title, $menu_slug, $capability, $params )
 		);
@@ -125,7 +123,6 @@ abstract class AbstractHandler implements SettingsHandlerInterface {
 	 */
 	public function register_options_group( string $group_id, string $group_title, array $fields, string $page, array $params ): SettingsActionResponse {
 		return $this->create_action_response(
-			'register_settings_group',
 			array( $this->adapter, 'register_options_group' ),
 			array( $group_id, $group_title, $fields, $page, $params )
 		);
@@ -146,7 +143,6 @@ abstract class AbstractHandler implements SettingsHandlerInterface {
 	 */
 	public function register_generic_group( string $group_id, string $group_title, array $fields, array $params ): SettingsActionResponse {
 		return $this->create_action_response(
-			'register_generic_group',
 			array( $this->adapter, 'register_generic_group' ),
 			array( $group_id, $group_title, $fields, $params )
 		);
@@ -168,7 +164,6 @@ abstract class AbstractHandler implements SettingsHandlerInterface {
 	 */
 	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params ): SettingsActionResponse {
 		return $this->create_action_response(
-			'register_field',
 			array( $this->adapter, 'register_field' ),
 			array( $group_id, $field_id, $field_title, $field_type, $params )
 		);
@@ -184,14 +179,10 @@ abstract class AbstractHandler implements SettingsHandlerInterface {
 	 * @param   string  $settings_id    The ID of the settings group to read from the database.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  SettingsActionResponse
+	 * @return  mixed
 	 */
-	public function get_option_value( string $field_id, string $settings_id, array $params ): SettingsActionResponse {
-		return $this->create_action_response(
-			'get_setting_value',
-			array( $this->adapter, 'get_option_value' ),
-			array( $field_id, $settings_id, $params )
-		);
+	public function get_option_value( string $field_id, string $settings_id, array $params ) {
+		return $this->adapter->get_option_value( $field_id, $settings_id, $params );
 	}
 
 	/**
@@ -204,14 +195,10 @@ abstract class AbstractHandler implements SettingsHandlerInterface {
 	 * @param   mixed   $object_id      The ID of the object the data is for.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  SettingsActionResponse
+	 * @return  mixed
 	 */
-	public function get_field_value( string $field_id, $object_id, array $params = array() ): SettingsActionResponse {
-		return $this->create_action_response(
-			'get_field_value',
-			array( $this->adapter, 'get_field_value' ),
-			array( $field_id, $object_id, $params )
-		);
+	public function get_field_value( string $field_id, $object_id, array $params = array() ) {
+		return $this->adapter->get_field_value( $field_id, $object_id, $params );
 	}
 
 	/**
@@ -225,14 +212,10 @@ abstract class AbstractHandler implements SettingsHandlerInterface {
 	 * @param   string  $settings_id    The ID of the settings group to update.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  SettingsActionResponse
+	 * @return  mixed
 	 */
-	public function update_option_value( string $field_id, $value, string $settings_id, array $params ): SettingsActionResponse {
-		return $this->create_action_response(
-			'update_settings_value',
-			array( $this->adapter, 'update_option_value' ),
-			array( $field_id, $value, $settings_id, $params )
-		);
+	public function update_option_value( string $field_id, $value, string $settings_id, array $params ) {
+		return $this->adapter->update_option_value( $field_id, $value, $settings_id, $params );
 	}
 
 	/**
@@ -246,14 +229,10 @@ abstract class AbstractHandler implements SettingsHandlerInterface {
 	 * @param   mixed   $object_id      The ID of the object the update is for.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  SettingsActionResponse
+	 * @return  mixed
 	 */
-	public function update_field_value( string $field_id, $value, $object_id, array $params ): SettingsActionResponse {
-		return $this->create_action_response(
-			'update_field_value',
-			array( $this->adapter, 'update_field_value' ),
-			array( $field_id, $value, $object_id, $params )
-		);
+	public function update_field_value( string $field_id, $value, $object_id, array $params ) {
+		return $this->adapter->update_field_value( $field_id, $value, $object_id, $params );
 	}
 
 	/**
@@ -266,14 +245,10 @@ abstract class AbstractHandler implements SettingsHandlerInterface {
 	 * @param   string      $settings_id    The ID of the settings group to delete the field from.
 	 * @param   array       $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  SettingsActionResponse
+	 * @return  mixed
 	 */
-	public function delete_option( string $field_id, string $settings_id, array $params ): SettingsActionResponse {
-		return $this->create_action_response(
-			'delete_field',
-			array( $this->adapter, 'delete_option' ),
-			array( $field_id, $settings_id, $params )
-		);
+	public function delete_option( string $field_id, string $settings_id, array $params ) {
+		return $this->adapter->delete_option( $field_id, $settings_id, $params );
 	}
 
 	/**
@@ -286,31 +261,11 @@ abstract class AbstractHandler implements SettingsHandlerInterface {
 	 * @param   mixed   $object_id  The ID of the object the deletion is for.
 	 * @param   array   $params     Other parameters required for the adapter to work.
 	 *
-	 * @return  SettingsActionResponse
+	 * @return  mixed
 	 */
-	public function delete_field( string $field_id, $object_id, array $params ): SettingsActionResponse {
-		return $this->create_action_response(
-			'delete_field',
-			array( $this->adapter, 'delete_field' ),
-			array( $field_id, $object_id, $params )
-		);
+	public function delete_field( string $field_id, $object_id, array $params ) {
+		return $this->adapter->delete_field( $field_id, $object_id, $params );
 	}
-
-	// endregion
-
-	// region GETTERS
-
-	/**
-	 * Returns the hook on which the settings framework is ready to be used.
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @param   string  $context    Some framework might have different init hooks than update hooks, e.g.
-	 *
-	 * @return  string
-	 */
-	abstract public function get_action_hook( string $context ): string;
 
 	// endregion
 
@@ -323,14 +278,13 @@ abstract class AbstractHandler implements SettingsHandlerInterface {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string      $context        The settings API action being performed.
 	 * @param   callable    $return_value   The callable that generates the return value.
 	 * @param   array       $args           Arguments to pass on to the callable.
 	 *
 	 * @return  SettingsActionResponse
 	 */
-	protected function create_action_response( string $context, callable $return_value, array $args ): SettingsActionResponse {
-		$hook = $this->get_action_hook( $context );
+	protected function create_action_response( callable $return_value, array $args ): SettingsActionResponse {
+		$hook = $this->get_action_hook();
 
 		if ( did_action( $hook ) || doing_action( $hook ) ) {
 			$return_value = call_user_func_array( $return_value, $args );

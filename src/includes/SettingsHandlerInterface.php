@@ -29,9 +29,7 @@ interface SettingsHandlerInterface extends SettingsAdapterInterface {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string  $context    The action to be executed. Some frameworks might have different init hooks than update hooks, e.g.
-	 *
-	 * @return string
+	 * @return  string
 	 */
-	public function get_action_hook( string $context ): string;
+	public function get_action_hook(): string;
 }

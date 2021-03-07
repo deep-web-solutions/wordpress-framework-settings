@@ -52,18 +52,10 @@ class MetaBox_Handler extends AbstractHandler {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string  $context    The action being executed.
-	 *
 	 * @return  string
 	 */
-	public function get_action_hook( string $context ): string {
-		switch ( $context ) {
-			case 'update_field_value':
-			case 'update_settings_value':
-				return 'wp_loaded'; // @see https://docs.metabox.io/rwmb-set-meta/
-			default:
-				return 'plugins_loaded';
-		}
+	public function get_action_hook(): string {
+		return 'plugins_loaded';
 	}
 
 	// endregion
