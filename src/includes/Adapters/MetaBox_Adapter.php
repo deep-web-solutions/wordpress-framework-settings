@@ -173,8 +173,11 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 								'name' => $field_title,
 								'type' => $field_type,
 							) + $params;
+							break;
 						}
 					}
+
+					return $meta_boxes;
 				},
 				20
 			);
