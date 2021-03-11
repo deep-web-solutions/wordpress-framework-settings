@@ -4,6 +4,7 @@ namespace DeepWebSolutions\Framework\Settings\Adapters;
 
 use DeepWebSolutions\Framework\Foundations\Exceptions\NotSupportedException;
 use DeepWebSolutions\Framework\Settings\SettingsAdapterInterface;
+use RW_Meta_Box;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -137,21 +138,46 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	 * @return  bool
 	 */
 	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params = array() ): bool {
-		return add_filter(
-			'rwmb_meta_boxes',
-			function( $meta_boxes ) use ( $group_id, $field_id, $field_title, $field_type, $params ) {
-				foreach ( $meta_boxes as $k => $meta_box ) {
-					if ( isset( $meta_box['id'] ) && $group_id === $meta_box['id'] ) {
-						$meta_boxes[ $k ]['fields'][] = array(
-							'id'   => $field_id,
-							'name' => $field_title,
-							'type' => $field_type,
-						) + $params;
+		if ( did_action( 'rwmb_meta_boxes' ) ) {
+			return add_action(
+				'rwmb_before',
+				function( RW_Meta_Box $rwmb ) use ( $group_id, $field_id, $field_title, $field_type, $params ) {
+					if ( $group_id !== $rwmb->id ) {
+						return;
 					}
+
+					$fields = $rwmb::normalize_fields(
+						array(
+							array(
+								'id'   => $field_id,
+								'name' => $field_title,
+								'type' => $field_type,
+							) + $params,
+						),
+						$rwmb->get_storage()
+					);
+
+					$rwmb->fields[] = reset( $fields );
+					$rwmb->register_fields();
 				}
-			},
-			20
-		);
+			);
+		} else {
+			return add_filter(
+				'rwmb_meta_boxes',
+				function( $meta_boxes ) use ( $group_id, $field_id, $field_title, $field_type, $params ) {
+					foreach ( $meta_boxes as $k => $meta_box ) {
+						if ( isset( $meta_box['id'] ) && $group_id === $meta_box['id'] ) {
+							$meta_boxes[ $k ]['fields'][] = array(
+								'id'   => $field_id,
+								'name' => $field_title,
+								'type' => $field_type,
+							) + $params;
+						}
+					}
+				},
+				20
+			);
+		}
 	}
 
 	// endregion

@@ -150,10 +150,7 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	}
 
 	/**
-	 * Registers a group of settings using WP's API. This only supports registering text-based fields inside WordPress'
-	 * 'Custom Fields' meta box. If you need something more, please use another framework or craft your own meta boxes.
-	 *
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 * Registers a group of meta fields and a corresponding meta box using WP's API.
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
@@ -165,12 +162,26 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	 *
 	 * @return  void
 	 */
-	public function register_generic_group( string $group_id, string $group_title, array $fields, array $params = array() ): void {
-		if ( false !== _get_meta_table( $group_id ) ) {
-			foreach ( $fields as $field ) {
-				register_meta( $group_id, $field['key'] ?? '', $field );
-			}
+	public function register_generic_group( string $group_id, string $group_title, array $fields, array $params = array() ): bool {
+		if ( ! isset( $params['object_type'] ) || 'user' === $params['object_type'] || false === _get_meta_table( $params['object_type'] ) ) {
+			return false;
 		}
+
+		add_meta_box(
+			$group_id,
+			$group_title,
+			$params['callback'] ?? null,
+			$params['object_type'],
+			$params['context'] ?? 'advanced',
+			$params['priority'] ?? 'default',
+			$params['callback_args'] ?? null
+		);
+
+		foreach ( $fields as $field ) {
+			register_meta( $params['object_type'], $field['key'] ?? '', $field );
+		}
+
+		return true;
 	}
 
 	/**
