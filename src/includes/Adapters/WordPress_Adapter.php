@@ -160,7 +160,7 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	 * @param   array   $fields         The fields to be registered with the group.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
-	 * @return  void
+	 * @return  bool
 	 */
 	public function register_generic_group( string $group_id, string $group_title, array $fields, array $params = array() ): bool {
 		if ( ! isset( $params['object_type'] ) || 'user' === $params['object_type'] || false === _get_meta_table( $params['object_type'] ) ) {
