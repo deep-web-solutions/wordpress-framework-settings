@@ -3,6 +3,7 @@
 namespace DeepWebSolutions\Framework\Settings\Adapters;
 
 use DeepWebSolutions\Framework\Foundations\Exceptions\NotSupportedException;
+use DeepWebSolutions\Framework\Helpers\WordPress\Hooks;
 use DeepWebSolutions\Framework\Settings\SettingsAdapterInterface;
 use RW_Meta_Box;
 
@@ -138,7 +139,7 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	 * @return  bool
 	 */
 	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params = array() ): bool {
-		if ( did_action( 'rwmb_meta_boxes' ) ) {
+		if ( did_action( 'init' ) || ( doing_action( 'init' ) && Hooks::get_current_hook_priority() >= 20 ) ) {
 			return add_action(
 				'rwmb_before',
 				function( RW_Meta_Box $rwmb ) use ( $group_id, $field_id, $field_title, $field_type, $params ) {
