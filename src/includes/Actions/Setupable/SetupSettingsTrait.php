@@ -9,7 +9,7 @@ use DeepWebSolutions\Framework\Settings\SettingsServiceAwareInterface;
 use DeepWebSolutions\Framework\Settings\SettingsServiceRegisterTrait;
 use DeepWebSolutions\Framework\Utilities\DependencyInjection\ContainerAwareInterface;
 
-defined( 'ABSPATH' ) || exit;
+\defined( 'ABSPATH' ) || exit;
 
 /**
  * Trait for registering settings of using instances.

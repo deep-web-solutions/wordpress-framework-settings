@@ -4,7 +4,7 @@ namespace DeepWebSolutions\Framework\Settings\Actions;
 
 use GuzzleHttp\Promise\PromiseInterface;
 
-defined( 'ABSPATH' ) || exit;
+\defined( 'ABSPATH' ) || exit;
 
 /**
  * Wrapper for a setting action's response.
@@ -51,7 +51,7 @@ class SettingsActionResponse {
 		$this->return  = $return_value;
 		$this->promise = $promise;
 
-		if ( ! is_null( $this->promise ) ) {
+		if ( ! \is_null( $this->promise ) ) {
 			$this->promise->then(
 				function( $value ) {
 					$this->return = $value;
@@ -73,7 +73,7 @@ class SettingsActionResponse {
 	 * @return  bool
 	 */
 	public function is_resolved(): bool {
-		return is_null( $this->promise ) || ( PromiseInterface::FULFILLED === $this->promise->getState() );
+		return \is_null( $this->promise ) || ( PromiseInterface::FULFILLED === $this->promise->getState() );
 	}
 
 	/**
@@ -82,6 +82,7 @@ class SettingsActionResponse {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
+	 * @noinspection PhpMissingReturnTypeInspection
 	 * @return  PromiseInterface|mixed|null
 	 */
 	public function unwrap() {

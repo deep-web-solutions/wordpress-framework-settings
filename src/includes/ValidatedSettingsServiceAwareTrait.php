@@ -6,7 +6,7 @@ use DeepWebSolutions\Framework\Settings\Actions\SettingsActionResponse;
 use DeepWebSolutions\Framework\Utilities\Validation\ValidationServiceAwareTrait;
 use GuzzleHttp\Promise\Promise;
 
-defined( 'ABSPATH' ) || exit;
+\defined( 'ABSPATH' ) || exit;
 
 /**
  * Basic implementation of the validated-settings-service-aware interface.

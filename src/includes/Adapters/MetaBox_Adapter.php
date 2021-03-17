@@ -3,9 +3,10 @@
 namespace DeepWebSolutions\Framework\Settings\Adapters;
 
 use DeepWebSolutions\Framework\Foundations\Exceptions\NotSupportedException;
+use DeepWebSolutions\Framework\Helpers\Security\Validation;
 use DeepWebSolutions\Framework\Settings\SettingsAdapterInterface;
 
-defined( 'ABSPATH' ) || exit;
+\defined( 'ABSPATH' ) || exit;
 
 /**
  * Interacts with the API of the Meta Box plugin.
@@ -36,7 +37,7 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	 * @return  bool
 	 */
 	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ): bool {
-		return add_filter(
+		return \add_filter(
 			'mb_settings_pages',
 			function ( $settings_pages ) use ( $page_title, $menu_title, $menu_slug, $capability, $params ) {
 				$settings_pages[] = array(
@@ -109,7 +110,7 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	 * @return  bool
 	 */
 	public function register_generic_group( string $group_id, string $group_title, array $fields, array $params ): bool {
-		return add_filter(
+		return \add_filter(
 			'rwmb_meta_boxes',
 			function ( $meta_boxes ) use ( $group_id, $group_title, $fields, $params ) {
 				$meta_boxes[] = array(
@@ -137,7 +138,7 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	 * @return  bool
 	 */
 	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params = array() ): bool {
-		return add_filter(
+		return \add_filter(
 			'rwmb_meta_boxes',
 			function( $meta_boxes ) use ( $group_id, $field_id, $field_title, $field_type, $params ) {
 				foreach ( $meta_boxes as $k => $meta_box ) {
@@ -174,8 +175,8 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	 * @return  mixed
 	 */
 	public function get_option_value( string $field_id, string $settings_id, array $params ) {
-		$params                = wp_parse_args( $params, array( 'network' => false ) );
-		$params['object_type'] = ( is_multisite() && $params['network'] ) ? 'network_setting' : 'setting';
+		$params                = \wp_parse_args( $params, array( 'network' => false ) );
+		$params['object_type'] = ( \is_multisite() && Validation::validate_boolean( $params['network'], false ) ) ? 'network_setting' : 'setting';
 
 		return $this->get_field_value( $field_id, $settings_id, $params );
 	}
@@ -193,7 +194,7 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	 * @return  mixed
 	 */
 	public function get_field_value( string $field_id, $object_id = null, array $params = array() ) {
-		return rwmb_meta( $field_id, $params, $object_id );
+		return \rwmb_meta( $field_id, $params, $object_id );
 	}
 
 	// endregion
@@ -214,8 +215,8 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	 * @return  true
 	 */
 	public function update_option_value( string $field_id, $value, string $settings_id, array $params ): bool {
-		$params                = wp_parse_args( $params, array( 'network' => false ) );
-		$params['object_type'] = ( is_multisite() && $params['network'] ) ? 'network_setting' : 'setting';
+		$params                = \wp_parse_args( $params, array( 'network' => false ) );
+		$params['object_type'] = ( \is_multisite() && Validation::validate_boolean( $params['network'], false ) ) ? 'network_setting' : 'setting';
 
 		return $this->update_field_value( $field_id, $value, $settings_id, $params );
 	}
@@ -234,7 +235,7 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	 * @return  true
 	 */
 	public function update_field_value( string $field_id, $value, $object_id, array $params ): bool {
-		rwmb_set_meta( $object_id, $field_id, $value, $params );
+		\rwmb_set_meta( $object_id, $field_id, $value, $params );
 		return true;
 	}
 

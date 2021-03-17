@@ -2,7 +2,7 @@
 
 namespace DeepWebSolutions\Framework\Settings;
 
-defined( 'ABSPATH' ) || exit;
+\defined( 'ABSPATH' ) || exit;
 
 /**
  * Basic implementation of the settings service register interface.

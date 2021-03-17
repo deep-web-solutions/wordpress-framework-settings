@@ -2,7 +2,7 @@
 
 namespace DeepWebSolutions\Framework\Settings;
 
-defined( 'ABSPATH' ) || exit;
+\defined( 'ABSPATH' ) || exit;
 
 /**
  * Describes an instance that can interact with a settings framework.

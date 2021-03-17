@@ -4,7 +4,7 @@ namespace DeepWebSolutions\Framework\Settings;
 
 use DeepWebSolutions\Framework\Settings\Actions\SettingsActionResponse;
 
-defined( 'ABSPATH' ) || exit;
+\defined( 'ABSPATH' ) || exit;
 
 /**
  * Basic implementation of the settings-service-aware interface.

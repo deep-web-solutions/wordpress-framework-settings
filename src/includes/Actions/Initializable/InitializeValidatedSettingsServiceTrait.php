@@ -4,7 +4,7 @@ namespace DeepWebSolutions\Framework\Settings\Actions\Initializable;
 
 use DeepWebSolutions\Framework\Utilities\Actions\Initializable\InitializeValidationServiceTrait;
 
-defined( 'ABSPATH' ) || exit;
+\defined( 'ABSPATH' ) || exit;
 
 /**
  * Trait for setting both the settings service and the validation service on the using instance.

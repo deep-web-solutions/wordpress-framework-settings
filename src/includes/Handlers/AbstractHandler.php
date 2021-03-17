@@ -10,7 +10,7 @@ use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Promise\Utils;
 
-defined( 'ABSPATH' ) || exit;
+\defined( 'ABSPATH' ) || exit;
 
 /**
  * Handles performing actions against a settings framework's API.
@@ -286,8 +286,8 @@ abstract class AbstractHandler implements SettingsHandlerInterface {
 	protected function create_action_response( callable $return_value, array $args ): SettingsActionResponse {
 		$hook = $this->get_action_hook();
 
-		if ( did_action( $hook ) || doing_action( $hook ) ) {
-			$return_value = call_user_func_array( $return_value, $args );
+		if ( \did_action( $hook ) || \doing_action( $hook ) ) {
+			$return_value = \call_user_func_array( $return_value, $args );
 			return ( $return_value instanceof PromiseInterface )
 				? new SettingsActionResponse( null, $return_value )
 				: new SettingsActionResponse( $return_value, null );
@@ -297,7 +297,7 @@ abstract class AbstractHandler implements SettingsHandlerInterface {
 			Hooks::enqueue_temp(
 				$hook,
 				function() use ( $promise, $return_value, $args ) {
-					$promise->resolve( call_user_func_array( $return_value, $args ) );
+					$promise->resolve( \call_user_func_array( $return_value, $args ) );
 					Utils::queue()->run(); // Run any callables immediately.
 				}
 			);

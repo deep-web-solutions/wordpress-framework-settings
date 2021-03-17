@@ -4,7 +4,7 @@ namespace DeepWebSolutions\Framework\Settings\Handlers;
 
 use DeepWebSolutions\Framework\Settings\Adapters\ACF_Adapter;
 
-defined( 'ABSPATH' ) || exit;
+\defined( 'ABSPATH' ) || exit;
 
 /**
  * Handles the interoperability layer between the DWS framework and the ACF settings framework.

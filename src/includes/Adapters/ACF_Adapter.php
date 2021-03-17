@@ -3,9 +3,10 @@
 namespace DeepWebSolutions\Framework\Settings\Adapters;
 
 use DeepWebSolutions\Framework\Helpers\DataTypes\Strings;
+use DeepWebSolutions\Framework\Helpers\Security\Validation;
 use DeepWebSolutions\Framework\Settings\SettingsAdapterInterface;
 
-defined( 'ABSPATH' ) || exit;
+\defined( 'ABSPATH' ) || exit;
 
 /**
  * Interacts with the API of the ACF plugin.
@@ -36,11 +37,11 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	 * @return  array|null  The validated and final page settings or null on failure.
 	 */
 	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params = array() ): ?array {
-		if ( ! function_exists( 'acf_add_options_page' ) ) {
+		if ( ! \function_exists( '\acf_add_options_page' ) ) {
 			return null; // ACF Pro required.
 		}
 
-		$result = acf_add_options_page(
+		$result = \acf_add_options_page(
 			array(
 				'page_title' => $page_title,
 				'menu_title' => $menu_title,
@@ -72,11 +73,11 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	 * @return  array|null  The validated and final page settings or null on failure.
 	 */
 	public function register_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params = array() ): ?array {
-		if ( ! function_exists( 'acf_add_options_sub_page' ) ) {
+		if ( ! \function_exists( '\acf_add_options_sub_page' ) ) {
 			return null; // ACF Pro required.
 		}
 
-		$result = acf_add_options_sub_page(
+		$result = \acf_add_options_sub_page(
 			array( 'parent_slug' => $parent_slug ) + array(
 				'page_title' => $page_title,
 				'menu_title' => $menu_title,
@@ -137,9 +138,9 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	 */
 	public function register_generic_group( string $group_id, string $group_title, array $fields, array $params = array() ): bool {
 		$group_id = Strings::starts_with( $group_id, 'group_' ) ? $group_id : "group_{$group_id}";
-		$params   = wp_parse_args( $params, array( 'location' => array() ) );
+		$params   = \wp_parse_args( $params, array( 'location' => array() ) );
 
-		return acf_add_local_field_group(
+		return \acf_add_local_field_group(
 			array(
 				'key'      => $group_id,
 				'title'    => $group_title,
@@ -166,9 +167,9 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params = array() ): bool {
 		$group_id = Strings::starts_with( $group_id, 'group_' ) || Strings::starts_with( $group_id, 'field_' ) ? $group_id : "group_{$group_id}";
 		$field_id = Strings::starts_with( $group_id, 'field_' ) ? $field_id : "field_{$field_id}";
-		$params   = wp_parse_args( $params, array( 'name' => '' ) );
+		$params   = \wp_parse_args( $params, array( 'name' => '' ) );
 
-		acf_add_local_field(
+		\acf_add_local_field(
 			array(
 				'key'    => $field_id,
 				'label'  => $field_title,
@@ -218,13 +219,8 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	 * @return  mixed
 	 */
 	public function get_field_value( string $field_id, $object_id = false, array $params = array() ) {
-		$params = wp_parse_args(
-			$params,
-			array(
-				'format_value' => true,
-			)
-		);
-		return get_field( $field_id, $object_id, $params['format_value'] );
+		$params = \wp_parse_args( $params, array( 'format_value' => true ) );
+		return \get_field( $field_id, $object_id, Validation::validate_boolean( $params['format_value'], true ) );
 	}
 
 	// endregion
@@ -267,7 +263,7 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	 * @return  bool
 	 */
 	public function update_field_value( string $field_id, $value, $object_id = false, array $params = array() ): bool {
-		return update_field( $field_id, $value, $object_id );
+		return \update_field( $field_id, $value, $object_id );
 	}
 
 	// endregion
@@ -307,11 +303,11 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	 * @return  bool
 	 */
 	public function delete_field( string $field_id, $object_id = false, array $params = array() ): bool {
-		$params = wp_parse_args( $params, array( 'sub_field' => false ) );
+		$params = \wp_parse_args( $params, array( 'sub_field' => false ) );
 
-		return boolval( $params['sub_field'] )
-			? delete_sub_field( $field_id, $object_id )
-			: delete_field( $field_id, $object_id );
+		return Validation::validate_boolean( $params['sub_field'], false )
+			? \delete_sub_field( $field_id, $object_id )
+			: \delete_field( $field_id, $object_id );
 	}
 
 	// endregion

@@ -2,7 +2,7 @@
 
 namespace DeepWebSolutions\Framework\Settings;
 
-defined( 'ABSPATH' ) || exit;
+\defined( 'ABSPATH' ) || exit;
 
 /**
  * Describes a settings-service-aware instance with built-in value validation for READ and UPDATE operations.
