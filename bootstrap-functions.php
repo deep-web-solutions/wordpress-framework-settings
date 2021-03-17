@@ -63,7 +63,7 @@ function dws_wp_framework_get_settings_min_wp() {
 }
 
 /**
- * Returns whether the core package has managed to initialize successfully or not in the current environment.
+ * Returns whether the settings package has managed to initialize successfully or not in the current environment.
  *
  * @since   1.0.0
  * @version 1.0.1
