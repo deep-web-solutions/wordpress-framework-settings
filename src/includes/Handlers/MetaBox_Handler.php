@@ -2,6 +2,7 @@
 
 namespace DeepWebSolutions\Framework\Settings\Handlers;
 
+use DeepWebSolutions\Framework\Settings\AbstractSettingsHandler;
 use DeepWebSolutions\Framework\Settings\Adapters\MetaBox_Adapter;
 
 \defined( 'ABSPATH' ) || exit;
@@ -14,7 +15,7 @@ use DeepWebSolutions\Framework\Settings\Adapters\MetaBox_Adapter;
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
  * @package DeepWebSolutions\WP-Framework\Settings\Handlers
  */
-class MetaBox_Handler extends AbstractHandler {
+class MetaBox_Handler extends AbstractSettingsHandler {
 	// region MAGIC METHODS
 
 	/**
@@ -23,28 +24,17 @@ class MetaBox_Handler extends AbstractHandler {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   MetaBox_Adapter|null    $adapter    Instance of the adapter to the Meta Box settings framework.
+	 * @param   string                  $handler_id     The ID of the settings handler.
+	 * @param   MetaBox_Adapter|null    $adapter        Instance of the adapter to the Meta Box settings framework.
 	 */
-	public function __construct( ?MetaBox_Adapter $adapter = null ) { // phpcs:ignore
+	public function __construct( string $handler_id = 'meta-box', ?MetaBox_Adapter $adapter = null ) { // phpcs:ignore
 		$adapter = $adapter ?? new MetaBox_Adapter();
-		parent::__construct( $adapter );
+		parent::__construct( $handler_id, $adapter );
 	}
 
 	// endregion
 
 	// region INHERITED METHODS
-
-	/**
-	 * Returns a unique name of the handler.
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @return  string
-	 */
-	public function get_name(): string {
-		return 'meta-box';
-	}
 
 	/**
 	 * Returns the hook on which the Meta Box framework is ready to be used.

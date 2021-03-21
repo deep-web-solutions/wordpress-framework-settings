@@ -68,9 +68,9 @@ if ( dws_wp_framework_check_php_wp_requirements_met( dws_wp_framework_get_settin
 	\define( __NAMESPACE__ . '\DWS_WP_FRAMEWORK_SETTINGS_INIT', false );
 	dws_wp_framework_output_requirements_error( dws_wp_framework_get_settings_name(), dws_wp_framework_get_settings_version(), dws_wp_framework_get_settings_min_php(), dws_wp_framework_get_settings_min_wp() );
 
-	// Stop the core from initializing if the settings module failed.
+	// Stop the foundations from initializing if the settings module failed.
 	\add_filter(
-		'dws_wp_framework_core_init_status',
+		'dws_wp_framework_foundations_init_status',
 		function( bool $init, string $namespace ) {
 			return ( __NAMESPACE__ === $namespace ) ? false : $init;
 		},

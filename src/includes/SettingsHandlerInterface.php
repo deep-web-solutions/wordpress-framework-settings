@@ -2,6 +2,8 @@
 
 namespace DeepWebSolutions\Framework\Settings;
 
+use DeepWebSolutions\Framework\Foundations\Utilities\Handlers\HandlerInterface;
+
 \defined( 'ABSPATH' ) || exit;
 
 /**
@@ -12,16 +14,16 @@ namespace DeepWebSolutions\Framework\Settings;
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
  * @package DeepWebSolutions\WP-Framework\Settings
  */
-interface SettingsHandlerInterface extends SettingsAdapterInterface {
+interface SettingsHandlerInterface extends HandlerInterface, SettingsAdapterInterface {
 	/**
-	 * Returns a unique name of the handler.
+	 * Returns the settings adapter used.
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @return  string
+	 * @return  SettingsAdapterInterface
 	 */
-	public function get_name(): string;
+	public function get_adapter(): SettingsAdapterInterface;
 
 	/**
 	 * Returns the hook on which the settings framework is ready to be used.
