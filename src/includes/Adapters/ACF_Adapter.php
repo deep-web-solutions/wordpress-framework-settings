@@ -47,7 +47,7 @@ class ACF_Adapter implements SettingsAdapterInterface {
 					'menu_slug'  => $menu_slug,
 					'capability' => $capability,
 				) + $params
-			) ?: null;
+			) ?: null; // phpcs:ignore
 		}
 
 		return $result;
@@ -83,7 +83,7 @@ class ACF_Adapter implements SettingsAdapterInterface {
 					'menu_slug'  => $menu_slug,
 					'capability' => $capability,
 				) + $params
-			) ?: null;
+			) ?: null; // phpcs:ignore
 		}
 
 		return $result;
