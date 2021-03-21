@@ -4,7 +4,6 @@ namespace DeepWebSolutions\Framework\Settings;
 
 use DeepWebSolutions\Framework\Foundations\Logging\LoggingService;
 use DeepWebSolutions\Framework\Foundations\Plugin\PluginInterface;
-use DeepWebSolutions\Framework\Foundations\Utilities\DependencyInjection\ContainerAwareInterface;
 use DeepWebSolutions\Framework\Foundations\Utilities\Handlers\HandlerInterface;
 use DeepWebSolutions\Framework\Foundations\Utilities\Services\AbstractMultiHandlerService;
 use DeepWebSolutions\Framework\Settings\Handlers\WordPress_Handler;
@@ -12,8 +11,6 @@ use DeepWebSolutions\Framework\Utilities\Hooks\HooksService;
 use DeepWebSolutions\Framework\Utilities\Hooks\HooksServiceAwareInterface;
 use DeepWebSolutions\Framework\Utilities\Hooks\HooksServiceAwareTrait;
 use DeepWebSolutions\Framework\Utilities\Hooks\HooksServiceRegisterInterface;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 
 \defined( 'ABSPATH' ) || exit;
 
@@ -112,7 +109,7 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 *
 	 * @return  mixed|null
 	 */
-	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params, string $handler_id = 'default' ) {
+	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params = array(), string $handler_id = 'default' ) {
 		return $this->get_handler( $handler_id )->register_menu_page( $page_title, $menu_title, $menu_slug, $capability, $params );
 	}
 
@@ -134,7 +131,7 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 *
 	 * @return  mixed|null
 	 */
-	public function register_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params, string $handler_id = 'default' ) {
+	public function register_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params = array(), string $handler_id = 'default' ) {
 		return $this->get_handler( $handler_id )->register_submenu_page( $parent_slug, $page_title, $menu_title, $menu_slug, $capability, $params );
 	}
 
@@ -153,7 +150,7 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 *
 	 * @return  mixed|null
 	 */
-	public function register_options_group( string $group_id, string $group_title, array $fields, string $page, array $params, string $handler_id = 'default' ) {
+	public function register_options_group( string $group_id, string $group_title, array $fields, string $page, array $params = array(), string $handler_id = 'default' ) {
 		return $this->get_handler( $handler_id )->register_options_group( $group_id, $group_title, $fields, $page, $params );
 	}
 
@@ -166,13 +163,14 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 * @param   string  $group_id       The ID of the settings group.
 	 * @param   string  $group_title    The title of the settings group.
 	 * @param   array   $fields         The fields to be registered with the group.
+	 * @param   array   $locations      Where the group should be outputted.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 * @param   string  $handler_id     The ID of the settings framework handler to use.
 	 *
 	 * @return  mixed|null
 	 */
-	public function register_generic_group( string $group_id, string $group_title, array $fields, array $params, string $handler_id = 'default' ) {
-		return $this->get_handler( $handler_id )->register_generic_group( $group_id, $group_title, $fields, $params );
+	public function register_generic_group( string $group_id, string $group_title, array $fields, array $locations, array $params = array(), string $handler_id = 'default' ) {
+		return $this->get_handler( $handler_id )->register_generic_group( $group_id, $group_title, $fields, $locations, $params );
 	}
 
 	/**
@@ -190,7 +188,7 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 *
 	 * @return  mixed|null
 	 */
-	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params, string $handler_id = 'default' ) {
+	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params = array(), string $handler_id = 'default' ) {
 		return $this->get_handler( $handler_id )->register_field( $group_id, $field_id, $field_title, $field_type, $params );
 	}
 
@@ -207,7 +205,7 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 *
 	 * @return  mixed
 	 */
-	public function get_option_value( string $field_id, string $settings_id, array $params, string $handler_id = 'default' ) {
+	public function get_option_value( string $field_id, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
 		return $this->get_handler( $handler_id )->get_option_value( $field_id, $settings_id, $params );
 	}
 
@@ -224,7 +222,7 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 *
 	 * @return  mixed
 	 */
-	public function get_field_value( string $field_id, $object_id, array $params, string $handler_id = 'default' ) {
+	public function get_field_value( string $field_id, $object_id, array $params = array(), string $handler_id = 'default' ) {
 		return $this->get_handler( $handler_id )->get_field_value( $field_id, $object_id, $params );
 	}
 
@@ -242,7 +240,7 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 *
 	 * @return  mixed
 	 */
-	public function update_option_value( string $field_id, $value, string $settings_id, array $params, string $handler_id = 'default' ) {
+	public function update_option_value( string $field_id, $value, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
 		return $this->get_handler( $handler_id )->update_option_value( $field_id, $value, $settings_id, $params );
 	}
 
@@ -260,7 +258,7 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 *
 	 * @return  mixed
 	 */
-	public function update_field_value( string $field_id, $value, $object_id, array $params, string $handler_id = 'default' ) {
+	public function update_field_value( string $field_id, $value, $object_id, array $params = array(), string $handler_id = 'default' ) {
 		return $this->get_handler( $handler_id )->update_field_value( $field_id, $value, $object_id, $params );
 	}
 
@@ -277,7 +275,7 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 *
 	 * @return  mixed
 	 */
-	public function delete_option( string $field_id, string $settings_id, array $params, string $handler_id = 'default' ) {
+	public function delete_option( string $field_id, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
 		return $this->get_handler( $handler_id )->delete_option( $field_id, $settings_id, $params );
 	}
 
@@ -294,7 +292,7 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 *
 	 * @return  mixed
 	 */
-	public function delete_field( string $field_id, $object_id, array $params, string $handler_id = 'default' ) {
+	public function delete_field( string $field_id, $object_id, array $params = array(), string $handler_id = 'default' ) {
 		return $this->get_handler( $handler_id )->delete_field( $field_id, $object_id, $params );
 	}
 
@@ -303,24 +301,15 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	// region HELPERS
 
 	/**
-	 * Register the handlers passed on in the constructor together with the default handlers.
+	 * Returns a list of what the default handlers actually are for the inheriting service.
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   array   $handlers   Handlers passed on in the constructor.
-	 *
-	 * @throws  NotFoundExceptionInterface      Thrown if the NullLogger is not found in the plugin DI-container.
-	 * @throws  ContainerExceptionInterface     Thrown if some other error occurs while retrieving the NullLogger instance.
+	 * @return  array
 	 */
-	protected function set_default_handlers( array $handlers ): void {
-		$plugin = $this->get_plugin();
-
-		$wordpress_handler = ( $plugin instanceof ContainerAwareInterface )
-			? $plugin->get_container()->get( WordPress_Handler::class )
-			: new WordPress_Handler();
-
-		parent::set_default_handlers( array_merge( array( $wordpress_handler ), $handlers ) );
+	protected function get_default_handlers_classes(): array {
+		return array( WordPress_Handler::class );
 	}
 
 	/**

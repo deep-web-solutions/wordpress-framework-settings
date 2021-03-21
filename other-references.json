@@ -1,0 +1,15 @@
+{
+  "classes": [],
+  "functions": [
+    "acf_add_options_page",
+    "acf_add_options_sub_page",
+    "acf_add_local_field_group",
+    "acf_add_local_field",
+    "get_field",
+    "update_field",
+    "delete_sub_field",
+    "delete_field",
+    "rwmb_meta",
+    "rwmb_set_meta"
+  ]
+}

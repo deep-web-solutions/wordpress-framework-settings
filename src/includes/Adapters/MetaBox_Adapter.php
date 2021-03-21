@@ -91,7 +91,7 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	 * @return  bool
 	 */
 	public function register_options_group( string $group_id, string $group_title, array $fields, string $page, array $params ): bool {
-		return $this->register_generic_group( $group_id, $group_title, $fields, array( 'settings_pages' => $page ) + $params );
+		return $this->register_generic_group( $group_id, $group_title, $fields, array( 'settings_pages' => $page ), $params );
 	}
 
 	/**
@@ -100,24 +100,25 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string  $group_id       The ID of the settings group.
-	 * @param   string  $group_title    The title of the settings group.
-	 * @param   array   $fields         The fields to be registered with the group.
-	 * @param   array   $params         Other parameters required for the adapter to work.
+	 * @param   string $group_id    The ID of the settings group.
+	 * @param   string $group_title The title of the settings group.
+	 * @param   array  $fields      The fields to be registered with the group.
+	 * @param   array  $locations   Where the group should be outputted.
+	 * @param   array  $params      Other parameters required for the adapter to work.
 	 *
 	 * @see     https://docs.metabox.io/extensions/mb-settings-page/
 	 *
 	 * @return  bool
 	 */
-	public function register_generic_group( string $group_id, string $group_title, array $fields, array $params ): bool {
+	public function register_generic_group( string $group_id, string $group_title, array $fields, array $locations, array $params ): bool {
 		return \add_filter(
 			'rwmb_meta_boxes',
-			function ( $meta_boxes ) use ( $group_id, $group_title, $fields, $params ) {
+			function ( $meta_boxes ) use ( $group_id, $group_title, $fields, $locations, $params ) {
 				$meta_boxes[] = array(
 					'id'     => $group_id,
 					'title'  => $group_title,
 					'fields' => $fields,
-				) + $params;
+				) + $locations + $params;
 				return $meta_boxes;
 			}
 		);
@@ -175,8 +176,8 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	 * @return  mixed
 	 */
 	public function get_option_value( string $field_id, string $settings_id, array $params ) {
-		$params                = \wp_parse_args( $params, array( 'network' => false ) );
-		$params['object_type'] = ( \is_multisite() && Validation::validate_boolean( $params['network'], false ) ) ? 'network_setting' : 'setting';
+		$params['object_type'] = ( \is_multisite() && Validation::validate_boolean( $params['network'] ?? false, false ) )
+			? 'network_setting' : 'setting';
 
 		return $this->get_field_value( $field_id, $settings_id, $params );
 	}
@@ -215,8 +216,8 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	 * @return  true
 	 */
 	public function update_option_value( string $field_id, $value, string $settings_id, array $params ): bool {
-		$params                = \wp_parse_args( $params, array( 'network' => false ) );
-		$params['object_type'] = ( \is_multisite() && Validation::validate_boolean( $params['network'], false ) ) ? 'network_setting' : 'setting';
+		$params['object_type'] = ( \is_multisite() && Validation::validate_boolean( $params['network'] ?? false, false ) )
+			? 'network_setting' : 'setting';
 
 		return $this->update_field_value( $field_id, $value, $settings_id, $params );
 	}

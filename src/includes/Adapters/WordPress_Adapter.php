@@ -2,7 +2,6 @@
 
 namespace DeepWebSolutions\Framework\Settings\Adapters;
 
-use DeepWebSolutions\Framework\Helpers\WordPress\Misc;
 use DeepWebSolutions\Framework\Settings\SettingsAdapterInterface;
 
 \defined( 'ABSPATH' ) || exit;
@@ -32,15 +31,7 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	 * @return  string  The resulting page's hook_suffix.
 	 */
 	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params = array() ): string {
-		$params = \wp_parse_args(
-			$params,
-			array(
-				'function' => '',
-				'icon_url' => '',
-				'position' => null,
-			)
-		);
-		return add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $params['function'], $params['icon_url'], $params['position'] );
+		return add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $params['function'] ?? '', $params['icon_url'] ?? '', $params['position'] ?? null );
 	}
 
 	/**
@@ -124,26 +115,13 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	 * @return  true
 	 */
 	public function register_options_group( string $group_id, string $group_title, array $fields, string $page, array $params = array() ): bool {
-		$params = \wp_parse_args(
-			$params,
-			array(
-				'setting_args'     => array(),
-				'section_callback' => '',
-			)
-		);
-
-		\register_setting( $group_id, $group_id, array( 'type' => 'array' ) + $params['setting_args'] );
-		\add_settings_section( $group_id, $group_title, $params['section_callback'], $page );
+		\register_setting( $group_id, $group_id, array( 'type' => 'array' ) + ( $params['setting_args'] ?? array() ) );
+		\add_settings_section( $group_id, $group_title, $params['section_callback'] ?? '', $page );
 
 		foreach ( $fields as $field ) {
-			if ( ! isset( $field['id'], $field['title'], $field['callback'] ) || ! \is_callable( $field['callback'] ) || ! \is_string( $field['id'] ) || ! \is_string( $field['title'] ) ) {
-				continue;
+			if ( isset( $field['id'], $field['title'], $field['callback'] ) ) {
+				\add_settings_field( $field['id'], $field['title'], $field['callback'], $page, $group_id, $field['args'] ?? array() );
 			}
-			if ( ! isset( $field['args'] ) || ! \is_array( $field['args'] ) ) {
-				$field['args'] = array();
-			}
-
-			\add_settings_field( $field['id'], $field['title'], $field['callback'], $page, $group_id, $field['args'] );
 		}
 
 		return true;
@@ -158,27 +136,20 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	 * @param   string  $group_id       The ID of the settings group.
 	 * @param   string  $group_title    The title of the settings group.
 	 * @param   array   $fields         The fields to be registered with the group.
+	 * @param   array   $locations      Where the group should be outputted.
 	 * @param   array   $params         Other parameters required for the adapter to work.
 	 *
 	 * @return  bool
 	 */
-	public function register_generic_group( string $group_id, string $group_title, array $fields, array $params = array() ): bool {
-		if ( ! isset( $params['object_type'] ) || 'user' === $params['object_type'] || false === \_get_meta_table( $params['object_type'] ) ) {
-			return false;
-		}
-
-		\add_meta_box(
-			$group_id,
-			$group_title,
-			$params['callback'] ?? null,
-			$params['object_type'],
-			$params['context'] ?? 'advanced',
-			$params['priority'] ?? 'default',
-			$params['callback_args'] ?? null
-		);
+	public function register_generic_group( string $group_id, string $group_title, array $fields, array $locations, array $params = array() ): bool {
+		\add_meta_box( $group_id, $group_title, $params['callback'] ?? null, $locations, $params['context'] ?? 'advanced', $params['priority'] ?? 'default', $params['callback_args'] ?? null );
 
 		foreach ( $fields as $field ) {
-			\register_meta( $params['object_type'], $field['key'] ?? '', $field );
+			foreach ( $locations as $location ) {
+				if ( \is_string( $location ) && false !== \_get_meta_table( $location ) ) {
+					\register_meta( $location, $field['key'] ?? '', $field );
+				}
+			}
 		}
 
 		return true;
@@ -199,24 +170,10 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	 * @return  true
 	 */
 	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params ): bool {
-		if ( false === \_get_meta_table( $group_id ) ) {
-			$params = Misc::wp_parse_args_recursive(
-				$params,
-				array(
-					'setting' => array(),
-					'field'   => array(
-						'callback' => '',
-						'page'     => '',
-						'args'     => array(),
-					),
-				)
-			);
-
-			\register_setting( $group_id, $field_id, array( 'type' => $field_type ) + $params['setting'] );
-			\add_settings_field( $field_id, $field_title, $params['field']['callback'], $params['field']['page'], $group_id, $params['field']['args'] );
-
+		if ( isset( \get_registered_settings()[ $group_id ] ) ) {
+			\add_settings_field( $field_id, $field_title, $params['callback'] ?? '', $params['page'] ?? '', $group_id, array( 'type' => $field_type ) + ( $params['args'] ?? array() ) );
 			return true;
-		} else {
+		} elseif ( false !== \_get_meta_table( $group_id ) ) {
 			return \register_meta(
 				$group_id,
 				$field_id,
@@ -226,6 +183,8 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 				) + $params
 			);
 		}
+
+		return false;
 	}
 
 	// endregion
@@ -244,28 +203,19 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	 *
 	 * @return  mixed
 	 */
-	public function get_option_value( string $field_id, string $settings_id, array $params = array() ) {
-		if ( \is_multisite() ) {
-			$params = \wp_parse_args(
-				$params,
-				array(
-					'network_id' => false,  // set to NULL or INT to use network-level options
-					'blog_id'    => null,   // set to INT to switch to a certain blog
-					'default'    => false,
-				)
-			);
+	public function get_option_value( ?string $field_id, string $settings_id, array $params = array() ) {
+		$params = \wp_parse_args( $params, array( 'default' => false ) );
 
+		if ( \is_multisite() ) {
+			$params   = $this->parse_network_params( $params );
 			$settings = ( false === $params['network_id'] )
 				? \get_blog_option( $params['blog_id'], $settings_id, $params['default'] )
 				: \get_network_option( $params['network_id'], $settings_id, $params['default'] );
 		} else {
-			$params   = \wp_parse_args( $params, array( 'default' => false ) );
 			$settings = \get_option( $settings_id, $params['default'] );
 		}
 
-		return \is_string( $field_id ) && isset( $settings[ $field_id ] )
-			? $settings[ $field_id ]
-			: $settings;
+		return $settings[ $field_id ] ?? $settings;
 	}
 
 	/**
@@ -313,35 +263,21 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	 * @return  bool
 	 */
 	public function update_option_value( string $field_id, $value, string $settings_id, array $params = array() ): bool {
+		$params = \wp_parse_args( $params, array( 'default' => false ) );
+
+		if ( ! \is_null( $field_id ) ) {
+			$options              = $this->get_option_value( null, $settings_id, $params );
+			$options[ $field_id ] = $value;
+			$value                = $options;
+		}
+
 		if ( \is_multisite() ) {
-			$params = \wp_parse_args(
-				$params,
-				array(
-					'network_id' => false,  // set to NULL or INT to use network-level options
-					'blog_id'    => null,   // set to INT to switch to a certain blog
-					'default'    => false,
-				)
-			);
-
-			if ( ! \is_null( $field_id ) ) {
-				$options              = $this->get_option_value( null, $settings_id, $params );
-				$options[ $field_id ] = $value;
-				$value                = $options;
-			}
-
+			$params = $this->parse_network_params( $params );
 			return ( false === $params['network_id'] )
 				? \update_blog_option( $params['blog_id'], $settings_id, $value )
 				: \update_network_option( $params['network_id'], $settings_id, $value );
 		} else {
-			$params = \wp_parse_args( $params, array( 'autoload' => null ) );
-
-			if ( ! \is_null( $field_id ) ) {
-				$options              = $this->get_option_value( null, $settings_id, $params );
-				$options[ $field_id ] = $value;
-				$value                = $options;
-			}
-
-			return \update_option( $settings_id, $value, $params['autoload'] );
+			return \update_option( $settings_id, $value, $params['autoload'] ?? null );
 		}
 	}
 
@@ -361,15 +297,7 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	 *                      the same as the one that is already in the database.
 	 */
 	public function update_field_value( string $field_id, $value, $object_id, array $params = array() ) {
-		$params = \wp_parse_args(
-			$params,
-			array(
-				'meta_type'  => 'post',
-				'prev_value' => '',
-			)
-		);
-
-		return \update_metadata( $params['meta_type'], $object_id, $field_id, $value, $params['prev_value'] );
+		return \update_metadata( $params['meta_type'] ?? 'post', $object_id, $field_id, $value, $params['prev_value'] ?? '' );
 	}
 
 	// endregion
@@ -382,26 +310,19 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string      $field_id       The ID of the settings field to remove from the database. Empty string to delete the whole group.
+	 * @param   string|null $field_id       The ID of the settings field to remove from the database. Empty string to delete the whole group.
 	 * @param   string      $settings_id    The ID of the settings group to delete the field from.
 	 * @param   array       $params         Other parameters required for the adapter to work.
 	 *
 	 * @return  bool
 	 */
-	public function delete_option( string $field_id, string $settings_id, array $params = array() ): bool {
-		$params = \wp_parse_args(
-			$params,
-			array(
-				'network_id' => false,
-				'blog_id'    => null,
-			)
-		);
-
+	public function delete_option( ?string $field_id, string $settings_id, array $params = array() ): bool {
 		if ( ! empty( $field_id ) ) {
 			$options = $this->get_option_value( null, $settings_id, $params );
 			unset( $options[ $field_id ] );
 			return $this->update_option_value( null, $options, $settings_id, $params );
 		} elseif ( \is_multisite() ) {
+			$params = $this->parse_network_params( $params );
 			return ( false === $params['network_id'] )
 				? \delete_blog_option( $params['blog_id'], $settings_id )
 				: \delete_network_option( $params['network_id'], $settings_id );
@@ -423,16 +344,31 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	 * @return  bool
 	 */
 	public function delete_field( string $field_id, $object_id, array $params = array() ): bool {
-		$params = \wp_parse_args(
+		return \delete_metadata( $params['meta_type'] ?? 'post', $object_id, $field_id, $params['meta_value'] ?? '', $params['delete_all'] ?? false );
+	}
+
+	// endregion
+
+	// region HELPERS
+
+	/**
+	 * Ensures parameters needed for working with multisite read/update/delete operations are present.
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
+	 * @param   array   $params     Parameters to parse.
+	 *
+	 * @return  array
+	 */
+	protected function parse_network_params( array $params ): array {
+		return \wp_parse_args(
 			$params,
 			array(
-				'meta_type'  => 'post',
-				'meta_value' => '',     // phpcs:ignore
-				'delete_all' => false,
+				'network_id' => false,  // set to NULL or INT to use network-level options
+				'blog_id'    => null,   // set to INT to switch to a certain blog
 			)
 		);
-
-		return \delete_metadata( $params['meta_type'], $object_id, $field_id, $params['meta_value'], $params['delete_all'] );
 	}
 
 	// endregion
