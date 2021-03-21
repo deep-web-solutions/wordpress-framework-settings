@@ -28,8 +28,7 @@ class WordPress_Handler extends AbstractSettingsHandler {
 	 * @param   WordPress_Adapter|null      $adapter        Instance of the adapter to the WordPress Settings API.
 	 */
 	public function __construct( string $handler_id = 'default', ?WordPress_Adapter $adapter = null ) { // phpcs:ignore
-		$adapter = $adapter ?? new WordPress_Adapter();
-		parent::__construct( $handler_id, $adapter );
+		parent::__construct( $handler_id, $adapter ?? new WordPress_Adapter() );
 	}
 
 	// endregion

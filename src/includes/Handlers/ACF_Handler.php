@@ -28,8 +28,7 @@ class ACF_Handler extends AbstractSettingsHandler {
 	 * @param   ACF_Adapter|null    $adapter        Instance of the adapter to the ACF settings framework.
 	 */
 	public function __construct( string $handler_id = 'acf', ?ACF_Adapter $adapter = null ) { // phpcs:ignore
-		$adapter = $adapter ?? new ACF_Adapter();
-		parent::__construct( $handler_id, $adapter );
+		parent::__construct( $handler_id, $adapter ?? new ACF_Adapter() );
 	}
 
 	// endregion

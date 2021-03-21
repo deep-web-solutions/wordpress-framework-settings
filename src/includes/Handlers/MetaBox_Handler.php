@@ -28,8 +28,7 @@ class MetaBox_Handler extends AbstractSettingsHandler {
 	 * @param   MetaBox_Adapter|null    $adapter        Instance of the adapter to the Meta Box settings framework.
 	 */
 	public function __construct( string $handler_id = 'meta-box', ?MetaBox_Adapter $adapter = null ) { // phpcs:ignore
-		$adapter = $adapter ?? new MetaBox_Adapter();
-		parent::__construct( $handler_id, $adapter );
+		parent::__construct( $handler_id, $adapter ?? new MetaBox_Adapter() );
 	}
 
 	// endregion
