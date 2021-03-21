@@ -45,8 +45,8 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 * @param   SettingsHandlerInterface[]      $handlers           Settings handlers to perform actions with.
 	 */
 	public function __construct( PluginInterface $plugin, LoggingService $logging_service, HooksService $hooks_service, array $handlers = array() ) {
-		parent::__construct( $plugin, $logging_service, $handlers );
 		$this->set_hooks_service( $hooks_service );
+		parent::__construct( $plugin, $logging_service, $handlers );
 	}
 
 	// endregion
