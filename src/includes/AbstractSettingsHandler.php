@@ -210,9 +210,9 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 */
 	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ) {
 		if ( $this->is_run() ) {
-			return $this->array_walk_register_menu_page( get_defined_vars() );
+			return $this->array_walk_register_menu_page( \get_defined_vars() );
 		} else {
-			$this->menu_pages[] = get_defined_vars();
+			$this->menu_pages[] = \get_defined_vars();
 		}
 
 		return null;
@@ -239,9 +239,9 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 */
 	public function register_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ) {
 		if ( $this->is_run() ) {
-			return $this->array_walk_register_submenu_page( get_defined_vars() );
+			return $this->array_walk_register_submenu_page( \get_defined_vars() );
 		} else {
-			$this->submenu_pages[] = get_defined_vars();
+			$this->submenu_pages[] = \get_defined_vars();
 		}
 
 		return null;
@@ -265,9 +265,9 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 */
 	public function register_options_group( string $group_id, string $group_title, array $fields, string $page, array $params ) {
 		if ( $this->is_run() ) {
-			return $this->array_walk_register_options_group( get_defined_vars() );
+			return $this->array_walk_register_options_group( \get_defined_vars() );
 		} else {
-			$this->options_groups[] = get_defined_vars();
+			$this->options_groups[] = \get_defined_vars();
 		}
 
 		return null;
@@ -291,9 +291,9 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 */
 	public function register_generic_group( string $group_id, string $group_title, array $fields, array $locations, array $params ) {
 		if ( $this->is_run() ) {
-			return $this->array_walk_register_generic_group( get_defined_vars() );
+			return $this->array_walk_register_generic_group( \get_defined_vars() );
 		} else {
-			$this->generic_groups[] = get_defined_vars();
+			$this->generic_groups[] = \get_defined_vars();
 		}
 
 		return null;
@@ -317,9 +317,9 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 */
 	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params ) {
 		if ( $this->is_run() ) {
-			return $this->array_walk_register_field( get_defined_vars() );
+			return $this->array_walk_register_field( \get_defined_vars() );
 		} else {
-			$this->fields[] = get_defined_vars();
+			$this->fields[] = \get_defined_vars();
 		}
 
 		return null;
@@ -438,7 +438,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @return  mixed
 	 */
 	protected function array_walk_register_menu_page( array $menu_page ) {
-		return $this->adapter->register_menu_page( $menu_page['page_title'], $menu_page['menu_title'], $menu_page['menu_slug'], $menu_page['capability'], $menu_page['params'] );
+		return \call_user_func_array( array( $this, 'register_menu_page' ), $menu_page );
 	}
 
 	/**
@@ -452,7 +452,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @return  mixed
 	 */
 	protected function array_walk_register_submenu_page( array $submenu_page ) {
-		return $this->adapter->register_submenu_page( $submenu_page['parent_slug'], $submenu_page['page_title'], $submenu_page['menu_title'], $submenu_page['menu_slug'], $submenu_page['capability'], $submenu_page['params'] );
+		return \call_user_func_array( array( $this, 'register_submenu_page' ), $submenu_page );
 	}
 
 	/**
@@ -466,7 +466,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @return  mixed
 	 */
 	protected function array_walk_register_options_group( array $options_group ) {
-		return $this->adapter->register_options_group( $options_group['group_id'], $options_group['group_title'], $options_group['fields'], $options_group['page'], $options_group['params'] );
+		return \call_user_func_array( array( $this, 'register_options_group' ), $options_group );
 	}
 
 	/**
@@ -480,7 +480,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @return  mixed
 	 */
 	protected function array_walk_register_generic_group( array $generic_group ) {
-		return $this->adapter->register_generic_group( $generic_group['group_id'], $generic_group['group_title'], $generic_group['fields'], $generic_group['params'] );
+		return \call_user_func_array( array( $this, 'register_generic_group' ), $generic_group );
 	}
 
 	/**
@@ -494,7 +494,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @return  mixed
 	 */
 	protected function array_walk_register_field( array $field ) {
-		return $this->adapter->register_field( $field['group_id'], $field['field_id'], $field['field_title'], $field['field_type'], $field['params'] );
+		return \call_user_func_array( array( $this, 'register_field' ), $field );
 	}
 
 	// endregion
