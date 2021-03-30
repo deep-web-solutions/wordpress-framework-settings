@@ -6,6 +6,7 @@ use DeepWebSolutions\Framework\Foundations\Actions\Runnable;
 use DeepWebSolutions\Framework\Foundations\Actions\Runnable\RunnableTrait;
 use DeepWebSolutions\Framework\Foundations\Actions\RunnableInterface;
 use DeepWebSolutions\Framework\Foundations\Utilities\Handlers\AbstractHandler;
+use DeepWebSolutions\Framework\Helpers\WordPress\Hooks;
 use DeepWebSolutions\Framework\Helpers\WordPress\Hooks\HooksHelpersAwareInterface;
 use DeepWebSolutions\Framework\Utilities\Hooks\HooksService;
 use DeepWebSolutions\Framework\Utilities\Hooks\HooksServiceRegisterInterface;
@@ -157,6 +158,13 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 
 		if ( ! \did_action( $hook ) ) {
 			$hooks_service->add_action( $hook, $this, 'run', PHP_INT_MAX );
+			Hooks::enqueue_temp_on_next_tick(
+				function () use ( $hook ) {
+					if ( \did_action( $hook ) ) {
+						$this->run();
+					}
+				}
+			);
 		} else {
 			$this->is_run     = true;
 			$this->run_result = null;
