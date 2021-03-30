@@ -156,7 +156,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 		$hook = $this->get_action_hook();
 
 		if ( ! \did_action( $hook ) ) {
-			$hooks_service->add_filter( $hook, $this, 'run', PHP_INT_MAX );
+			$hooks_service->add_action( $hook, $this, 'run', PHP_INT_MAX );
 		} else {
 			$this->is_run     = true;
 			$this->run_result = null;
@@ -209,7 +209,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @return  mixed|null
 	 */
 	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ) {
-		if ( $this->is_run() ) {
+		if ( $this->is_run() || \did_action( $this->get_action_hook() ) ) {
 			return $this->array_walk_register_menu_page( \get_defined_vars() );
 		} else {
 			$this->menu_pages[] = \get_defined_vars();
@@ -238,7 +238,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @return  mixed|null
 	 */
 	public function register_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ) {
-		if ( $this->is_run() ) {
+		if ( $this->is_run() || \did_action( $this->get_action_hook() ) ) {
 			return $this->array_walk_register_submenu_page( \get_defined_vars() );
 		} else {
 			$this->submenu_pages[] = \get_defined_vars();
@@ -264,7 +264,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @return  mixed|null
 	 */
 	public function register_options_group( string $group_id, string $group_title, array $fields, string $page, array $params ) {
-		if ( $this->is_run() ) {
+		if ( $this->is_run() || \did_action( $this->get_action_hook() ) ) {
 			return $this->array_walk_register_options_group( \get_defined_vars() );
 		} else {
 			$this->options_groups[] = \get_defined_vars();
@@ -290,7 +290,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @return  mixed|null
 	 */
 	public function register_generic_group( string $group_id, string $group_title, array $fields, array $locations, array $params ) {
-		if ( $this->is_run() ) {
+		if ( $this->is_run() || \did_action( $this->get_action_hook() ) ) {
 			return $this->array_walk_register_generic_group( \get_defined_vars() );
 		} else {
 			$this->generic_groups[] = \get_defined_vars();
@@ -316,7 +316,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @return  mixed|null
 	 */
 	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params ) {
-		if ( $this->is_run() ) {
+		if ( $this->is_run() || \did_action( $this->get_action_hook() ) ) {
 			return $this->array_walk_register_field( \get_defined_vars() );
 		} else {
 			$this->fields[] = \get_defined_vars();
