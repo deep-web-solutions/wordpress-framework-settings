@@ -158,13 +158,6 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 
 		if ( ! \did_action( $hook ) ) {
 			$hooks_service->add_action( $hook, $this, 'run', PHP_INT_MAX );
-			Hooks::enqueue_temp_on_next_tick(
-				function () use ( $hook ) {
-					if ( \did_action( $hook ) ) {
-						$this->run();
-					}
-				}
-			);
 		} else {
 			$this->is_run     = true;
 			$this->run_result = null;
