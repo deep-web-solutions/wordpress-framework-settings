@@ -148,14 +148,12 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 			foreach ( $locations as $location ) {
 				if ( \is_string( $location ) ) {
 					$object_type = $location;
-					if ( \post_type_exists( $object_type ) ) {
+					if ( \post_type_exists( $object_type ) || false === \_get_meta_table( $object_type ) ) {
 						$object_type             = 'post';
 						$field['object_subtype'] = $location;
 					}
 
-					if ( false !== \_get_meta_table( $object_type ) ) {
-						\register_meta( $object_type, $field['key'] ?? '', $field );
-					}
+					\register_meta( $object_type, $field['key'] ?? '', $field );
 				}
 			}
 		}
