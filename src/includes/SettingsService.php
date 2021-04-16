@@ -34,7 +34,7 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	// region MAGIC METHODS
 
 	/**
-	 * CronService constructor.
+	 * SettingsService constructor.
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0

@@ -1,6 +1,8 @@
 <?php
 
-namespace DeepWebSolutions\Framework\Settings;
+namespace DeepWebSolutions\Framework\Settings\Utilities;
+
+use DeepWebSolutions\Framework\Settings\SettingsServiceAwareInterface;
 
 \defined( 'ABSPATH' ) || exit;
 
@@ -10,7 +12,7 @@ namespace DeepWebSolutions\Framework\Settings;
  * @since   1.0.0
  * @version 1.0.0
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
- * @package DeepWebSolutions\WP-Framework\Settings
+ * @package DeepWebSolutions\WP-Framework\Settings\Utilities
  */
 interface ValidatedSettingsServiceAwareInterface extends SettingsServiceAwareInterface {
 	/**
