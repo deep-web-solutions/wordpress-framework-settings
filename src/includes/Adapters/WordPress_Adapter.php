@@ -142,21 +142,15 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	 * @return  bool
 	 */
 	public function register_generic_group( string $group_id, string $group_title, array $fields, array $locations, array $params = array() ): bool {
-		\add_meta_box( $group_id, $group_title, $params['callback'] ?? '__return_empty_string', $locations, $params['context'] ?? 'advanced', $params['priority'] ?? 'default', $params['callback_args'] ?? null );
-
-		foreach ( $fields as $field ) {
-			foreach ( $locations as $location ) {
-				if ( \is_string( $location ) ) {
-					$object_type = $location;
-					if ( \post_type_exists( $object_type ) || false === \_get_meta_table( $object_type ) ) {
-						$object_type             = 'post';
-						$field['object_subtype'] = $location;
-					}
-
-					\register_meta( $object_type, $field['key'] ?? '', $field );
-				}
-			}
-		}
+		\add_meta_box(
+			$group_id,
+			$group_title,
+			$params['callback'] ?? '__return_empty_string',
+			$locations,
+			$params['context'] ?? 'advanced',
+			$params['priority'] ?? 'default',
+			array( 'fields' => $fields ) + ( $params['callback_args'] ?? array() )
+		);
 
 		return true;
 	}
@@ -179,15 +173,6 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 		if ( isset( \get_registered_settings()[ $group_id ] ) ) {
 			\add_settings_field( $field_id, $field_title, $params['callback'] ?? '', $params['page'] ?? '', $group_id, array( 'type' => $field_type ) + ( $params['args'] ?? array() ) );
 			return true;
-		} elseif ( false !== \_get_meta_table( $group_id ) ) {
-			return \register_meta(
-				$group_id,
-				$field_id,
-				array(
-					'description' => $field_title,
-					'type'        => $field_type,
-				) + $params
-			);
 		}
 
 		return false;
