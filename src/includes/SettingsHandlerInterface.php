@@ -31,7 +31,9 @@ interface SettingsHandlerInterface extends HandlerInterface, SettingsAdapterInte
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
+	 * @param   string  $context    The settings action that is to be performed.
+	 *
 	 * @return  string
 	 */
-	public function get_action_hook(): string;
+	public function get_action_hook( string $context ): string;
 }

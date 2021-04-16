@@ -4,6 +4,7 @@ namespace DeepWebSolutions\Framework\Settings\Handlers;
 
 use DeepWebSolutions\Framework\Settings\AbstractSettingsHandler;
 use DeepWebSolutions\Framework\Settings\Adapters\WordPress_Adapter;
+use DeepWebSolutions\Framework\Settings\SettingsActionsEnum;
 
 \defined( 'ABSPATH' ) || exit;
 
@@ -41,10 +42,23 @@ class WordPress_Handler extends AbstractSettingsHandler {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
+	 * @param   string  $context    The settings action that is to be performed.
+	 *
 	 * @return  string
 	 */
-	public function get_action_hook(): string {
-		return 'init';
+	public function get_action_hook( string $context ): string {
+		switch ( $context ) {
+			case SettingsActionsEnum::REGISTER_MENU_PAGE:
+			case SettingsActionsEnum::REGISTER_SUBMENU_PAGE:
+				return 'admin_menu';
+			case SettingsActionsEnum::REGISTER_OPTIONS_GROUP:
+			case SettingsActionsEnum::REGISTER_FIELD:
+				return 'admin_init';
+			case SettingsActionsEnum::REGISTER_GENERIC_GROUP:
+				return 'add_meta_boxes';
+			default:
+				return 'init';
+		}
 	}
 
 	// endregion

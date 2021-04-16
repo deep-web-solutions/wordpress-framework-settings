@@ -3,7 +3,6 @@
 namespace DeepWebSolutions\Framework\Settings;
 
 use DeepWebSolutions\Framework\Foundations\Actions\Runnable\RunFailureException;
-use DeepWebSolutions\Framework\Foundations\Actions\Runnable\RunLocalTrait;
 use DeepWebSolutions\Framework\Foundations\Actions\RunnableInterface;
 use DeepWebSolutions\Framework\Foundations\Utilities\Handlers\AbstractHandler;
 use DeepWebSolutions\Framework\Helpers\WordPress\Hooks\HooksHelpersAwareInterface;
@@ -27,7 +26,6 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	// region TRAITS
 
 	use HooksServiceRegisterTrait;
-	use RunLocalTrait;
 
 	// endregion
 
@@ -98,6 +96,28 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 */
 	protected array $fields = array();
 
+	/**
+	 * Stores whether individual actions have been run already or not.
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
+	 * @access  protected
+	 * @var     bool|null[]
+	 */
+	protected array $is_run = array();
+
+	/**
+	 * Stores whether individual actions have been run already or not.
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
+	 * @access  protected
+	 * @var     RunFailureException|null[]
+	 */
+	protected array $run_result = array();
+
 	// endregion
 
 	// region MAGIC METHODS
@@ -153,13 +173,15 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @param   HooksService    $hooks_service      Instance of the hooks service.
 	 */
 	public function register_hooks( HooksService $hooks_service ): void {
-		$hook = $this->get_action_hook();
+		foreach ( SettingsActionsEnum::get_all() as $action ) {
+			$hook = $this->get_action_hook( $action );
 
-		if ( ! \did_action( $hook ) ) {
-			$hooks_service->add_action( $hook, $this, 'run', PHP_INT_MAX );
-		} else {
-			$this->is_run     = true;
-			$this->run_result = null;
+			if ( ! \did_action( $hook ) ) {
+				$hooks_service->add_action( $hook, $this, 'run', PHP_INT_MAX - 100 );
+			} else {
+				$this->is_run[ $action ]     = true;
+				$this->run_result[ $action ] = true;
+			}
 		}
 	}
 
@@ -171,12 +193,34 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 *
 	 * @return  RunFailureException|null
 	 */
-	protected function run_local(): ?RunFailureException {
-		\array_walk( $this->menu_pages, array( $this, 'array_walk_register_menu_page' ) );
-		\array_walk( $this->submenu_pages, array( $this, 'array_walk_register_submenu_page' ) );
-		\array_walk( $this->options_groups, array( $this, 'array_walk_register_options_group' ) );
-		\array_walk( $this->generic_groups, array( $this, 'array_walk_register_generic_group' ) );
-		\array_walk( $this->fields, array( $this, 'array_walk_register_field' ) );
+	public function run(): ?RunFailureException {
+		foreach ( SettingsActionsEnum::get_all() as $action ) {
+			$hook = $this->get_action_hook( $action );
+			if ( \doing_action( $hook ) && \is_null( $this->is_run( $action ) ) ) {
+				switch ( $action ) {
+					case SettingsActionsEnum::REGISTER_MENU_PAGE:
+						\array_walk( $this->menu_pages, array( $this, 'array_walk_register_menu_page' ) );
+						break;
+					case SettingsActionsEnum::REGISTER_SUBMENU_PAGE:
+						\array_walk( $this->submenu_pages, array( $this, 'array_walk_register_submenu_page' ) );
+						break;
+					case SettingsActionsEnum::REGISTER_OPTIONS_GROUP:
+						\array_walk( $this->options_groups, array( $this, 'array_walk_register_options_group' ) );
+						break;
+					case SettingsActionsEnum::REGISTER_GENERIC_GROUP:
+						\array_walk( $this->generic_groups, array( $this, 'array_walk_register_generic_group' ) );
+						break;
+					case SettingsActionsEnum::REGISTER_FIELD:
+						\array_walk( $this->fields, array( $this, 'array_walk_register_field' ) );
+						break;
+					default:
+						continue 2;
+				}
+
+				$this->is_run[ $action ]     = true;
+				$this->run_result[ $action ] = null;
+			}
+		}
 
 		return null;
 	}
@@ -184,6 +228,34 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	// endregion
 
 	// region METHODS
+
+	/**
+	 * Returns whether a given settings action has been run already or not.
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
+	 * @param   string|null     $context    The settings action the query related to.
+	 *
+	 * @return  bool|null
+	 */
+	public function is_run( string $context ): ?bool {
+		return $this->is_run[ $context ] ?? null;
+	}
+
+	/**
+	 * Returns the result of running a given settings action.
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
+	 * @param   string|null     $context    The settings action the query related to.
+	 *
+	 * @return  RunFailureException|null
+	 */
+	public function get_run_result( string $context ): ?RunFailureException {
+		return $this->run_result[ $context ] ?? null;
+	}
 
 	/**
 	 * Registers a new WordPress admin page.
@@ -204,7 +276,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @return  mixed|null
 	 */
 	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ) {
-		if ( $this->is_run() || \did_action( $this->get_action_hook() ) ) {
+		if ( $this->is_run( SettingsActionsEnum::REGISTER_MENU_PAGE ) || \did_action( $this->get_action_hook( SettingsActionsEnum::REGISTER_MENU_PAGE ) ) ) {
 			return $this->array_walk_register_menu_page( \get_defined_vars() );
 		} else {
 			$this->menu_pages[] = \get_defined_vars();
@@ -233,7 +305,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @return  mixed|null
 	 */
 	public function register_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ) {
-		if ( $this->is_run() || \did_action( $this->get_action_hook() ) ) {
+		if ( $this->is_run( SettingsActionsEnum::REGISTER_SUBMENU_PAGE ) || \did_action( $this->get_action_hook( SettingsActionsEnum::REGISTER_SUBMENU_PAGE ) ) ) {
 			return $this->array_walk_register_submenu_page( \get_defined_vars() );
 		} else {
 			$this->submenu_pages[] = \get_defined_vars();
@@ -259,7 +331,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @return  mixed|null
 	 */
 	public function register_options_group( string $group_id, string $group_title, array $fields, string $page, array $params ) {
-		if ( $this->is_run() || \did_action( $this->get_action_hook() ) ) {
+		if ( $this->is_run( SettingsActionsEnum::REGISTER_OPTIONS_GROUP ) || \did_action( $this->get_action_hook( SettingsActionsEnum::REGISTER_OPTIONS_GROUP ) ) ) {
 			return $this->array_walk_register_options_group( \get_defined_vars() );
 		} else {
 			$this->options_groups[] = \get_defined_vars();
@@ -285,7 +357,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @return  mixed|null
 	 */
 	public function register_generic_group( string $group_id, string $group_title, array $fields, array $locations, array $params ) {
-		if ( $this->is_run() || \did_action( $this->get_action_hook() ) ) {
+		if ( $this->is_run( SettingsActionsEnum::REGISTER_GENERIC_GROUP ) || \did_action( $this->get_action_hook( SettingsActionsEnum::REGISTER_GENERIC_GROUP ) ) ) {
 			return $this->array_walk_register_generic_group( \get_defined_vars() );
 		} else {
 			$this->generic_groups[] = \get_defined_vars();
@@ -311,7 +383,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @return  mixed|null
 	 */
 	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params ) {
-		if ( $this->is_run() || \did_action( $this->get_action_hook() ) ) {
+		if ( $this->is_run( SettingsActionsEnum::REGISTER_FIELD ) || \did_action( $this->get_action_hook( SettingsActionsEnum::REGISTER_FIELD ) ) ) {
 			return $this->array_walk_register_field( \get_defined_vars() );
 		} else {
 			$this->fields[] = \get_defined_vars();
