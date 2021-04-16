@@ -142,12 +142,20 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	 * @return  bool
 	 */
 	public function register_generic_group( string $group_id, string $group_title, array $fields, array $locations, array $params = array() ): bool {
-		\add_meta_box( $group_id, $group_title, $params['callback'] ?? null, $locations, $params['context'] ?? 'advanced', $params['priority'] ?? 'default', $params['callback_args'] ?? null );
+		\add_meta_box( $group_id, $group_title, $params['callback'] ?? '__return_empty_string', $locations, $params['context'] ?? 'advanced', $params['priority'] ?? 'default', $params['callback_args'] ?? null );
 
 		foreach ( $fields as $field ) {
 			foreach ( $locations as $location ) {
-				if ( \is_string( $location ) && false !== \_get_meta_table( $location ) ) {
-					\register_meta( $location, $field['key'] ?? '', $field );
+				if ( \is_string( $location ) ) {
+					$object_type = $location;
+					if ( \post_type_exists( $object_type ) ) {
+						$object_type             = 'post';
+						$field['object_subtype'] = $location;
+					}
+
+					if ( false !== \_get_meta_table( $object_type ) ) {
+						\register_meta( $object_type, $field['key'] ?? '', $field );
+					}
 				}
 			}
 		}
