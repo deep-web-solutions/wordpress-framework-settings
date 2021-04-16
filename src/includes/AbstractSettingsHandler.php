@@ -2,8 +2,8 @@
 
 namespace DeepWebSolutions\Framework\Settings;
 
-use DeepWebSolutions\Framework\Foundations\Actions\Runnable;
-use DeepWebSolutions\Framework\Foundations\Actions\Runnable\RunnableTrait;
+use DeepWebSolutions\Framework\Foundations\Actions\Runnable\RunFailureException;
+use DeepWebSolutions\Framework\Foundations\Actions\Runnable\RunLocalTrait;
 use DeepWebSolutions\Framework\Foundations\Actions\RunnableInterface;
 use DeepWebSolutions\Framework\Foundations\Utilities\Handlers\AbstractHandler;
 use DeepWebSolutions\Framework\Helpers\WordPress\Hooks\HooksHelpersAwareInterface;
@@ -27,7 +27,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	// region TRAITS
 
 	use HooksServiceRegisterTrait;
-	use RunnableTrait;
+	use RunLocalTrait;
 
 	// endregion
 
@@ -169,21 +169,16 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @return  Runnable\RunFailureException|null
+	 * @return  RunFailureException|null
 	 */
-	public function run(): ?Runnable\RunFailureException {
-		if ( \is_nulL( $this->is_run ) ) {
-			\array_walk( $this->menu_pages, array( $this, 'array_walk_register_menu_page' ) );
-			\array_walk( $this->submenu_pages, array( $this, 'array_walk_register_submenu_page' ) );
-			\array_walk( $this->options_groups, array( $this, 'array_walk_register_options_group' ) );
-			\array_walk( $this->generic_groups, array( $this, 'array_walk_register_generic_group' ) );
-			\array_walk( $this->fields, array( $this, 'array_walk_register_field' ) );
+	protected function run_local(): ?RunFailureException {
+		\array_walk( $this->menu_pages, array( $this, 'array_walk_register_menu_page' ) );
+		\array_walk( $this->submenu_pages, array( $this, 'array_walk_register_submenu_page' ) );
+		\array_walk( $this->options_groups, array( $this, 'array_walk_register_options_group' ) );
+		\array_walk( $this->generic_groups, array( $this, 'array_walk_register_generic_group' ) );
+		\array_walk( $this->fields, array( $this, 'array_walk_register_field' ) );
 
-			$this->is_run     = true;
-			$this->run_result = null;
-		}
-
-		return $this->run_result;
+		return null;
 	}
 
 	// endregion
