@@ -35,7 +35,7 @@ jobs:
             ${{ runner.os }}-php-
 
       - name: Install module dev dependencies
-        with:
+        env:
           PLUGIN_ACF_KEY: $${{ secrets.PLUGIN_ACF_KEY }}
         run: composer install --no-interaction --ignore-platform-reqs --prefer-dist --no-progress
 
