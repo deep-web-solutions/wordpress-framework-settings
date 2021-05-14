@@ -44,8 +44,8 @@
     "deep-web-solutions/wp-framework-utilities": "master@dev"
   },
   "require-dev": {
-    "wpmetabox/meta-box": "^5.3.8",
-    "advanced-custom-fields/advanced-custom-fields-pro": "^5.9.5",
+    "wpmetabox/meta-box": "^5.4",
+    "advanced-custom-fields/advanced-custom-fields-pro": "^5.9",
 
     "deep-web-solutions/wordpress-configs": "master@dev",
     "php-stubs/wordpress-stubs": "5.5.*",
@@ -58,8 +58,6 @@
     "phpcompatibility/phpcompatibility-wp": "*",
     "wp-coding-standards/wpcs": "*"
   },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
 
   "autoload": {
     "psr-4": {
@@ -95,7 +93,9 @@
 
   "extra": {
     "installer-paths": {
-      "vendor/wpmetabox/meta-box/": ["wpmetabox/meta-box"]
+      "vendor/wpmetabox/meta-box/": [
+        "wpmetabox/meta-box"
+      ]
     }
   }
 }
