@@ -265,17 +265,17 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 *
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 *
-	 * @param   string  $page_title     The text to be displayed in the title tags of the page when the menu is selected.
-	 * @param   string  $menu_title     The text to be used for the menu.
-	 * @param   string  $menu_slug      The slug name to refer to this menu by. Should be unique for this menu page and only
-	 *                                  include lowercase alphanumeric, dashes, and underscores characters to be compatible
-	 *                                  with sanitize_key().
-	 * @param   string  $capability     The capability required for this menu to be displayed to the user.
-	 * @param   array   $params         Other params required for the adapter to work.
+	 * @param   string|callable     $page_title     The text to be displayed in the title tags of the page when the menu is selected.
+	 * @param   string|callable     $menu_title     The text to be used for the menu.
+	 * @param   string              $menu_slug      The slug name to refer to this menu by. Should be unique for this menu page and only
+	 *                                              include lowercase alphanumeric, dashes, and underscores characters to be compatible
+	 *                                              with sanitize_key().
+	 * @param   string              $capability     The capability required for this menu to be displayed to the user.
+	 * @param   array               $params         Other params required for the adapter to work.
 	 *
 	 * @return  mixed|null
 	 */
-	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ) {
+	public function register_menu_page( $page_title, $menu_title, string $menu_slug, string $capability, array $params ) {
 		if ( $this->is_run( SettingsActionsEnum::REGISTER_MENU_PAGE ) || \did_action( $this->get_action_hook( SettingsActionsEnum::REGISTER_MENU_PAGE ) ) ) {
 			return $this->array_walk_register_menu_page( \get_defined_vars() );
 		} else {
@@ -293,18 +293,18 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 *
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 *
-	 * @param   string  $parent_slug    The slug name for the parent menu (or the file name of a standard WordPress admin page).
-	 * @param   string  $page_title     The text to be displayed in the title tags of the page when the menu is selected.
-	 * @param   string  $menu_title     The text to be used for the menu.
-	 * @param   string  $menu_slug      The slug name to refer to this menu by. Should be unique for this menu page and only
-	 *                                  include lowercase alphanumeric, dashes, and underscores characters to be compatible
-	 *                                  with sanitize_key().
-	 * @param   string  $capability     The capability required for this menu to be displayed to the user.
-	 * @param   array   $params         Other parameters required for the adapter to work.
+	 * @param   string              $parent_slug    The slug name for the parent menu (or the file name of a standard WordPress admin page).
+	 * @param   string|callable     $page_title     The text to be displayed in the title tags of the page when the menu is selected.
+	 * @param   string|callable     $menu_title     The text to be used for the menu.
+	 * @param   string              $menu_slug      The slug name to refer to this menu by. Should be unique for this menu page and only
+	 *                                              include lowercase alphanumeric, dashes, and underscores characters to be compatible
+	 *                                              with sanitize_key().
+	 * @param   string              $capability     The capability required for this menu to be displayed to the user.
+	 * @param   array               $params         Other parameters required for the adapter to work.
 	 *
 	 * @return  mixed|null
 	 */
-	public function register_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params ) {
+	public function register_submenu_page( string $parent_slug, $page_title, $menu_title, string $menu_slug, string $capability, array $params ) {
 		if ( $this->is_run( SettingsActionsEnum::REGISTER_SUBMENU_PAGE ) || \did_action( $this->get_action_hook( SettingsActionsEnum::REGISTER_SUBMENU_PAGE ) ) ) {
 			return $this->array_walk_register_submenu_page( \get_defined_vars() );
 		} else {
@@ -322,15 +322,15 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 *
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 *
-	 * @param   string  $group_id       The ID of the settings group.
-	 * @param   string  $group_title    The title of the settings group.
-	 * @param   array   $fields         The fields to be registered with the group.
-	 * @param   string  $page           The settings page on which the group's fields should be displayed.
-	 * @param   array   $params         Other parameters required for the adapter to work.
+	 * @param   string              $group_id       The ID of the settings group.
+	 * @param   string|callable     $group_title    The title of the settings group.
+	 * @param   array               $fields         The fields to be registered with the group.
+	 * @param   string              $page           The settings page on which the group's fields should be displayed.
+	 * @param   array               $params         Other parameters required for the adapter to work.
 	 *
 	 * @return  mixed|null
 	 */
-	public function register_options_group( string $group_id, string $group_title, array $fields, string $page, array $params ) {
+	public function register_options_group( string $group_id, $group_title, array $fields, string $page, array $params ) {
 		if ( $this->is_run( SettingsActionsEnum::REGISTER_OPTIONS_GROUP ) || \did_action( $this->get_action_hook( SettingsActionsEnum::REGISTER_OPTIONS_GROUP ) ) ) {
 			return $this->array_walk_register_options_group( \get_defined_vars() );
 		} else {
@@ -348,15 +348,15 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 *
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 *
-	 * @param   string  $group_id       The ID of the settings group.
-	 * @param   string  $group_title    The title of the settings group.
-	 * @param   array   $fields         The fields to be registered with the group.
-	 * @param   array   $locations      Where the group should be outputted.
-	 * @param   array   $params         Other parameters required for the adapter to work.
+	 * @param   string              $group_id       The ID of the settings group.
+	 * @param   string|callable     $group_title    The title of the settings group.
+	 * @param   array               $fields         The fields to be registered with the group.
+	 * @param   array               $locations      Where the group should be outputted.
+	 * @param   array               $params         Other parameters required for the adapter to work.
 	 *
 	 * @return  mixed|null
 	 */
-	public function register_generic_group( string $group_id, string $group_title, array $fields, array $locations, array $params ) {
+	public function register_generic_group( string $group_id, $group_title, array $fields, array $locations, array $params ) {
 		if ( $this->is_run( SettingsActionsEnum::REGISTER_GENERIC_GROUP ) || \did_action( $this->get_action_hook( SettingsActionsEnum::REGISTER_GENERIC_GROUP ) ) ) {
 			return $this->array_walk_register_generic_group( \get_defined_vars() );
 		} else {
@@ -374,15 +374,15 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 *
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 *
-	 * @param   string  $group_id       The ID of the parent group that the dynamically added field belongs to.
-	 * @param   string  $field_id       The ID of the newly registered field.
-	 * @param   string  $field_title    The title of the newly registered field.
-	 * @param   string  $field_type     The type of custom field being registered.
-	 * @param   array   $params         Other parameters required for the adapter to work.
+	 * @param   string              $group_id       The ID of the parent group that the dynamically added field belongs to.
+	 * @param   string              $field_id       The ID of the newly registered field.
+	 * @param   string|callable     $field_title    The title of the newly registered field.
+	 * @param   string              $field_type     The type of custom field being registered.
+	 * @param   array               $params         Other parameters required for the adapter to work.
 	 *
 	 * @return  mixed|null
 	 */
-	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params ) {
+	public function register_field( string $group_id, string $field_id, $field_title, string $field_type, array $params ) {
 		if ( $this->is_run( SettingsActionsEnum::REGISTER_FIELD ) || \did_action( $this->get_action_hook( SettingsActionsEnum::REGISTER_FIELD ) ) ) {
 			return $this->array_walk_register_field( \get_defined_vars() );
 		} else {

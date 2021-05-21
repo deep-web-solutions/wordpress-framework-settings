@@ -24,26 +24,26 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	/**
 	 * Registers a new WordPress admin page using ACF's API.
 	 *
-	 * @param   string  $page_title     The text to be displayed in the title tags of the page when the menu is selected.
-	 * @param   string  $menu_title     The text to be used for the menu.
-	 * @param   string  $menu_slug      The slug name to refer to this menu by. Should be unique for this menu page and only
-	 *                                  include lowercase alphanumeric, dashes, and underscores characters to be compatible
-	 *                                  with sanitize_key().
-	 * @param   string  $capability     The capability required for this menu to be displayed to the user.
-	 * @param   array   $params         Other params required for the adapter to work.
+	 * @param   string|callable     $page_title     The text to be displayed in the title tags of the page when the menu is selected.
+	 * @param   string|callable     $menu_title     The text to be used for the menu.
+	 * @param   string              $menu_slug      The slug name to refer to this menu by. Should be unique for this menu page and only
+	 *                                              include lowercase alphanumeric, dashes, and underscores characters to be compatible
+	 *                                              with sanitize_key().
+	 * @param   string              $capability     The capability required for this menu to be displayed to the user.
+	 * @param   array               $params         Other params required for the adapter to work.
 	 *
 	 * @see     https://www.advancedcustomfields.com/resources/acf_add_options_page/
 	 *
 	 * @return  array|null  The validated and final page settings or null on failure.
 	 */
-	public function register_menu_page( string $page_title, string $menu_title, string $menu_slug, string $capability, array $params = array() ): ?array {
+	public function register_menu_page( $page_title, $menu_title, string $menu_slug, string $capability, array $params = array() ): ?array {
 		$result = null;
 
 		if ( \function_exists( '\acf_add_options_page' ) ) { // ACF Pro required.
 			$result = \acf_add_options_page(
 				array(
-					'page_title' => $page_title,
-					'menu_title' => $menu_title,
+					'page_title' => Strings::resolve( $page_title ),
+					'menu_title' => Strings::resolve( $menu_title ),
 					'menu_slug'  => $menu_slug,
 					'capability' => $capability,
 				) + $params
@@ -59,27 +59,27 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string  $parent_slug    The slug name for the parent menu (or the file name of a standard WordPress admin page).
-	 * @param   string  $page_title     The text to be displayed in the title tags of the page when the menu is selected.
-	 * @param   string  $menu_title     The text to be used for the menu.
-	 * @param   string  $menu_slug      The slug name to refer to this menu by. Should be unique for this menu page and only
-	 *                                  include lowercase alphanumeric, dashes, and underscores characters to be compatible
-	 *                                  with sanitize_key().
-	 * @param   string  $capability     The capability required for this menu to be displayed to the user.
-	 * @param   array   $params         Other params required for the adapter to work.
+	 * @param   string              $parent_slug    The slug name for the parent menu (or the file name of a standard WordPress admin page).
+	 * @param   string|callable     $page_title     The text to be displayed in the title tags of the page when the menu is selected.
+	 * @param   string|callable     $menu_title     The text to be used for the menu.
+	 * @param   string              $menu_slug      The slug name to refer to this menu by. Should be unique for this menu page and only
+	 *                                              include lowercase alphanumeric, dashes, and underscores characters to be compatible
+	 *                                              with sanitize_key().
+	 * @param   string              $capability     The capability required for this menu to be displayed to the user.
+	 * @param   array               $params         Other params required for the adapter to work.
 	 *
 	 * @see     https://www.advancedcustomfields.com/resources/acf_add_options_sub_page/
 	 *
 	 * @return  array|null  The validated and final page settings or null on failure.
 	 */
-	public function register_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $menu_slug, string $capability, array $params = array() ): ?array {
+	public function register_submenu_page( string $parent_slug, $page_title, $menu_title, string $menu_slug, string $capability, array $params = array() ): ?array {
 		$result = null;
 
 		if ( \function_exists( '\acf_add_options_sub_page' ) ) { // ACF Pro required.
 			$result = \acf_add_options_sub_page(
 				array( 'parent_slug' => $parent_slug ) + array(
-					'page_title' => $page_title,
-					'menu_title' => $menu_title,
+					'page_title' => Strings::resolve( $page_title ),
+					'menu_title' => Strings::resolve( $menu_title ),
 					'menu_slug'  => $menu_slug,
 					'capability' => $capability,
 				) + $params
@@ -95,15 +95,15 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string  $group_id       The ID of the settings group.
-	 * @param   string  $group_title    The title of the settings group.
-	 * @param   array   $fields         The fields to be registered with the group.
-	 * @param   string  $page           The settings page on which the group's fields should be displayed.
-	 * @param   array   $params         Other parameters required for the adapter to work.
+	 * @param   string              $group_id       The ID of the settings group.
+	 * @param   string|callable     $group_title    The title of the settings group.
+	 * @param   array               $fields         The fields to be registered with the group.
+	 * @param   string              $page           The settings page on which the group's fields should be displayed.
+	 * @param   array               $params         Other parameters required for the adapter to work.
 	 *
 	 * @return  bool
 	 */
-	public function register_options_group( string $group_id, string $group_title, array $fields, string $page, array $params = array() ): bool {
+	public function register_options_group( string $group_id, $group_title, array $fields, string $page, array $params = array() ): bool {
 		return $this->register_generic_group(
 			$group_id,
 			$group_title,
@@ -127,24 +127,24 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string $group_id    The ID of the settings group.
-	 * @param   string $group_title The title of the settings group.
-	 * @param   array  $fields      The fields to be registered with the group.
-	 * @param   array  $locations   Where the group should be outputted.
-	 * @param   array  $params      Other parameters required for the adapter to work.
+	 * @param   string              $group_id       The ID of the settings group.
+	 * @param   string|callable     $group_title    The title of the settings group.
+	 * @param   array               $fields         The fields to be registered with the group.
+	 * @param   array               $locations      Where the group should be outputted.
+	 * @param   array               $params         Other parameters required for the adapter to work.
 	 *
 	 * @see     https://www.advancedcustomfields.com/resources/register-fields-via-php/
 	 *
 	 * @return  bool
 	 */
-	public function register_generic_group( string $group_id, string $group_title, array $fields, array $locations, array $params = array() ): bool {
+	public function register_generic_group( string $group_id, $group_title, array $fields, array $locations, array $params = array() ): bool {
 		$group_id = Strings::starts_with( $group_id, 'group_' ) ? $group_id : "group_{$group_id}";
 		$params   = \wp_parse_args( $params, array( 'location' => array() ) );
 
 		return \acf_add_local_field_group(
 			array(
 				'key'      => $group_id,
-				'title'    => $group_title,
+				'title'    => Strings::resolve( $group_title ),
 				'fields'   => $fields,
 				'location' => $locations,
 			) + $params
@@ -157,22 +157,22 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string  $group_id       The ID of the parent group that the dynamically added field belongs to.
-	 * @param   string  $field_id       The ID of the newly registered field.
-	 * @param   string  $field_title    The title of the newly registered field.
-	 * @param   string  $field_type     The type of custom field being registered.
-	 * @param   array   $params         Other parameters required for the adapter to work.
+	 * @param   string              $group_id       The ID of the parent group that the dynamically added field belongs to.
+	 * @param   string              $field_id       The ID of the newly registered field.
+	 * @param   string|callable     $field_title    The title of the newly registered field.
+	 * @param   string              $field_type     The type of custom field being registered.
+	 * @param   array               $params         Other parameters required for the adapter to work.
 	 *
 	 * @return  true
 	 */
-	public function register_field( string $group_id, string $field_id, string $field_title, string $field_type, array $params = array() ): bool {
+	public function register_field( string $group_id, string $field_id, $field_title, string $field_type, array $params = array() ): bool {
 		$group_id = Strings::starts_with( $group_id, 'group_' ) || Strings::starts_with( $group_id, 'field_' ) ? $group_id : "group_{$group_id}";
 		$field_id = Strings::starts_with( $group_id, 'field_' ) ? $field_id : "field_{$field_id}";
 
 		\acf_add_local_field(
 			array(
 				'key'    => $field_id,
-				'label'  => $field_title,
+				'label'  => Strings::resolve( $field_title ),
 				'name'   => $params['name'] ?? '',
 				'type'   => $field_type,
 				'parent' => $group_id,
