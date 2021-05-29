@@ -197,7 +197,7 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	 *
 	 * @return  mixed
 	 */
-	public function get_option_value( ?string $field_id, string $settings_id, array $params = array() ) {
+	public function get_option( ?string $field_id, string $settings_id, array $params = array() ) {
 		$params = \wp_parse_args( $params, array( 'default' => false ) );
 
 		if ( \is_multisite() ) {
@@ -224,7 +224,7 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	 *
 	 * @return  mixed
 	 */
-	public function get_field_value( string $field_id, $object_id, array $params = array() ) {
+	public function get_field( string $field_id, $object_id, array $params = array() ) {
 		$params = \wp_parse_args(
 			$params,
 			array(
@@ -256,11 +256,11 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	 *
 	 * @return  bool
 	 */
-	public function update_option_value( string $field_id, $value, string $settings_id, array $params = array() ): bool {
+	public function update_option( string $field_id, $value, string $settings_id, array $params = array() ): bool {
 		$params = \wp_parse_args( $params, array( 'default' => false ) );
 
 		if ( ! \is_null( $field_id ) ) {
-			$options              = $this->get_option_value( null, $settings_id, $params );
+			$options              = $this->get_option( null, $settings_id, $params );
 			$options[ $field_id ] = $value;
 			$value                = $options;
 		}
@@ -290,7 +290,7 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	 *                      true on successful update, false on failure or if the value passed to the function is
 	 *                      the same as the one that is already in the database.
 	 */
-	public function update_field_value( string $field_id, $value, $object_id, array $params = array() ) {
+	public function update_field( string $field_id, $value, $object_id, array $params = array() ) {
 		return \update_metadata( $params['meta_type'] ?? 'post', $object_id, $field_id, $value, $params['prev_value'] ?? '' );
 	}
 
@@ -312,9 +312,9 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	 */
 	public function delete_option( ?string $field_id, string $settings_id, array $params = array() ): bool {
 		if ( ! empty( $field_id ) ) {
-			$options = $this->get_option_value( null, $settings_id, $params );
+			$options = $this->get_option( null, $settings_id, $params );
 			unset( $options[ $field_id ] );
-			return $this->update_option_value( null, $options, $settings_id, $params );
+			return $this->update_option( null, $options, $settings_id, $params );
 		} elseif ( \is_multisite() ) {
 			$params = $this->parse_network_params( $params );
 			return ( false === $params['network_id'] )

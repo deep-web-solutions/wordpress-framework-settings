@@ -116,7 +116,7 @@ interface SettingsAdapterInterface {
 	 *
 	 * @return  mixed
 	 */
-	public function get_option_value( string $field_id, string $settings_id, array $params );
+	public function get_option( string $field_id, string $settings_id, array $params );
 
 	/**
 	 * Reads a field's value from the database.
@@ -130,7 +130,7 @@ interface SettingsAdapterInterface {
 	 *
 	 * @return  mixed
 	 */
-	public function get_field_value( string $field_id, $object_id, array $params );
+	public function get_field( string $field_id, $object_id, array $params );
 
 	// endregion
 
@@ -149,7 +149,7 @@ interface SettingsAdapterInterface {
 	 *
 	 * @return  mixed
 	 */
-	public function update_option_value( string $field_id, $value, string $settings_id, array $params );
+	public function update_option( string $field_id, $value, string $settings_id, array $params );
 
 	/**
 	 * Updates a field's value.
@@ -164,7 +164,7 @@ interface SettingsAdapterInterface {
 	 *
 	 * @return  mixed
 	 */
-	public function update_field_value( string $field_id, $value, $object_id, array $params );
+	public function update_field( string $field_id, $value, $object_id, array $params );
 
 	// endregion
 

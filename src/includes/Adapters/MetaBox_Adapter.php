@@ -3,8 +3,8 @@
 namespace DeepWebSolutions\Framework\Settings\Adapters;
 
 use DeepWebSolutions\Framework\Foundations\Exceptions\NotSupportedException;
+use DeepWebSolutions\Framework\Helpers\DataTypes\Booleans;
 use DeepWebSolutions\Framework\Helpers\DataTypes\Strings;
-use DeepWebSolutions\Framework\Helpers\Security\Validation;
 use DeepWebSolutions\Framework\Settings\SettingsAdapterInterface;
 
 \defined( 'ABSPATH' ) || exit;
@@ -176,11 +176,11 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	 *
 	 * @return  mixed
 	 */
-	public function get_option_value( string $field_id, string $settings_id, array $params ) {
-		$params['object_type'] = ( \is_multisite() && Validation::validate_boolean( $params['network'] ?? false, false ) )
+	public function get_option( string $field_id, string $settings_id, array $params ) {
+		$params['object_type'] = ( \is_multisite() && Booleans::maybe_cast( $params['network'] ?? false, false ) )
 			? 'network_setting' : 'setting';
 
-		return $this->get_field_value( $field_id, $settings_id, $params );
+		return $this->get_field( $field_id, $settings_id, $params );
 	}
 
 	/**
@@ -195,7 +195,7 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	 *
 	 * @return  mixed
 	 */
-	public function get_field_value( string $field_id, $object_id = null, array $params = array() ) {
+	public function get_field( string $field_id, $object_id = null, array $params = array() ) {
 		return \rwmb_meta( $field_id, $params, $object_id );
 	}
 
@@ -216,11 +216,11 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	 *
 	 * @return  true
 	 */
-	public function update_option_value( string $field_id, $value, string $settings_id, array $params ): bool {
-		$params['object_type'] = ( \is_multisite() && Validation::validate_boolean( $params['network'] ?? false, false ) )
+	public function update_option( string $field_id, $value, string $settings_id, array $params ): bool {
+		$params['object_type'] = ( \is_multisite() && Booleans::maybe_cast( $params['network'] ?? false, false ) )
 			? 'network_setting' : 'setting';
 
-		return $this->update_field_value( $field_id, $value, $settings_id, $params );
+		return $this->update_field( $field_id, $value, $settings_id, $params );
 	}
 
 	/**
@@ -236,7 +236,7 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	 *
 	 * @return  true
 	 */
-	public function update_field_value( string $field_id, $value, $object_id, array $params ): bool {
+	public function update_field( string $field_id, $value, $object_id, array $params ): bool {
 		\rwmb_set_meta( $object_id, $field_id, $value, $params );
 		return true;
 	}

@@ -205,8 +205,8 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 *
 	 * @return  mixed
 	 */
-	public function get_option_value( string $field_id, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
-		return $this->get_handler( $handler_id )->get_option_value( $field_id, $settings_id, $params );
+	public function get_option( string $field_id, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
+		return $this->get_handler( $handler_id )->get_option( $field_id, $settings_id, $params );
 	}
 
 	/**
@@ -222,8 +222,8 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 *
 	 * @return  mixed
 	 */
-	public function get_field_value( string $field_id, $object_id, array $params = array(), string $handler_id = 'default' ) {
-		return $this->get_handler( $handler_id )->get_field_value( $field_id, $object_id, $params );
+	public function get_field( string $field_id, $object_id, array $params = array(), string $handler_id = 'default' ) {
+		return $this->get_handler( $handler_id )->get_field( $field_id, $object_id, $params );
 	}
 
 	/**
@@ -240,8 +240,8 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 *
 	 * @return  mixed
 	 */
-	public function update_option_value( string $field_id, $value, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
-		return $this->get_handler( $handler_id )->update_option_value( $field_id, $value, $settings_id, $params );
+	public function update_option( string $field_id, $value, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
+		return $this->get_handler( $handler_id )->update_option( $field_id, $value, $settings_id, $params );
 	}
 
 	/**
@@ -258,8 +258,8 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 *
 	 * @return  mixed
 	 */
-	public function update_field_value( string $field_id, $value, $object_id, array $params = array(), string $handler_id = 'default' ) {
-		return $this->get_handler( $handler_id )->update_field_value( $field_id, $value, $object_id, $params );
+	public function update_field( string $field_id, $value, $object_id, array $params = array(), string $handler_id = 'default' ) {
+		return $this->get_handler( $handler_id )->update_field( $field_id, $value, $object_id, $params );
 	}
 
 	/**

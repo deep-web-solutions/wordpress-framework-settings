@@ -75,8 +75,8 @@ trait SettingsServiceAwareTrait {
 	 *
 	 * @return  mixed
 	 */
-	public function get_option_value( string $field_id, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
-		return $this->get_settings_service()->get_option_value( $field_id, $settings_id, $params, $handler_id );
+	public function get_option( string $field_id, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
+		return $this->get_settings_service()->get_option( $field_id, $settings_id, $params, $handler_id );
 	}
 
 	/**
@@ -92,8 +92,8 @@ trait SettingsServiceAwareTrait {
 	 *
 	 * @return  mixed
 	 */
-	public function get_field_value( string $field_id, $object_id, array $params = array(), string $handler_id = 'default' ) {
-		return $this->get_settings_service()->get_field_value( $field_id, $object_id, $params, $handler_id );
+	public function get_field( string $field_id, $object_id, array $params = array(), string $handler_id = 'default' ) {
+		return $this->get_settings_service()->get_field( $field_id, $object_id, $params, $handler_id );
 	}
 
 	/**
@@ -110,8 +110,8 @@ trait SettingsServiceAwareTrait {
 	 *
 	 * @return  mixed
 	 */
-	public function update_option_value( string $field_id, $value, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
-		return $this->get_settings_service()->update_option_value( $field_id, $value, $settings_id, $params, $handler_id );
+	public function update_option( string $field_id, $value, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
+		return $this->get_settings_service()->update_option( $field_id, $value, $settings_id, $params, $handler_id );
 	}
 
 	/**
@@ -128,8 +128,8 @@ trait SettingsServiceAwareTrait {
 	 *
 	 * @return  mixed
 	 */
-	public function update_field_value( string $field_id, $value, $object_id, array $params = array(), string $handler_id = 'default' ) {
-		return $this->get_settings_service()->update_field_value( $field_id, $value, $object_id, $params, $handler_id );
+	public function update_field( string $field_id, $value, $object_id, array $params = array(), string $handler_id = 'default' ) {
+		return $this->get_settings_service()->update_field( $field_id, $value, $object_id, $params, $handler_id );
 	}
 
 	// endregion

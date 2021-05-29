@@ -38,9 +38,9 @@ trait ValidatedSettingsServiceAwareTrait {
 	 *
 	 * @return  mixed
 	 */
-	public function get_validated_option_value( string $field_id, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
-		$value = $this->get_option_value( $field_id, $settings_id, $params, $handler_id );
-		return $this->validate_setting_value( $value, $params['validator'] ?? array() );
+	public function get_validated_option( string $field_id, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
+		$value = $this->get_option( $field_id, $settings_id, $params, $handler_id );
+		return $this->validate_setting( $value, $params['validator'] ?? array() );
 	}
 
 	/**
@@ -56,9 +56,9 @@ trait ValidatedSettingsServiceAwareTrait {
 	 *
 	 * @return  mixed
 	 */
-	public function get_validated_field_value( string $field_id, $object_id, array $params = array(), string $handler_id = 'default' ) {
-		$value = $this->get_field_value( $field_id, $object_id, $params, $handler_id );
-		return $this->validate_setting_value( $value, $params['validator'] ?? array() );
+	public function get_validated_field( string $field_id, $object_id, array $params = array(), string $handler_id = 'default' ) {
+		$value = $this->get_field( $field_id, $object_id, $params, $handler_id );
+		return $this->validate_setting( $value, $params['validator'] ?? array() );
 	}
 
 	/**
@@ -75,9 +75,9 @@ trait ValidatedSettingsServiceAwareTrait {
 	 *
 	 * @return  mixed
 	 */
-	public function update_validated_option_value( string $field_id, $value, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
-		$value = $this->validate_setting_value( $value, $params['validator'] ?? array() );
-		return $this->update_option_value( $field_id, $value, $settings_id, $params, $handler_id );
+	public function update_validated_option( string $field_id, $value, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
+		$value = $this->validate_setting( $value, $params['validator'] ?? array() );
+		return $this->update_option( $field_id, $value, $settings_id, $params, $handler_id );
 	}
 
 	/**
@@ -94,9 +94,9 @@ trait ValidatedSettingsServiceAwareTrait {
 	 *
 	 * @return  mixed
 	 */
-	public function update_validated_field_value( string $field_id, $value, $object_id, array $params = array(), string $handler_id = 'default' ) {
-		$value = $this->validate_setting_value( $value, $params['validator'] ?? array() );
-		return $this->update_field_value( $field_id, $value, $object_id, $params, $handler_id );
+	public function update_validated_field( string $field_id, $value, $object_id, array $params = array(), string $handler_id = 'default' ) {
+		$value = $this->validate_setting( $value, $params['validator'] ?? array() );
+		return $this->update_field( $field_id, $value, $object_id, $params, $handler_id );
 	}
 
 	// endregion
@@ -114,8 +114,8 @@ trait ValidatedSettingsServiceAwareTrait {
 	 *
 	 * @return  mixed
 	 */
-	protected function validate_setting_value( $value, array $args ) {
-		return $this->validate_value( $value, $args['default_key'] ?? '', $args['validation_type'] ?? '', $args['params'] ?? array() );
+	protected function validate_setting( $value, array $args ) {
+		return $this->validate( $value, $args['default_key'] ?? '', $args['validation_type'] ?? '', $args['params'] ?? array() );
 	}
 
 	// endregion
