@@ -124,7 +124,7 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 
 		foreach ( Callables::maybe_resolve( $fields ) as $field ) {
 			if ( isset( $field['id'], $field['title'], $field['callback'] ) ) {
-				\add_settings_field( $field['id'], $field['title'], $field['callback'], $page, $group_id, $field['args'] ?? array() );
+				\add_settings_field( $field['id'], Strings::resolve( $field['title'] ), $field['callback'], $page, $group_id, $field['args'] ?? array() );
 			}
 		}
 
