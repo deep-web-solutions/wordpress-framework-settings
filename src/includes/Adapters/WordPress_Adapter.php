@@ -2,6 +2,7 @@
 
 namespace DeepWebSolutions\Framework\Settings\Adapters;
 
+use DeepWebSolutions\Framework\Helpers\DataTypes\Callables;
 use DeepWebSolutions\Framework\Helpers\DataTypes\Strings;
 use DeepWebSolutions\Framework\Settings\SettingsAdapterInterface;
 
@@ -121,7 +122,7 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 		\register_setting( $group_id, $group_id, array( 'type' => 'array' ) + ( $params['setting_args'] ?? array() ) );
 		\add_settings_section( $group_id, Strings::resolve( $group_title ), $params['section_callback'] ?? '', $page );
 
-		foreach ( $fields as $field ) {
+		foreach ( Callables::maybe_resolve( $fields ) as $field ) {
 			if ( isset( $field['id'], $field['title'], $field['callback'] ) ) {
 				\add_settings_field( $field['id'], $field['title'], $field['callback'], $page, $group_id, $field['args'] ?? array() );
 			}
@@ -152,7 +153,7 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 			$locations,
 			$params['context'] ?? 'advanced',
 			$params['priority'] ?? 'default',
-			array( 'fields' => $fields ) + ( $params['callback_args'] ?? array() )
+			array( 'fields' => Callables::maybe_resolve( $fields ) ) + ( $params['callback_args'] ?? array() )
 		);
 
 		return true;
