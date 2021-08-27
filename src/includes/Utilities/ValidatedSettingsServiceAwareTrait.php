@@ -40,7 +40,7 @@ trait ValidatedSettingsServiceAwareTrait {
 	 */
 	public function get_validated_option( string $field_id, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
 		$value = $this->get_option( $field_id, $settings_id, $params, $handler_id );
-		return $this->validate_setting( $value, $params['validator'] ?? array() );
+		return $this->validate_value( $value, $params['validator'] ?? array() );
 	}
 
 	/**
@@ -58,7 +58,7 @@ trait ValidatedSettingsServiceAwareTrait {
 	 */
 	public function get_validated_field( string $field_id, $object_id, array $params = array(), string $handler_id = 'default' ) {
 		$value = $this->get_field( $field_id, $object_id, $params, $handler_id );
-		return $this->validate_setting( $value, $params['validator'] ?? array() );
+		return $this->validate_value( $value, $params['validator'] ?? array() );
 	}
 
 	/**
@@ -76,7 +76,7 @@ trait ValidatedSettingsServiceAwareTrait {
 	 * @return  mixed
 	 */
 	public function update_validated_option( string $field_id, $value, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
-		$value = $this->validate_setting( $value, $params['validator'] ?? array() );
+		$value = $this->validate_value( $value, $params['validator'] ?? array() );
 		return $this->update_option( $field_id, $value, $settings_id, $params, $handler_id );
 	}
 
@@ -95,7 +95,7 @@ trait ValidatedSettingsServiceAwareTrait {
 	 * @return  mixed
 	 */
 	public function update_validated_field( string $field_id, $value, $object_id, array $params = array(), string $handler_id = 'default' ) {
-		$value = $this->validate_setting( $value, $params['validator'] ?? array() );
+		$value = $this->validate_value( $value, $params['validator'] ?? array() );
 		return $this->update_field( $field_id, $value, $object_id, $params, $handler_id );
 	}
 
@@ -114,7 +114,7 @@ trait ValidatedSettingsServiceAwareTrait {
 	 *
 	 * @return  mixed
 	 */
-	protected function validate_setting( $value, array $args ) {
+	protected function validate_value( $value, array $args ) {
 		return $this->validate( $value, $args['default_key'] ?? '', $args['validation_type'] ?? '', $args['params'] ?? array() );
 	}
 
