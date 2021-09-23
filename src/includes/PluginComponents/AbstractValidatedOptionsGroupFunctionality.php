@@ -3,9 +3,7 @@
 namespace DeepWebSolutions\Framework\Settings\PluginComponents;
 
 use DeepWebSolutions\Framework\Helpers\DataTypes\Strings;
-use DeepWebSolutions\Framework\Utilities\Actions\Initializable\InitializeCachingServiceTrait;
 use DeepWebSolutions\Framework\Utilities\Actions\Initializable\InitializeValidationServiceTrait;
-use DeepWebSolutions\Framework\Utilities\Caching\CachingServiceAwareInterface;
 use DeepWebSolutions\Framework\Utilities\Hooks\HooksService;
 use DeepWebSolutions\Framework\Utilities\Validation\ValidationServiceAwareInterface;
 use DeepWebSolutions\Framework\Utilities\Validation\ValidationServiceAwareTrait;
@@ -22,10 +20,9 @@ use DeepWebSolutions\Framework\Utilities\Validation\ValidationServiceAwareTrait;
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
  * @package DeepWebSolutions\WP-Framework\Settings\PluginComponents
  */
-abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOptionsGroupFunctionality implements CachingServiceAwareInterface, ValidationServiceAwareInterface {
+abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOptionsGroupFunctionality implements ValidationServiceAwareInterface {
 	// region TRAITS
 
-	use InitializeCachingServiceTrait;
 	use InitializeValidationServiceTrait;
 	use ValidationServiceAwareTrait {
 		get_default_value as protected get_default_value_trait;
@@ -114,15 +111,8 @@ abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOption
 	 * @return  mixed
 	 */
 	public function get_validated_option_value( string $field_id ) {
-		$found = null;
-		$value = $this->get_cache_value( "{$this->get_parent()->get_page_slug()}/{$this->get_group_name()}/$field_id", $found );
-
-		if ( false === $found ) {
-			$value = $this->get_option_value( $field_id );
-			$value = $this->validate_option_value( $value, $field_id );
-
-			$this->set_cache_value( "{$this->get_parent()->get_page_slug()}/{$this->get_group_name()}/$field_id", $value );
-		}
+		$value = $this->get_option_value( $field_id );
+		$value = $this->validate_option_value( $value, $field_id );
 
 		return \apply_filters( $this->get_hook_tag( 'get_validated_option_value' ), $value, $field_id );
 	}
