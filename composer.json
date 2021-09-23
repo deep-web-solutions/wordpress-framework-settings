@@ -21,31 +21,26 @@
 
   "repositories": [
     {
-      "type": "package",
-      "package": {
-        "name": "advanced-custom-fields/advanced-custom-fields-pro",
-        "version": "5.9.5",
-        "type": "library",
-        "dist": {
-          "type": "zip",
-          "url": "https://connect.advancedcustomfields.com/index.php?a=download&p=pro&k={%PLUGIN_ACF_KEY}&t={%VERSION}"
-        },
-        "require": {
-          "composer/installers": "^1.4",
-          "ffraenz/private-composer-installer": "^5.0"
-        }
-      }
+      "type": "composer",
+      "url": "https://wpackagist.org",
+      "only": [
+        "wpackagist-plugin/*"
+      ]
+    },
+    {
+      "type": "composer",
+      "url": "https://packages.deep-web-solutions.com/satispress/"
     }
   ],
   "require": {
     "deep-web-solutions/wp-framework-bootstrapper": "^1.2.0",
-    "deep-web-solutions/wp-framework-helpers": "^1.4.0",
-    "deep-web-solutions/wp-framework-foundations": "^1.4.2",
+    "deep-web-solutions/wp-framework-helpers": "^1.4.5",
+    "deep-web-solutions/wp-framework-foundations": "^1.4.3",
     "deep-web-solutions/wp-framework-utilities": "master@dev"
   },
   "require-dev": {
-    "wpmetabox/meta-box": "^5.4",
-    "advanced-custom-fields/advanced-custom-fields-pro": "^5.9",
+    "wpackagist-plugin/meta-box": "^5.4",
+    "satispress/advanced-custom-fields-pro": "*",
 
     "deep-web-solutions/wordpress-configs": "master@dev",
     "php-stubs/wordpress-stubs": "5.5.*",
@@ -93,8 +88,8 @@
 
   "extra": {
     "installer-paths": {
-      "vendor/wpmetabox/meta-box/": [
-        "wpmetabox/meta-box"
+      "vendor/wpackagist-plugin/{$name}/": [
+        "type:wordpress-plugin"
       ]
     }
   }
