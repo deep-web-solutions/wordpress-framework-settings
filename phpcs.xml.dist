@@ -59,11 +59,8 @@
                 <element value="DeepWebSolutions"/>
             </property>
         </properties>
-    </rule>
-
-    <!-- All hooks are auto-generated. This sniff is a false positive. -->
-    <rule ref="WordPress.NamingConventions">
-        <exclude name="WordPress.NamingConventions.ValidHookName"/>
+        <!-- All hooks are auto-generated. This sniff is a false positive. -->
+        <exclude name="WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound"/>
     </rule>
 
     <!-- Define some special rules for the Codeception tests. -->
