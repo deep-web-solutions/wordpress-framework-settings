@@ -119,6 +119,16 @@ abstract class AbstractOptionsPageFunctionality extends AbstractPluginFunctional
 	 */
 	abstract public function get_page_slug(): string;
 
+	/**
+	 * Returns the options page's title.
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
+	 * @return  string
+	 */
+	abstract public function get_page_title(): string;
+
 	// endregion
 
 	// region INSTALLATION
