@@ -166,12 +166,11 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	 * @return  true
 	 */
 	public function register_field( string $group_id, string $field_id, $field_title, string $field_type, array $params = array() ): bool {
-		$group_id = Strings::starts_with( $group_id, 'group_' ) || Strings::starts_with( $group_id, 'field_' ) ? $group_id : "group_{$group_id}";
-		$field_id = Strings::starts_with( $group_id, 'field_' ) ? $field_id : "field_{$field_id}";
+		$group_id = Strings::starts_with( $group_id, 'group_' ) || Strings::starts_with( $group_id, 'field_' ) ? $group_id : "group_$group_id";
 
 		\acf_add_local_field(
 			array(
-				'key'    => $field_id,
+				'key'    => Strings::maybe_prefix( $field_id, 'field_' ),
 				'label'  => Strings::resolve( $field_title ),
 				'name'   => $params['name'] ?? '',
 				'type'   => $field_type,
@@ -200,8 +199,8 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	 *
 	 * @return  mixed
 	 */
-	public function get_option( string $field_id, string $settings_id = null, array $params = array() ) {
-		return $this->get_field( $field_id, 'options', $params );
+	public function get_option_value( string $field_id, string $settings_id = null, array $params = array() ) {
+		return $this->get_field_value( $field_id, 'options', $params );
 	}
 
 	/**
@@ -218,7 +217,7 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	 *
 	 * @return  mixed
 	 */
-	public function get_field( string $field_id, $object_id = false, array $params = array() ) {
+	public function get_field_value( string $field_id, $object_id = false, array $params = array() ) {
 		return \get_field( $field_id, $object_id, Booleans::maybe_cast( $params['format_value'] ?? true, true ) );
 	}
 
@@ -241,8 +240,8 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	 *
 	 * @return  bool
 	 */
-	public function update_option( string $field_id, $value, string $settings_id = null, array $params = array() ): bool {
-		return $this->update_field( $field_id, 'options', $value, $params );
+	public function update_option_value( string $field_id, $value, string $settings_id = null, array $params = array() ): bool {
+		return $this->update_field_value( $field_id, 'options', $value, $params );
 	}
 
 	/**
@@ -261,7 +260,7 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	 *
 	 * @return  bool
 	 */
-	public function update_field( string $field_id, $value, $object_id = false, array $params = array() ): bool {
+	public function update_field_value( string $field_id, $value, $object_id = false, array $params = array() ): bool {
 		return \update_field( $field_id, $value, $object_id );
 	}
 
@@ -283,8 +282,8 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	 *
 	 * @return  bool
 	 */
-	public function delete_option( string $field_id, string $settings_id = null, array $params = array() ): bool {
-		return $this->delete_field( $field_id, array( 'post_id' => 'options' ) + $params );
+	public function delete_option_value( string $field_id, string $settings_id = null, array $params = array() ): bool {
+		return $this->delete_field_value( $field_id, array( 'post_id' => 'options' ) + $params );
 	}
 
 	/**
@@ -301,7 +300,7 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	 *
 	 * @return  bool
 	 */
-	public function delete_field( string $field_id, $object_id = false, array $params = array() ): bool {
+	public function delete_field_value( string $field_id, $object_id = false, array $params = array() ): bool {
 		return Booleans::maybe_cast( $params['sub_field'] ?? false, false )
 			? \delete_sub_field( $field_id, $object_id )
 			: \delete_field( $field_id, $object_id );

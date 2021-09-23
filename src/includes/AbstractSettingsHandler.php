@@ -404,8 +404,8 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 *
 	 * @return  mixed
 	 */
-	public function get_option( string $field_id, string $settings_id, array $params ) {
-		return $this->adapter->get_option( $field_id, $settings_id, $params );
+	public function get_option_value( string $field_id, string $settings_id, array $params ) {
+		return $this->adapter->get_option_value( $field_id, $settings_id, $params );
 	}
 
 	/**
@@ -420,8 +420,8 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 *
 	 * @return  mixed
 	 */
-	public function get_field( string $field_id, $object_id, array $params = array() ) {
-		return $this->adapter->get_field( $field_id, $object_id, $params );
+	public function get_field_value( string $field_id, $object_id, array $params = array() ) {
+		return $this->adapter->get_field_value( $field_id, $object_id, $params );
 	}
 
 	/**
@@ -437,8 +437,8 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 *
 	 * @return  mixed
 	 */
-	public function update_option( string $field_id, $value, string $settings_id, array $params ) {
-		return $this->adapter->update_option( $field_id, $value, $settings_id, $params );
+	public function update_option_value( string $field_id, $value, string $settings_id, array $params ) {
+		return $this->adapter->update_option_value( $field_id, $value, $settings_id, $params );
 	}
 
 	/**
@@ -454,8 +454,8 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 *
 	 * @return  mixed
 	 */
-	public function update_field( string $field_id, $value, $object_id, array $params ) {
-		return $this->adapter->update_field( $field_id, $value, $object_id, $params );
+	public function update_field_value( string $field_id, $value, $object_id, array $params ) {
+		return $this->adapter->update_field_value( $field_id, $value, $object_id, $params );
 	}
 
 	/**
@@ -470,8 +470,8 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 *
 	 * @return  mixed
 	 */
-	public function delete_option( string $field_id, string $settings_id, array $params ) {
-		return $this->adapter->delete_option( $field_id, $settings_id, $params );
+	public function delete_option_value( string $field_id, string $settings_id, array $params ) {
+		return $this->adapter->delete_option_value( $field_id, $settings_id, $params );
 	}
 
 	/**
@@ -486,8 +486,8 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 *
 	 * @return  mixed
 	 */
-	public function delete_field( string $field_id, $object_id, array $params ) {
-		return $this->adapter->delete_field( $field_id, $object_id, $params );
+	public function delete_field_value( string $field_id, $object_id, array $params ) {
+		return $this->adapter->delete_field_value( $field_id, $object_id, $params );
 	}
 
 	// endregion

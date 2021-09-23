@@ -198,15 +198,15 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string  $field_id       The ID of the field within the settings to read from the database.
-	 * @param   string  $settings_id    The ID of the settings group to read from the database.
-	 * @param   array   $params         Other parameters required for the adapter to work.
-	 * @param   string  $handler_id     The ID of the settings framework handler to use.
+	 * @param   string|null     $field_id       The ID of the field within the settings to read from the database.
+	 * @param   string          $settings_id    The ID of the settings group to read from the database.
+	 * @param   array           $params         Other parameters required for the adapter to work.
+	 * @param   string          $handler_id     The ID of the settings framework handler to use.
 	 *
 	 * @return  mixed
 	 */
-	public function get_option( string $field_id, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
-		return $this->get_handler( $handler_id )->get_option( $field_id, $settings_id, $params );
+	public function get_option_value( ?string $field_id, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
+		return $this->get_handler( $handler_id )->get_option_value( $field_id, $settings_id, $params );
 	}
 
 	/**
@@ -222,8 +222,8 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 *
 	 * @return  mixed
 	 */
-	public function get_field( string $field_id, $object_id, array $params = array(), string $handler_id = 'default' ) {
-		return $this->get_handler( $handler_id )->get_field( $field_id, $object_id, $params );
+	public function get_field_value( string $field_id, $object_id, array $params = array(), string $handler_id = 'default' ) {
+		return $this->get_handler( $handler_id )->get_field_value( $field_id, $object_id, $params );
 	}
 
 	/**
@@ -232,16 +232,16 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string  $field_id       The ID of the field within the settings to update.
-	 * @param   mixed   $value          The new value of the setting.
-	 * @param   string  $settings_id    The ID of the settings group to update.
-	 * @param   array   $params         Other parameters required for the adapter to work.
-	 * @param   string  $handler_id     The ID of the settings framework handler to use.
+	 * @param   string|null     $field_id       The ID of the field within the settings to update.
+	 * @param   mixed           $value          The new value of the setting.
+	 * @param   string          $settings_id    The ID of the settings group to update.
+	 * @param   array           $params         Other parameters required for the adapter to work.
+	 * @param   string          $handler_id     The ID of the settings framework handler to use.
 	 *
 	 * @return  mixed
 	 */
-	public function update_option( string $field_id, $value, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
-		return $this->get_handler( $handler_id )->update_option( $field_id, $value, $settings_id, $params );
+	public function update_option_value( ?string $field_id, $value, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
+		return $this->get_handler( $handler_id )->update_option_value( $field_id, $value, $settings_id, $params );
 	}
 
 	/**
@@ -258,8 +258,8 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 *
 	 * @return  mixed
 	 */
-	public function update_field( string $field_id, $value, $object_id, array $params = array(), string $handler_id = 'default' ) {
-		return $this->get_handler( $handler_id )->update_field( $field_id, $value, $object_id, $params );
+	public function update_field_value( string $field_id, $value, $object_id, array $params = array(), string $handler_id = 'default' ) {
+		return $this->get_handler( $handler_id )->update_field_value( $field_id, $value, $object_id, $params );
 	}
 
 	/**
@@ -268,15 +268,15 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string  $field_id       The ID of the settings field to remove from the database. Empty string to delete the whole group.
-	 * @param   string  $settings_id    The ID of the settings group to delete the field from.
-	 * @param   array   $params         Other parameters required for the adapter to work.
-	 * @param   string  $handler_id     The ID of the settings framework handler to use.
+	 * @param   string|null     $field_id       The ID of the settings field to remove from the database. Empty string to delete the whole group.
+	 * @param   string          $settings_id    The ID of the settings group to delete the field from.
+	 * @param   array           $params         Other parameters required for the adapter to work.
+	 * @param   string          $handler_id     The ID of the settings framework handler to use.
 	 *
 	 * @return  mixed
 	 */
-	public function delete_option( string $field_id, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
-		return $this->get_handler( $handler_id )->delete_option( $field_id, $settings_id, $params );
+	public function delete_option_value( ?string $field_id, string $settings_id, array $params = array(), string $handler_id = 'default' ) {
+		return $this->get_handler( $handler_id )->delete_option_value( $field_id, $settings_id, $params );
 	}
 
 	/**
@@ -292,8 +292,8 @@ class SettingsService extends AbstractMultiHandlerService implements HooksServic
 	 *
 	 * @return  mixed
 	 */
-	public function delete_field( string $field_id, $object_id, array $params = array(), string $handler_id = 'default' ) {
-		return $this->get_handler( $handler_id )->delete_field( $field_id, $object_id, $params );
+	public function delete_field_value( string $field_id, $object_id, array $params = array(), string $handler_id = 'default' ) {
+		return $this->get_handler( $handler_id )->delete_field_value( $field_id, $object_id, $params );
 	}
 
 	// endregion
