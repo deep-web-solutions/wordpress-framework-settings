@@ -44,8 +44,8 @@ abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOption
 	public function register_hooks( HooksService $hooks_service ): void {
 		parent::register_hooks( $hooks_service );
 
-		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'get_validated_option_value' ), $this, 'maybe_get_validated_option_value', 10, 2 );
-		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'validate_option_value' ), $this, 'maybe_validate_option_value', 10, 2 );
+		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'get_validated_option_value' ), $this, 'maybe_get_validated_option_value', 10, 2, 'internal' );
+		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'validate_option_value' ), $this, 'maybe_validate_option_value', 10, 2, 'internal' );
 	}
 
 	/**

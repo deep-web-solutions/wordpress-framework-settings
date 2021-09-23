@@ -90,9 +90,9 @@ abstract class AbstractOptionsGroupFunctionality extends AbstractPluginFunctiona
 	 * {@inheritDoc}
 	 */
 	public function register_hooks( HooksService $hooks_service ): void {
-		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'get_option_value' ), $this, 'maybe_get_option_value', 10, 2 );
-		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'update_option_value' ), $this, 'maybe_update_option_value', 10, 3 );
-		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'delete_option_value' ), $this, 'maybe_delete_option_value', 10, 2 );
+		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'get_option_value' ), $this, 'maybe_get_option_value', 10, 2, 'internal' );
+		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'update_option_value' ), $this, 'maybe_update_option_value', 10, 3, 'internal' );
+		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'delete_option_value' ), $this, 'maybe_delete_option_value', 10, 2, 'internal' );
 	}
 
 	/**
