@@ -31,7 +31,7 @@ abstract class AbstractOptionsGroupFunctionality extends AbstractPluginFunctiona
 		update_field_value as private update_field_value;
 	}
 	use NodeTrait {
-		get_parent as private get_parent_node_trait;
+		get_parent as protected get_parent_node_trait;
 	}
 	use SetupHooksTrait;
 
