@@ -37,6 +37,8 @@
         "delete_blog_option",
         "delete_network_option",
         "delete_option",
-        "delete_metadata"
+        "delete_metadata",
+        "do_action",
+        "__"
     ]
 }

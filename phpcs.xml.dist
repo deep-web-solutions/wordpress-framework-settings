@@ -44,7 +44,7 @@
     <rule ref="WordPress.WP.I18n">
         <properties>
             <property name="text_domain" type="array">
-                <element value="dws-wp-framework-core"/>
+                <element value="dws-wp-framework-settings"/>
             </property>
         </properties>
     </rule>
@@ -59,6 +59,11 @@
                 <element value="DeepWebSolutions"/>
             </property>
         </properties>
+    </rule>
+
+    <!-- All hooks are auto-generated. This sniff is a false positive. -->
+    <rule ref="WordPress.NamingConventions">
+        <exclude name="WordPress.NamingConventions.ValidHookName"/>
     </rule>
 
     <!-- Define some special rules for the Codeception tests. -->
