@@ -15,6 +15,8 @@ use DeepWebSolutions\Framework\Utilities\Validation\ValidationServiceAwareTrait;
 /**
  * Template for standardizing the registration of an options group with validated retrieval.
  *
+ * @SuppressWarnings(PHPMD.LongClassName)
+ *
  * @since   1.0.0
  * @version 1.0.0
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>

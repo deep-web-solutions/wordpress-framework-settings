@@ -10,6 +10,8 @@ use DeepWebSolutions\Framework\Utilities\Validation\ValidationServiceAwareInterf
 /**
  * Template for standardizing the registration and retrieval of validated options.
  *
+ * @SuppressWarnings(PHPMD.LongClassName)
+ *
  * @since   1.0.0
  * @version 1.0.0
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
