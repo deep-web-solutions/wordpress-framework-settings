@@ -26,9 +26,9 @@ abstract class AbstractOptionsPageFunctionality extends AbstractPluginFunctional
 
 	use InitializeSettingsServiceTrait {
 		get_option_value as protected get_option_value_trait;
-		get_field_value as private get_field_value;
+		get_field_value as private;
 		update_option_value as protected update_option_value_trait;
-		update_field_value as private update_field_value;
+		update_field_value as private;
 	}
 	use SetupSettingsTrait;
 
