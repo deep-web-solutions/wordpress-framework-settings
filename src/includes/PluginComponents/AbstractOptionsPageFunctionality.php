@@ -9,6 +9,7 @@ use DeepWebSolutions\Framework\Settings\Actions\Initializable\InitializeSettings
 use DeepWebSolutions\Framework\Settings\Actions\Setupable\SetupSettingsTrait;
 use DeepWebSolutions\Framework\Settings\SettingsService;
 use DeepWebSolutions\Framework\Settings\SettingsServiceAwareInterface;
+use DeepWebSolutions\Framework\Settings\SettingsServiceRegisterInterface;
 
 \defined( 'ABSPATH' ) || exit;
 
@@ -44,7 +45,7 @@ abstract class AbstractOptionsPageFunctionality extends AbstractPluginFunctional
 		\do_action( $this->get_hook_tag( 'registered_options_page' ), $settings_service );
 
 		foreach ( $this->get_children() as $child ) {
-			if ( \is_a( $child, AbstractOptionsGroupFunctionality::class ) ) {
+			if ( $child instanceof SettingsServiceRegisterInterface ) {
 				$child->register_settings( $settings_service );
 			}
 		}
