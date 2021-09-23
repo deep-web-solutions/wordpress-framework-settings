@@ -2,7 +2,7 @@ name: WordPress Coding Standards
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, develop ]
   pull_request:
     branches: [ master ]
 
@@ -34,9 +34,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-php-
 
-      - name: Install module dev dependencies
+      - name: Set composer authentication credentials
         env:
-          PLUGIN_ACF_KEY: ${{ secrets.PLUGIN_ACF_KEY }}
+          SATISPRESS_USERNAME: ${{ secrets.SATISPRESS_USERNAME }}
+          SATISPRESS_PASSWORD: ${{ secrets.SATISPRESS_PASSWORD }}
+        run: composer config -a http-basic.packages.deep-web-solutions.com "$SATISPRESS_USERNAME" "$SATISPRESS_PASSWORD"
+
+      - name: Install dependencies
         run: composer install --no-interaction --ignore-platform-reqs --prefer-dist --no-progress
 
       - name: Run PHP Code Sniffer
