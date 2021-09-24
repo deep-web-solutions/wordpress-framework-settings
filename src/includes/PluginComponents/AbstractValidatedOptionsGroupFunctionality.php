@@ -145,7 +145,7 @@ abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOption
 	 */
 	public function validate_option_value( $value, string $field_id ) {
 		$validated_value = $this->validate_option_value_helper( $value, $field_id );
-		return \apply_filters( $this->get_hook_tag( 'validate_option_value' ), $validated_value, $value, $field_id );
+		return \apply_filters( $this->get_hook_tag( 'validate_option_value' ), $validated_value, $field_id, $value );
 	}
 
 	// endregion
