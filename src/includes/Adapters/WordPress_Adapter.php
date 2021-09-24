@@ -210,7 +210,7 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 			$settings = \get_option( $settings_id, $params['default'] );
 		}
 
-		return $settings[ $field_id ] ?? $settings;
+		return \is_null( $field_id ) ? $settings : ( $settings[ $field_id ] ?? $params['default'] );
 	}
 
 	/**
