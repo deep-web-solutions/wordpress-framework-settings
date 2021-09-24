@@ -128,7 +128,9 @@ abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOption
 	 *
 	 * @return  mixed
 	 */
-	abstract public function validate_option_value( $value, string $field_id );
+	public function validate_option_value( $value, string $field_id ) {
+		return \apply_filters( $this->get_hook_tag( 'validate_option_value' ), $value, $field_id );
+	}
 
 	// endregion
 
