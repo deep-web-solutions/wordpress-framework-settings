@@ -141,7 +141,7 @@ abstract class AbstractOptionsGroupFunctionality extends AbstractPluginFunctiona
 		$options_prefix = $this->get_parent()->get_options_name_prefix();
 		$options_group  = $this->get_group_name();
 
-		return Strings::maybe_suffix( $options_prefix ) . $options_group;
+		return Strings::maybe_suffix( $options_prefix, '_' ) . $options_group;
 	}
 
 	/**
