@@ -144,7 +144,8 @@ abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOption
 	 * @return  mixed
 	 */
 	public function validate_option_value( $value, string $field_id ) {
-		return \apply_filters( $this->get_hook_tag( 'validate_option_value' ), $value, $value, $field_id );
+		$validated_value = $this->validate_option_value_helper( $value, $field_id );
+		return \apply_filters( $this->get_hook_tag( 'validate_option_value' ), $validated_value, $value, $field_id );
 	}
 
 	// endregion
@@ -195,6 +196,23 @@ abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOption
 
 		return $value;
 	}
+
+	// endregion
+
+	// region HELPERS
+
+	/**
+	 * Children classes should define the validation logic for their fields in here.
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
+	 * @param   mixed   $value      Value to validate.
+	 * @param   string  $field_id   The ID of the field that the value belongs to.
+	 *
+	 * @return  mixed
+	 */
+	abstract protected function validate_option_value_helper( $value, string $field_id );
 
 	// endregion
 }

@@ -52,7 +52,7 @@ abstract class AbstractValidatedOptionsPageFunctionality extends AbstractOptions
 	 * @return  mixed
 	 */
 	public function validate_option_value( $value, string $field_id ) {
-		return \apply_filters( $this->get_hook_tag( 'validate_option_value' ), $value, $field_id );
+		return \apply_filters( $this->get_hook_tag( 'validate_option_value' ), $value, $field_id, $value );
 	}
 
 	// endregion
