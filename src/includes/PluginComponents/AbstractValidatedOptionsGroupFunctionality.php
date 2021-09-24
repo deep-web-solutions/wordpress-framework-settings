@@ -33,25 +33,6 @@ abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOption
 
 	// endregion
 
-	// region MAGIC METHODS
-
-	/**
-	 * Runs the return value of the 'validate_option_value' method through a filter if the method is not public.
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @param   string  $name       The name of the method being invoked.
-	 * @param   array   $arguments  The arguments passed on.
-	 */
-	public function __call( string $name, array $arguments ) {
-		if ( 'validate_option_value' === $name ) {
-			return \apply_filters( $this->get_hook_tag( 'validate_option_value' ), $this->validate_option_value( ...$arguments ), ...$arguments );
-		}
-	}
-
-	// endregion
-
 	// region INHERITED METHODS
 
 	/**
@@ -162,7 +143,9 @@ abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOption
 	 *
 	 * @return  mixed
 	 */
-	abstract protected function validate_option_value( $value, string $field_id );
+	public function validate_option_value( $value, string $field_id ) {
+		return \apply_filters( $this->get_hook_tag( 'validate_option_value' ), $value, $value, $field_id );
+	}
 
 	// endregion
 
