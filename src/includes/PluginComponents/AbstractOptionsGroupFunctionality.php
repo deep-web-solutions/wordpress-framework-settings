@@ -46,7 +46,7 @@ abstract class AbstractOptionsGroupFunctionality extends AbstractPluginFunctiona
 	 */
 	public function get_parent(): ?AbstractOptionsPageFunctionality {
 		/* @noinspection PhpIncompatibleReturnTypeInspection */
-		return $this->get_parent_trait();
+		return $this->parent;
 	}
 
 	/**
@@ -85,6 +85,9 @@ abstract class AbstractOptionsGroupFunctionality extends AbstractPluginFunctiona
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
 	 */
 	public function register_hooks( HooksService $hooks_service ): void {
 		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'get_option_value' ), $this, 'maybe_get_option_value', 10, 2, 'internal' );
@@ -94,6 +97,9 @@ abstract class AbstractOptionsGroupFunctionality extends AbstractPluginFunctiona
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
 	 */
 	public function register_settings( SettingsService $settings_service ): void {
 		$this->register_options_group( $settings_service, $this->get_parent() );

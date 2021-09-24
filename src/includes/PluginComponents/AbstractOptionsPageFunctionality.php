@@ -38,6 +38,9 @@ abstract class AbstractOptionsPageFunctionality extends AbstractPluginFunctional
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
 	 */
 	public function register_settings( SettingsService $settings_service ): void {
 		$this->register_options_page( $settings_service );

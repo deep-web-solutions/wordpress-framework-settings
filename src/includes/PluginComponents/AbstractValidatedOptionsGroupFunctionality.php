@@ -37,6 +37,9 @@ abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOption
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
 	 */
 	public function register_hooks( HooksService $hooks_service ): void {
 		parent::register_hooks( $hooks_service );
@@ -48,6 +51,9 @@ abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOption
 	/**
 	 * {@inheritDoc}
 	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
 	 * @noinspection PhpParameterNameChangedDuringInheritanceInspection
 	 */
 	public function get_default_value( string $field_id, string $handler_id = 'default' ) {
@@ -56,6 +62,9 @@ abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOption
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
 	 *
 	 * @noinspection PhpParameterNameChangedDuringInheritanceInspection
 	 */
@@ -66,6 +75,9 @@ abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOption
 	/**
 	 * {@inheritDoc}
 	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
 	 * @noinspection PhpParameterNameChangedDuringInheritanceInspection
 	 */
 	protected function validate_value( $value, string $field_id, string $validation_type, string $handler_id = 'default' ) {
@@ -74,6 +86,9 @@ abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOption
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
 	 *
 	 * @noinspection PhpParameterNameChangedDuringInheritanceInspection
 	 */
