@@ -46,7 +46,7 @@ abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOption
 	 */
 	public function __call( string $name, array $arguments ) {
 		if ( 'validate_option_value' === $name ) {
-			return \apply_filters( $this->get_hook_tag( 'validate_option_value' ), $this->validate_option_value( ...$arguments ) );
+			return \apply_filters( $this->get_hook_tag( 'validate_option_value' ), $this->validate_option_value( ...$arguments ), ...$arguments );
 		}
 	}
 
