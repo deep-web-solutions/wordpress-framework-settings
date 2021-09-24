@@ -30,9 +30,6 @@ abstract class AbstractOptionsGroupFunctionality extends AbstractPluginFunctiona
 		update_option_value as protected update_option_value_trait;
 		update_field_value as private;
 	}
-	use NodeTrait {
-		get_parent as protected get_parent_node_trait;
-	}
 	use SetupHooksTrait;
 
 	// endregion
@@ -49,7 +46,7 @@ abstract class AbstractOptionsGroupFunctionality extends AbstractPluginFunctiona
 	 */
 	public function get_parent(): ?AbstractOptionsPageFunctionality {
 		/* @noinspection PhpIncompatibleReturnTypeInspection */
-		return $this->get_parent_node_trait();
+		return $this->get_parent_trait();
 	}
 
 	/**
