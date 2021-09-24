@@ -110,6 +110,22 @@ abstract class AbstractOptionsGroupFunctionality extends AbstractPluginFunctiona
 	// region METHODS
 
 	/**
+	 * Returns the ID of the options group. Needed for registering the group itself and for performing CRUD operations
+	 * on the options later on.
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
+	 * @return  string
+	 */
+	public function get_group_id(): string {
+		$options_prefix = $this->get_parent()->get_options_name_prefix();
+		$options_group  = $this->get_group_name();
+
+		return Strings::maybe_suffix( $options_prefix, '_' ) . $options_group;
+	}
+
+	/**
 	 * Returns the name of the group for purposes of retrieving options.
 	 *
 	 * @since   1.0.0
@@ -129,22 +145,6 @@ abstract class AbstractOptionsGroupFunctionality extends AbstractPluginFunctiona
 	}
 
 	/**
-	 * Returns the ID of the options group. Needed for registering the group itself and for performing CRUD operations
-	 * on the options later on.
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @return  string
-	 */
-	public function get_group_id(): string {
-		$options_prefix = $this->get_parent()->get_options_name_prefix();
-		$options_group  = $this->get_group_name();
-
-		return Strings::maybe_suffix( $options_prefix, '_' ) . $options_group;
-	}
-
-	/**
 	 * Returns the options group's public title.
 	 *
 	 * @since   1.0.0
@@ -153,6 +153,18 @@ abstract class AbstractOptionsGroupFunctionality extends AbstractPluginFunctiona
 	 * @return  string
 	 */
 	abstract public function get_group_title(): string;
+
+	/**
+	 * Returns the options fields' definition.
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
+	 * @return  array[]
+	 */
+	public function get_group_fields(): array {
+		return \apply_filters( $this->get_hook_tag( 'get_group_fields' ), $this->get_group_fields_helper() );
+	}
 
 	// endregion
 
@@ -247,6 +259,16 @@ abstract class AbstractOptionsGroupFunctionality extends AbstractPluginFunctiona
 	 * @param   AbstractOptionsPageFunctionality    $options_page       Instance of the options page the group belongs to.
 	 */
 	abstract protected function register_options_group( SettingsService $settings_service, AbstractOptionsPageFunctionality $options_page );
+
+	/**
+	 * Child classes should return their fields definitions here.
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
+	 * @return  array[]
+	 */
+	abstract protected function get_group_fields_helper(): array;
 
 	// endregion
 }
