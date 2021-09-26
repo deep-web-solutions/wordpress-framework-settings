@@ -23,12 +23,11 @@ use DeepWebSolutions\Framework\Utilities\Validation\ValidationServiceAwareTrait;
 abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOptionsGroupFunctionality implements ValidationServiceAwareInterface {
 	// region TRAITS
 
-	use InitializeValidationServiceTrait;
-	use ValidationServiceAwareTrait {
-		get_default_value as protected get_default_value_trait;
-		get_supported_options as protected get_supported_options_trait;
-		validate_value as protected validate_value_trait;
-		validate_allowed_value as protected validate_allowed_value_trait;
+	use InitializeValidationServiceTrait , ValidationServiceAwareTrait {
+		ValidationServiceAwareTrait::get_default_value as protected get_default_value_trait;
+		ValidationServiceAwareTrait::get_supported_options as protected get_supported_options_trait;
+		ValidationServiceAwareTrait::validate_value as protected validate_value_trait;
+		ValidationServiceAwareTrait::validate_allowed_value as protected validate_allowed_value_trait;
 	}
 
 	// endregion
