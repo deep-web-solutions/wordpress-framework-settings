@@ -240,12 +240,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deep-web-solutions/wordpress-framework-utilities.git",
-                "reference": "4a1750c851c49f13f70c6c20588b4ccd0f70ac94"
+                "reference": "ab5ad12c2a708d29197633c4e9a6b9269c90f10d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deep-web-solutions/wordpress-framework-utilities/zipball/4a1750c851c49f13f70c6c20588b4ccd0f70ac94",
-                "reference": "4a1750c851c49f13f70c6c20588b4ccd0f70ac94",
+                "url": "https://api.github.com/repos/deep-web-solutions/wordpress-framework-utilities/zipball/ab5ad12c2a708d29197633c4e9a6b9269c90f10d",
+                "reference": "ab5ad12c2a708d29197633c4e9a6b9269c90f10d",
                 "shasum": ""
             },
             "require": {
@@ -314,7 +314,7 @@
                 "issues": "https://github.com/deep-web-solutions/wordpress-framework-utilities/issues",
                 "source": "https://github.com/deep-web-solutions/wordpress-framework-utilities/tree/master"
             },
-            "time": "2021-10-29T22:55:42+00:00"
+            "time": "2021-10-29T23:15:10+00:00"
         },
         {
             "name": "psr/container",
@@ -1661,12 +1661,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deep-web-solutions/wordpress-framework-core.git",
-                "reference": "fc9a993fb8b8f68317907756b4bfed67bd5f842d"
+                "reference": "9f273e948fddcacb546fdc88e9d91628997985ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deep-web-solutions/wordpress-framework-core/zipball/fc9a993fb8b8f68317907756b4bfed67bd5f842d",
-                "reference": "fc9a993fb8b8f68317907756b4bfed67bd5f842d",
+                "url": "https://api.github.com/repos/deep-web-solutions/wordpress-framework-core/zipball/9f273e948fddcacb546fdc88e9d91628997985ec",
+                "reference": "9f273e948fddcacb546fdc88e9d91628997985ec",
                 "shasum": ""
             },
             "require": {
@@ -1735,7 +1735,7 @@
                 "issues": "https://github.com/deep-web-solutions/wordpress-framework-core/issues",
                 "source": "https://github.com/deep-web-solutions/wordpress-framework-core/tree/master"
             },
-            "time": "2021-10-29T22:41:37+00:00"
+            "time": "2021-10-29T23:16:07+00:00"
         },
         {
             "name": "dg/mysql-dump",
