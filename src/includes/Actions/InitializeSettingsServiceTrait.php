@@ -1,11 +1,12 @@
 <?php
 
-namespace DeepWebSolutions\Framework\Settings\Actions\Initializable;
+namespace DeepWebSolutions\Framework\Settings\Actions;
 
 use DeepWebSolutions\Framework\Foundations\Actions\Initializable\InitializableExtensionTrait;
 use DeepWebSolutions\Framework\Foundations\Actions\Initializable\InitializationFailureException;
+use DeepWebSolutions\Framework\Foundations\DependencyInjection\ContainerAwareInterface;
 use DeepWebSolutions\Framework\Foundations\Hierarchy\ChildInterface;
-use DeepWebSolutions\Framework\Foundations\Utilities\DependencyInjection\ContainerAwareInterface;
+use DeepWebSolutions\Framework\Foundations\PluginAwareInterface;
 use DeepWebSolutions\Framework\Settings\SettingsService;
 use DeepWebSolutions\Framework\Settings\SettingsServiceAwareInterface;
 use DeepWebSolutions\Framework\Settings\SettingsServiceAwareTrait;
@@ -20,7 +21,7 @@ use Psr\Container\NotFoundExceptionInterface;
  * @since   1.0.0
  * @version 1.0.0
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
- * @package DeepWebSolutions\WP-Framework\Settings\Actions\Initializable
+ * @package DeepWebSolutions\WP-Framework\Settings\Actions
  */
 trait InitializeSettingsServiceTrait {
 	// region TRAITS
@@ -49,6 +50,9 @@ trait InitializeSettingsServiceTrait {
 			$service = $this->get_parent()->get_settings_service();
 		} elseif ( $this instanceof ContainerAwareInterface ) {
 			$service = $this->get_container()->get( SettingsService::class );
+		} elseif ( $this instanceof PluginAwareInterface && $this->get_plugin() instanceof ContainerAwareInterface ) {
+			/* @noinspection PhpUndefinedMethodInspection */
+			$service = $this->get_plugin()->get_container()->get( SettingsService::class );
 		} else {
 			return new InitializationFailureException( 'Settings service initialization scenario not supported' );
 		}
