@@ -3,7 +3,9 @@
 namespace DeepWebSolutions\Framework\Settings\Adapters;
 
 use DeepWebSolutions\Framework\Foundations\Exceptions\NotSupportedException;
+use DeepWebSolutions\Framework\Helpers\DataTypes\Arrays;
 use DeepWebSolutions\Framework\Helpers\DataTypes\Booleans;
+use DeepWebSolutions\Framework\Helpers\DataTypes\Callables;
 use DeepWebSolutions\Framework\Helpers\DataTypes\Strings;
 use DeepWebSolutions\Framework\Settings\SettingsAdapterInterface;
 
@@ -23,19 +25,11 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	// region CREATE
 
 	/**
-	 * Registers a new WordPress admin page using Meta Box's API.
-	 *
-	 * @param   string|callable     $page_title     The text to be displayed in the title tags of the page when the menu is selected.
-	 * @param   string|callable     $menu_title     The text to be used for the menu.
-	 * @param   string              $menu_slug      The slug name to refer to this menu by. Should be unique for this menu page and only
-	 *                                              include lowercase alphanumeric, dashes, and underscores characters to be compatible
-	 *                                              with sanitize_key().
-	 * @param   string              $capability     The capability required for this menu to be displayed to the user.
-	 * @param   array               $params         Other params required for the adapter to work.
+	 * {@inheritDoc}
 	 *
 	 * @see     https://docs.metabox.io/extensions/mb-settings-page/
-	 *
-	 * @return  bool
+	 * @since   1.0.0
+	 * @version 1.0.0
 	 */
 	public function register_menu_page( $page_title, $menu_title, string $menu_slug, string $capability, array $params ): bool {
 		return \add_filter(
@@ -53,72 +47,42 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	}
 
 	/**
-	 * Registers a new WordPress child admin page using Meta Box's API.
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @param   string              $parent_slug    The slug name for the parent menu (or the file name of a standard WordPress admin page).
-	 * @param   string|callable     $page_title     The text to be displayed in the title tags of the page when the menu is selected.
-	 * @param   string|callable     $menu_title     The text to be used for the menu.
-	 * @param   string              $menu_slug      The slug name to refer to this menu by. Should be unique for this menu page and only
-	 *                                              include lowercase alphanumeric, dashes, and underscores characters to be compatible
-	 *                                              with sanitize_key().
-	 * @param   string              $capability     The capability required for this menu to be displayed to the user.
-	 * @param   array               $params         Other params required for the adapter to work.
+	 * {@inheritDoc}
 	 *
 	 * @see     https://docs.metabox.io/extensions/mb-settings-page/
-	 *
-	 * @return  bool
+	 * @since   1.0.0
+	 * @version 1.0.0
 	 */
 	public function register_submenu_page( string $parent_slug, $page_title, $menu_title, string $menu_slug, string $capability, array $params ): bool {
 		return $this->register_menu_page( $page_title, $menu_title, $menu_slug, $capability, array( 'parent' => $parent_slug ) + $params );
 	}
 
 	/**
-	 * Registers a group of settings to be outputted on an admin-side settings page using Meta Box's API.
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @param   string              $group_id       The ID of the settings group.
-	 * @param   string|callable     $group_title    The title of the settings group.
-	 * @param   array               $fields         The fields to be registered with the group.
-	 * @param   string              $page           The settings page on which the group's fields should be displayed.
-	 * @param   array               $params         Other parameters required for the adapter to work.
+	 * {@inheritDoc}
 	 *
 	 * @see     https://docs.metabox.io/extensions/mb-settings-page/
-	 *
-	 * @return  bool
+	 * @since   1.0.0
+	 * @version 1.0.0
 	 */
-	public function register_options_group( string $group_id, $group_title, array $fields, string $page, array $params ): bool {
+	public function register_options_group( string $group_id, $group_title, $fields, string $page, array $params ): bool {
 		return $this->register_generic_group( $group_id, $group_title, $fields, array( 'settings_pages' => $page ), $params );
 	}
 
 	/**
-	 * Registers a group of settings using Meta Box's API.
+	 * {@inheritDoc}
 	 *
+	 * @see     https://docs.metabox.io/creating-meta-boxes/#using-code
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string              $group_id       The ID of the settings group.
-	 * @param   string|callable     $group_title    The title of the settings group.
-	 * @param   array               $fields         The fields to be registered with the group.
-	 * @param   array               $locations      Where the group should be outputted.
-	 * @param   array               $params         Other parameters required for the adapter to work.
-	 *
-	 * @see     https://docs.metabox.io/extensions/mb-settings-page/
-	 *
-	 * @return  bool
 	 */
-	public function register_generic_group( string $group_id, $group_title, array $fields, array $locations, array $params ): bool {
+	public function register_generic_group( string $group_id, $group_title, $fields, array $locations, array $params ): bool {
 		return \add_filter(
 			'rwmb_meta_boxes',
 			function ( $meta_boxes ) use ( $group_id, $group_title, $fields, $locations, $params ) {
 				$meta_boxes[] = array(
 					'id'     => $group_id,
 					'title'  => Strings::resolve( $group_title ),
-					'fields' => $fields,
+					'fields' => Arrays::validate( Callables::maybe_resolve( $fields ), array() ),
 				) + $locations + $params;
 				return $meta_boxes;
 			}
@@ -126,18 +90,11 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	}
 
 	/**
-	 * Registers a custom field dynamically at a later point than the parent group's creation using Meta Box's API.
+	 * {@inheritDoc}
 	 *
+	 * @see     https://docs.metabox.io/field-settings/
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string              $group_id       The ID of the parent group that the dynamically added field belongs to.
-	 * @param   string              $field_id       The ID of the newly registered field.
-	 * @param   string|callable     $field_title    The title of the newly registered field.
-	 * @param   string              $field_type     The type of custom field being registered.
-	 * @param   array               $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  bool
 	 */
 	public function register_field( string $group_id, string $field_id, $field_title, string $field_type, array $params = array() ): bool {
 		return \add_filter(
@@ -165,16 +122,10 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	// region READ
 
 	/**
-	 * Reads a setting's value from the database using Meta Box's API.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string  $field_id       The ID of the field within the settings to read from the database.
-	 * @param   string  $settings_id    The ID of the settings group to read from the database.
-	 * @param   array   $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  mixed
 	 */
 	public function get_option_value( string $field_id, string $settings_id, array $params ) {
 		$params['object_type'] = ( \is_multisite() && Booleans::maybe_cast( $params['network'] ?? false, false ) )
@@ -184,16 +135,10 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	}
 
 	/**
-	 * Reads a field's value from the database using Meta Box's API.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string  $field_id       The ID of the field to read from the database.
-	 * @param   mixed   $object_id      The ID of the object the data is for.
-	 * @param   array   $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  mixed
 	 */
 	public function get_field_value( string $field_id, $object_id = null, array $params = array() ) {
 		return \rwmb_meta( $field_id, $params, $object_id );
@@ -204,17 +149,10 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	// region UPDATE
 
 	/**
-	 * Updates a setting's value using Meta Box's API.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string  $field_id       The ID of the field within the settings to update.
-	 * @param   mixed   $value          The new value of the setting.
-	 * @param   string  $settings_id    The ID of the settings group to update.
-	 * @param   array   $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  true
 	 */
 	public function update_option_value( string $field_id, $value, string $settings_id, array $params ): bool {
 		$params['object_type'] = ( \is_multisite() && Booleans::maybe_cast( $params['network'] ?? false, false ) )
@@ -224,17 +162,10 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	}
 
 	/**
-	 * Updates a field's value using Meta Box's API.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string  $field_id       The ID of the field to update.
-	 * @param   mixed   $value          The new value of the setting.
-	 * @param   mixed   $object_id      The ID of the object the update is for.
-	 * @param   array   $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  true
 	 */
 	public function update_field_value( string $field_id, $value, $object_id, array $params ): bool {
 		\rwmb_set_meta( $object_id, $field_id, $value, $params );
@@ -246,40 +177,28 @@ class MetaBox_Adapter implements SettingsAdapterInterface {
 	// region DELETE
 
 	/**
-	 * Deletes a setting from the database using Meta Box's API.
-	 *
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string      $field_id       The ID of the settings field to remove from the database. Empty string to delete the whole group.
-	 * @param   string      $settings_id    The ID of the settings group to delete the field from.
-	 * @param   array       $params         Other parameters required for the adapter to work.
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 *
 	 * @throws  NotSupportedException       The Meta Box plugin does NOT implement any functions for deleting values. Use the WP adapter.
-	 *
-	 * @return  void
 	 */
 	public function delete_option_value( string $field_id, string $settings_id, array $params ) {
 		throw new NotSupportedException();
 	}
 
 	/**
-	 * Deletes a field's value from the database using Meta Box's API.
-	 *
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string  $field_id   The ID of the field to delete from the database.
-	 * @param   mixed   $object_id  The ID of the object the deletion is for.
-	 * @param   array   $params     Other parameters required for the adapter to work.
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 *
 	 * @throws  NotSupportedException       The Meta Box plugin does NOT implement any functions for deleting values. Use the WP adapter.
-	 *
-	 * @return  void
 	 */
 	public function delete_field_value( string $field_id, $object_id, array $params ) {
 		throw new NotSupportedException();

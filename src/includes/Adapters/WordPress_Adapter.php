@@ -2,6 +2,7 @@
 
 namespace DeepWebSolutions\Framework\Settings\Adapters;
 
+use DeepWebSolutions\Framework\Helpers\DataTypes\Arrays;
 use DeepWebSolutions\Framework\Helpers\DataTypes\Callables;
 use DeepWebSolutions\Framework\Helpers\DataTypes\Strings;
 use DeepWebSolutions\Framework\Settings\SettingsAdapterInterface;
@@ -20,40 +21,22 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	// region CREATE
 
 	/**
-	 * Registers a new WordPress admin page using WP's own Settings API.
+	 * {@inheritDoc}
 	 *
-	 * @param   string|callable     $page_title     The text to be displayed in the title tags of the page when the menu is selected.
-	 * @param   string|callable     $menu_title     The text to be used for the menu.
-	 * @param   string              $menu_slug      The slug name to refer to this menu by. Should be unique for this menu page and only
-	 *                                              include lowercase alphanumeric, dashes, and underscores characters to be compatible
-	 *                                              with sanitize_key().
-	 * @param   string              $capability     The capability required for this menu to be displayed to the user.
-	 * @param   array               $params         Other params required for the adapter to work.
-	 *
-	 * @return  string  The resulting page's hook_suffix.
+	 * @since   1.0.0
+	 * @version 1.0.0
 	 */
 	public function register_menu_page( $page_title, $menu_title, string $menu_slug, string $capability, array $params = array() ): string {
-		return add_menu_page( Strings::resolve( $page_title ), Strings::resolve( $menu_title ), $capability, $menu_slug, $params['function'] ?? '', $params['icon_url'] ?? '', $params['position'] ?? null );
+		return \add_menu_page( Strings::resolve( $page_title ), Strings::resolve( $menu_title ), $capability, $menu_slug, $params['function'] ?? '', $params['icon_url'] ?? '', $params['position'] ?? null );
 	}
 
 	/**
-	 * Registers a new WordPress child admin page using WP's own Settings API.
-	 *
-	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string              $parent_slug    The slug name for the parent menu (or the file name of a standard WordPress admin page).
-	 * @param   string|callable     $page_title     The text to be displayed in the title tags of the page when the menu is selected.
-	 * @param   string|callable     $menu_title     The text to be used for the menu.
-	 * @param   string              $menu_slug      The slug name to refer to this menu by. Should be unique for this menu page and only
-	 *                                              include lowercase alphanumeric, dashes, and underscores characters to be compatible
-	 *                                              with sanitize_key().
-	 * @param   string              $capability     The capability required for this menu to be displayed to the user.
-	 * @param   array               $params         Other params required for the adapter to work.
-	 *
-	 * @return  string|null     The resulting page's hook_suffix, or null if the user does not have the capability required.
+	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
 	 */
 	public function register_submenu_page( string $parent_slug, $page_title, $menu_title, string $menu_slug, string $capability, array $params = array() ): ?string {
 		$page_title = Strings::resolve( $page_title );
@@ -105,24 +88,17 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	}
 
 	/**
-	 * Registers a group of settings to be outputted on an admin-side settings page using WP's own Settings API.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string              $group_id       The ID of the settings group.
-	 * @param   string|callable     $group_title    The title of the settings group.
-	 * @param   array               $fields         The fields to be registered with the group.
-	 * @param   string              $page           The settings page on which the group's fields should be displayed.
-	 * @param   array               $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  true
 	 */
-	public function register_options_group( string $group_id, $group_title, array $fields, string $page, array $params = array() ): bool {
+	public function register_options_group( string $group_id, $group_title, $fields, string $page, array $params = array() ): bool {
 		\register_setting( $group_id, $group_id, array( 'type' => 'array' ) + ( $params['setting_args'] ?? array() ) );
 		\add_settings_section( $group_id, Strings::resolve( $group_title ), $params['section_callback'] ?? '', $page );
 
-		foreach ( Callables::maybe_resolve( $fields ) as $field ) {
+		$fields = Arrays::validate( Callables::maybe_resolve( $fields ), array() );
+		foreach ( $fields as $field ) {
 			if ( isset( $field['id'], $field['title'], $field['callback'] ) ) {
 				\add_settings_field( $field['id'], Strings::resolve( $field['title'] ), $field['callback'], $page, $group_id, $field['args'] ?? array() );
 			}
@@ -132,20 +108,12 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	}
 
 	/**
-	 * Registers a group of meta fields and a corresponding meta box using WP's API.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string              $group_id       The ID of the settings group.
-	 * @param   string|callable     $group_title    The title of the settings group.
-	 * @param   array               $fields         The fields to be registered with the group.
-	 * @param   array               $locations      Where the group should be outputted.
-	 * @param   array               $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  bool
 	 */
-	public function register_generic_group( string $group_id, $group_title, array $fields, array $locations, array $params = array() ): bool {
+	public function register_generic_group( string $group_id, $group_title, $fields, array $locations, array $params = array() ): bool {
 		\add_meta_box(
 			$group_id,
 			Strings::resolve( $group_title ),
@@ -160,18 +128,10 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	}
 
 	/**
-	 * Registers a custom field dynamically at a later point than the parent group's creation using WP's API.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string              $group_id       The ID of the parent group that the dynamically added field belongs to.
-	 * @param   string              $field_id       The ID of the newly registered field.
-	 * @param   string|callable     $field_title    The title of the newly registered field.
-	 * @param   string              $field_type     The type of custom field being registered.
-	 * @param   array               $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  true
 	 */
 	public function register_field( string $group_id, string $field_id, $field_title, string $field_type, array $params ): bool {
 		if ( isset( \get_registered_settings()[ $group_id ] ) ) {
@@ -187,16 +147,10 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	// region READ
 
 	/**
-	 * Reads a setting's value from the database using WP's API.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string|null     $field_id       The ID of the field within the settings to read from the database.
-	 * @param   string          $settings_id    The ID of the settings group to read from the database.
-	 * @param   array           $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  mixed
 	 */
 	public function get_option_value( ?string $field_id, string $settings_id, array $params = array() ) {
 		$params = \wp_parse_args( $params, array( 'default' => false ) );
@@ -210,20 +164,14 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 			$settings = \get_option( $settings_id, $params['default'] );
 		}
 
-		return \is_null( $field_id ) ? $settings : ( $settings[ $field_id ] ?? $params['default'] );
+		return empty( $field_id ) ? $settings : ( $settings[ $field_id ] ?? $params['default'] );
 	}
 
 	/**
-	 * Reads a field's value from the database using WP's API.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string  $field_id       The ID of the field to read from the database.
-	 * @param   int     $object_id      The ID of the object the data is for.
-	 * @param   array   $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  mixed
 	 */
 	public function get_field_value( string $field_id, $object_id, array $params = array() ) {
 		$params = \wp_parse_args(
@@ -245,22 +193,15 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	// region UPDATE
 
 	/**
-	 * Updates a setting's value using WP's API.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string|null     $field_id       The ID of the field within the settings to update.
-	 * @param   mixed           $value          The new value of the setting.
-	 * @param   string          $settings_id    The ID of the settings group to update.
-	 * @param   array           $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  bool
 	 */
 	public function update_option_value( ?string $field_id, $value, string $settings_id, array $params = array() ): bool {
 		$params = \wp_parse_args( $params, array( 'default' => false ) );
 
-		if ( ! \is_null( $field_id ) ) {
+		if ( ! empty( $field_id ) ) {
 			$options              = $this->get_option_value( null, $settings_id, $params );
 			$options[ $field_id ] = $value;
 			$value                = $options;
@@ -277,19 +218,10 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	}
 
 	/**
-	 * Updates a field's value using WP's API.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string  $field_id       The ID of the field to update.
-	 * @param   mixed   $value          The new value of the setting.
-	 * @param   int     $object_id      The ID of the object the update is for.
-	 * @param   array   $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  int|bool    The new meta field ID if a field with the given key didn't exist and was therefore added,
-	 *                      true on successful update, false on failure or if the value passed to the function is
-	 *                      the same as the one that is already in the database.
 	 */
 	public function update_field_value( string $field_id, $value, $object_id, array $params = array() ) {
 		return \update_metadata( $params['meta_type'] ?? 'post', $object_id, $field_id, $value, $params['prev_value'] ?? '' );
@@ -300,16 +232,10 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	// region DELETE
 
 	/**
-	 * Deletes a setting from the database using WP's API.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string|null $field_id       The ID of the settings field to remove from the database. Empty string to delete the whole group.
-	 * @param   string      $settings_id    The ID of the settings group to delete the field from.
-	 * @param   array       $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  bool
 	 */
 	public function delete_option_value( ?string $field_id, string $settings_id, array $params = array() ): bool {
 		if ( ! empty( $field_id ) ) {
@@ -327,16 +253,10 @@ class WordPress_Adapter implements SettingsAdapterInterface {
 	}
 
 	/**
-	 * Deletes a field's value from the database.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string  $field_id   The ID of the field to delete from the database.
-	 * @param   int     $object_id  The ID of the object the deletion is for.
-	 * @param   array   $params     Other parameters required for the adapter to work.
-	 *
-	 * @return  bool
 	 */
 	public function delete_field_value( string $field_id, $object_id, array $params = array() ): bool {
 		return \delete_metadata( $params['meta_type'] ?? 'post', $object_id, $field_id, $params['meta_value'] ?? '', $params['delete_all'] ?? false );

@@ -2,7 +2,9 @@
 
 namespace DeepWebSolutions\Framework\Settings\Adapters;
 
+use DeepWebSolutions\Framework\Helpers\DataTypes\Arrays;
 use DeepWebSolutions\Framework\Helpers\DataTypes\Booleans;
+use DeepWebSolutions\Framework\Helpers\DataTypes\Callables;
 use DeepWebSolutions\Framework\Helpers\DataTypes\Strings;
 use DeepWebSolutions\Framework\Settings\SettingsAdapterInterface;
 
@@ -22,19 +24,11 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	// region CREATE
 
 	/**
-	 * Registers a new WordPress admin page using ACF's API.
-	 *
-	 * @param   string|callable     $page_title     The text to be displayed in the title tags of the page when the menu is selected.
-	 * @param   string|callable     $menu_title     The text to be used for the menu.
-	 * @param   string              $menu_slug      The slug name to refer to this menu by. Should be unique for this menu page and only
-	 *                                              include lowercase alphanumeric, dashes, and underscores characters to be compatible
-	 *                                              with sanitize_key().
-	 * @param   string              $capability     The capability required for this menu to be displayed to the user.
-	 * @param   array               $params         Other params required for the adapter to work.
+	 * {@inheritDoc}
 	 *
 	 * @see     https://www.advancedcustomfields.com/resources/acf_add_options_page/
-	 *
-	 * @return  array|null  The validated and final page settings or null on failure.
+	 * @since   1.0.0
+	 * @version 1.0.0
 	 */
 	public function register_menu_page( $page_title, $menu_title, string $menu_slug, string $capability, array $params = array() ): ?array {
 		$result = null;
@@ -54,23 +48,11 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	}
 
 	/**
-	 * Registers a new WordPress child admin page using ACF's API.
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @param   string              $parent_slug    The slug name for the parent menu (or the file name of a standard WordPress admin page).
-	 * @param   string|callable     $page_title     The text to be displayed in the title tags of the page when the menu is selected.
-	 * @param   string|callable     $menu_title     The text to be used for the menu.
-	 * @param   string              $menu_slug      The slug name to refer to this menu by. Should be unique for this menu page and only
-	 *                                              include lowercase alphanumeric, dashes, and underscores characters to be compatible
-	 *                                              with sanitize_key().
-	 * @param   string              $capability     The capability required for this menu to be displayed to the user.
-	 * @param   array               $params         Other params required for the adapter to work.
+	 * {@inheritDoc}
 	 *
 	 * @see     https://www.advancedcustomfields.com/resources/acf_add_options_sub_page/
-	 *
-	 * @return  array|null  The validated and final page settings or null on failure.
+	 * @since   1.0.0
+	 * @version 1.0.0
 	 */
 	public function register_submenu_page( string $parent_slug, $page_title, $menu_title, string $menu_slug, string $capability, array $params = array() ): ?array {
 		$result = null;
@@ -83,27 +65,19 @@ class ACF_Adapter implements SettingsAdapterInterface {
 					'menu_slug'  => $menu_slug,
 					'capability' => $capability,
 				) + $params
-			) ?: null; // phpcs:ignore
+			) ?: null;
 		}
 
 		return $result;
 	}
 
 	/**
-	 * Registers a group of settings to be outputted on an admin-side settings page using ACF's API.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string              $group_id       The ID of the settings group.
-	 * @param   string|callable     $group_title    The title of the settings group.
-	 * @param   array               $fields         The fields to be registered with the group.
-	 * @param   string              $page           The settings page on which the group's fields should be displayed.
-	 * @param   array               $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  bool
 	 */
-	public function register_options_group( string $group_id, $group_title, array $fields, string $page, array $params = array() ): bool {
+	public function register_options_group( string $group_id, $group_title, $fields, string $page, array $params = array() ): bool {
 		return $this->register_generic_group(
 			$group_id,
 			$group_title,
@@ -122,51 +96,35 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	}
 
 	/**
-	 * Registers a group of settings using ACF's API.
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @param   string              $group_id       The ID of the settings group.
-	 * @param   string|callable     $group_title    The title of the settings group.
-	 * @param   array               $fields         The fields to be registered with the group.
-	 * @param   array               $locations      Where the group should be outputted.
-	 * @param   array               $params         Other parameters required for the adapter to work.
+	 * {@inheritDoc}
 	 *
 	 * @see     https://www.advancedcustomfields.com/resources/register-fields-via-php/
-	 *
-	 * @return  bool
+	 * @since   1.0.0
+	 * @version 1.0.0
 	 */
-	public function register_generic_group( string $group_id, $group_title, array $fields, array $locations, array $params = array() ): bool {
-		$group_id = Strings::starts_with( $group_id, 'group_' ) ? $group_id : "group_{$group_id}";
+	public function register_generic_group( string $group_id, $group_title, $fields, array $locations, array $params = array() ): bool {
+		$group_id = Strings::maybe_prefix( $group_id, 'group_' );
 		$params   = \wp_parse_args( $params, array( 'location' => array() ) );
 
 		return \acf_add_local_field_group(
 			array(
 				'key'      => $group_id,
 				'title'    => Strings::resolve( $group_title ),
-				'fields'   => $fields,
+				'fields'   => Arrays::validate( Callables::maybe_resolve( $fields ), array() ),
 				'location' => $locations,
 			) + $params
 		);
 	}
 
 	/**
-	 * Registers a custom field dynamically at a later point than the parent group's creation using ACF's API.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string              $group_id       The ID of the parent group that the dynamically added field belongs to.
-	 * @param   string              $field_id       The ID of the newly registered field.
-	 * @param   string|callable     $field_title    The title of the newly registered field.
-	 * @param   string              $field_type     The type of custom field being registered.
-	 * @param   array               $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  true
 	 */
 	public function register_field( string $group_id, string $field_id, $field_title, string $field_type, array $params = array() ): bool {
-		$group_id = Strings::starts_with( $group_id, 'group_' ) || Strings::starts_with( $group_id, 'field_' ) ? $group_id : "group_$group_id";
+		$group_id = Strings::starts_with( $group_id, 'group_' ) || Strings::starts_with( $group_id, 'field_' )
+			? $group_id : "group_$group_id";
 
 		\acf_add_local_field(
 			array(
@@ -186,36 +144,23 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	// region READ
 
 	/**
-	 * Reads a setting's value from the database using ACF's API.
-	 *
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string          $field_id       The ID of the field within the settings to read from the database.
-	 * @param   string|null     $settings_id    NOT USED BY THE ACF ADAPTER.
-	 * @param   array           $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  mixed
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 * @noinspection PhpParameterNameChangedDuringInheritanceInspection
 	 */
-	public function get_option_value( string $field_id, string $settings_id = null, array $params = array() ) {
+	public function get_option_value( string $field_id, string $unused = null, array $params = array() ) {
 		return $this->get_field_value( $field_id, 'options', $params );
 	}
 
 	/**
-	 * Reads a field's value from the database using ACF's API.
-	 *
-	 * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string              $field_id       The ID of the field to read from the database.
-	 * @param   false|string|int    $object_id      The ID of the object the data is for.
-	 * @param   array               $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  mixed
 	 */
 	public function get_field_value( string $field_id, $object_id = false, array $params = array() ) {
 		return \get_field( $field_id, $object_id, Booleans::maybe_cast( $params['format_value'] ?? true, true ) );
@@ -226,39 +171,25 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	// region UPDATE
 
 	/**
-	 * Updates a setting's value using ACF's API.
-	 *
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string          $field_id       The ID of the field within the settings to update.
-	 * @param   mixed           $value          The new value of the setting.
-	 * @param   string|null     $settings_id    NOT USED BY THE ACF ADAPTER.
-	 * @param   array           $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  bool
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 * @noinspection PhpParameterNameChangedDuringInheritanceInspection
 	 */
-	public function update_option_value( string $field_id, $value, string $settings_id = null, array $params = array() ): bool {
+	public function update_option_value( string $field_id, $value, string $unused = null, array $params = array() ): bool {
 		return $this->update_field_value( $field_id, 'options', $value, $params );
 	}
 
 	/**
-	 * Updates a field's value using ACF's API.
-	 *
-	 * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string              $field_id       The ID of the field to update.
-	 * @param   mixed               $value          The new value of the setting.
-	 * @param   false|string|int    $object_id      The ID of the object the update is for.
-	 * @param   array               $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  bool
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function update_field_value( string $field_id, $value, $object_id = false, array $params = array() ): bool {
 		return \update_field( $field_id, $value, $object_id );
@@ -269,36 +200,23 @@ class ACF_Adapter implements SettingsAdapterInterface {
 	// region DELETE
 
 	/**
-	 * Deletes a setting from the database using ACF's API.
-	 *
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string          $field_id       The ID of the settings field to remove from the database.
-	 * @param   string|null     $settings_id    NOT USED BY THE ACF ADAPTER.
-	 * @param   array           $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  bool
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 * @noinspection PhpParameterNameChangedDuringInheritanceInspection
 	 */
-	public function delete_option_value( string $field_id, string $settings_id = null, array $params = array() ): bool {
+	public function delete_option_value( string $field_id, string $unused = null, array $params = array() ): bool {
 		return $this->delete_field_value( $field_id, array( 'post_id' => 'options' ) + $params );
 	}
 
 	/**
-	 * Deletes a field's value from the database using ACF's API.
-	 *
-	 * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string              $field_id       The ID of the field to delete from the database.
-	 * @param   false|string|int    $object_id      The ID of the object the deletion is for.
-	 * @param   array               $params         Other parameters required for the adapter to work.
-	 *
-	 * @return  bool
 	 */
 	public function delete_field_value( string $field_id, $object_id = false, array $params = array() ): bool {
 		return Booleans::maybe_cast( $params['sub_field'] ?? false, false )

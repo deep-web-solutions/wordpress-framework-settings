@@ -60,13 +60,13 @@ interface SettingsAdapterInterface {
 	 *
 	 * @param   string              $group_id       The ID of the settings group.
 	 * @param   string|callable     $group_title    The title of the settings group.
-	 * @param   array               $fields         The fields to be registered with the group.
+	 * @param   array|callable      $fields         The fields to be registered with the group.
 	 * @param   string              $page           The settings page on which the group's fields should be displayed.
 	 * @param   array               $params         Other parameters required for the adapter to work.
 	 *
 	 * @return  mixed
 	 */
-	public function register_options_group( string $group_id, $group_title, array $fields, string $page, array $params );
+	public function register_options_group( string $group_id, $group_title, $fields, string $page, array $params );
 
 	/**
 	 * Registers a group of settings.
@@ -76,13 +76,13 @@ interface SettingsAdapterInterface {
 	 *
 	 * @param   string              $group_id       The ID of the settings group.
 	 * @param   string|callable     $group_title    The title of the settings group.
-	 * @param   array               $fields         The fields to be registered with the group.
+	 * @param   array|callable      $fields         The fields to be registered with the group.
 	 * @param   array               $locations      Where the group should be outputted.
 	 * @param   array               $params         Other parameters required for the adapter to work.
 	 *
 	 * @return  mixed
 	 */
-	public function register_generic_group( string $group_id, $group_title, array $fields, array $locations, array $params );
+	public function register_generic_group( string $group_id, $group_title, $fields, array $locations, array $params );
 
 	/**
 	 * Registers a custom field dynamically at a later point than the parent group's creation.

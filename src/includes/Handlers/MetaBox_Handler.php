@@ -28,7 +28,7 @@ class MetaBox_Handler extends AbstractSettingsHandler {
 	 * @param   string                  $handler_id     The ID of the settings handler.
 	 * @param   MetaBox_Adapter|null    $adapter        Instance of the adapter to the Meta Box settings framework.
 	 */
-	public function __construct( string $handler_id = 'meta-box', ?MetaBox_Adapter $adapter = null ) { // phpcs:ignore
+	public function __construct( string $handler_id = 'meta-box', ?MetaBox_Adapter $adapter = null ) {
 		parent::__construct( $handler_id, $adapter ?? new MetaBox_Adapter() );
 	}
 
@@ -37,21 +37,17 @@ class MetaBox_Handler extends AbstractSettingsHandler {
 	// region INHERITED METHODS
 
 	/**
-	 * Returns the hook on which the Meta Box framework is ready to be used.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string  $context    The settings action that is to be performed.
-	 *
-	 * @return  string
 	 */
 	public function get_action_hook( string $context ): string {
 		switch ( $context ) {
 			case SettingsActionsEnum::REGISTER_OPTIONS_GROUP:
 				return 'mb_settings_page_load';
 			default:
-				return 'plugins_loaded';
+				return 'init';
 		}
 	}
 
