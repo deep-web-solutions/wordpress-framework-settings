@@ -46,6 +46,23 @@ require_once __DIR__ . '/bootstrap-functions.php';
 \define( __NAMESPACE__ . '\DWS_WP_FRAMEWORK_SETTINGS_MIN_PHP', '7.4' );
 \define( __NAMESPACE__ . '\DWS_WP_FRAMEWORK_SETTINGS_MIN_WP', '5.5' );
 
+/**
+ * Registers the language files for the settings' text domain.
+ *
+ * @since   1.0.0
+ * @version 1.0.0
+ */
+\add_action(
+	'init',
+	function() {
+		\load_plugin_textdomain(
+			'dws-wp-framework-settings',
+			false,
+			\dirname( \plugin_basename( __FILE__ ) ) . '/src/languages'
+		);
+	}
+);
+
 // Bootstrap the settings (maybe)!
 if ( dws_wp_framework_check_php_wp_requirements_met( dws_wp_framework_get_settings_min_php(), dws_wp_framework_get_settings_min_wp() ) ) {
 	$dws_settings_init_function = function() {
