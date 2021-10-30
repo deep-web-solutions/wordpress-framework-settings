@@ -240,12 +240,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deep-web-solutions/wordpress-framework-utilities.git",
-                "reference": "2b690149b879ea537bde29e8f3bd7711e683aef8"
+                "reference": "525941465aa1446eec4034ebf6d65d8a00c33694"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deep-web-solutions/wordpress-framework-utilities/zipball/2b690149b879ea537bde29e8f3bd7711e683aef8",
-                "reference": "2b690149b879ea537bde29e8f3bd7711e683aef8",
+                "url": "https://api.github.com/repos/deep-web-solutions/wordpress-framework-utilities/zipball/525941465aa1446eec4034ebf6d65d8a00c33694",
+                "reference": "525941465aa1446eec4034ebf6d65d8a00c33694",
                 "shasum": ""
             },
             "require": {
@@ -313,7 +313,7 @@
                 "issues": "https://github.com/deep-web-solutions/wordpress-framework-utilities/issues",
                 "source": "https://github.com/deep-web-solutions/wordpress-framework-utilities/tree/master"
             },
-            "time": "2021-10-30T12:33:34+00:00"
+            "time": "2021-10-30T20:55:18+00:00"
         },
         {
             "name": "psr/container",
@@ -1660,12 +1660,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deep-web-solutions/wordpress-framework-core.git",
-                "reference": "ce84586b32a8906d3aefabd9954034dd9645e449"
+                "reference": "6cc532aa30226121b74d8975cf81203723c1cd55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deep-web-solutions/wordpress-framework-core/zipball/ce84586b32a8906d3aefabd9954034dd9645e449",
-                "reference": "ce84586b32a8906d3aefabd9954034dd9645e449",
+                "url": "https://api.github.com/repos/deep-web-solutions/wordpress-framework-core/zipball/6cc532aa30226121b74d8975cf81203723c1cd55",
+                "reference": "6cc532aa30226121b74d8975cf81203723c1cd55",
                 "shasum": ""
             },
             "require": {
@@ -1734,7 +1734,7 @@
                 "issues": "https://github.com/deep-web-solutions/wordpress-framework-core/issues",
                 "source": "https://github.com/deep-web-solutions/wordpress-framework-core/tree/master"
             },
-            "time": "2021-10-30T12:35:00+00:00"
+            "time": "2021-10-30T20:56:10+00:00"
         },
         {
             "name": "dg/mysql-dump",
@@ -3351,16 +3351,16 @@
         },
         {
             "name": "lucatume/wp-browser",
-            "version": "3.0.11",
+            "version": "3.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucatume/wp-browser.git",
-                "reference": "c215ae0aff4a4ea58e2172e7014a2a7b0c160e25"
+                "reference": "f6e8d3b38e2b457057262d414a1a69270521dcbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucatume/wp-browser/zipball/c215ae0aff4a4ea58e2172e7014a2a7b0c160e25",
-                "reference": "c215ae0aff4a4ea58e2172e7014a2a7b0c160e25",
+                "url": "https://api.github.com/repos/lucatume/wp-browser/zipball/f6e8d3b38e2b457057262d414a1a69270521dcbd",
+                "reference": "f6e8d3b38e2b457057262d414a1a69270521dcbd",
                 "shasum": ""
             },
             "require": {
@@ -3433,7 +3433,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lucatume/wp-browser/issues",
-                "source": "https://github.com/lucatume/wp-browser/tree/3.0.11"
+                "source": "https://github.com/lucatume/wp-browser/tree/3.0.12"
             },
             "funding": [
                 {
@@ -3441,7 +3441,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-09-20T17:00:45+00:00"
+            "time": "2021-10-30T16:28:12+00:00"
         },
         {
             "name": "mikehaertl/php-shellcommand",
