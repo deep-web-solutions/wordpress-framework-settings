@@ -1,12 +1,12 @@
 <?php
 
-namespace DeepWebSolutions\Framework\Settings\PluginComponents;
+namespace DeepWebSolutions\Framework\Settings\Functionalities;
 
+use DeepWebSolutions\Framework\Core\AbstractPluginFunctionality;
 use DeepWebSolutions\Framework\Core\Actions\Installable\UninstallFailureException;
 use DeepWebSolutions\Framework\Core\Actions\UninstallableInterface;
-use DeepWebSolutions\Framework\Core\Plugin\AbstractPluginFunctionality;
-use DeepWebSolutions\Framework\Settings\Actions\Initializable\InitializeSettingsServiceTrait;
-use DeepWebSolutions\Framework\Settings\Actions\Setupable\SetupSettingsTrait;
+use DeepWebSolutions\Framework\Settings\Actions\InitializeSettingsServiceTrait;
+use DeepWebSolutions\Framework\Settings\Actions\SetupSettingsTrait;
 use DeepWebSolutions\Framework\Settings\SettingsService;
 use DeepWebSolutions\Framework\Settings\SettingsServiceAwareInterface;
 use DeepWebSolutions\Framework\Settings\SettingsServiceRegisterInterface;
@@ -19,7 +19,7 @@ use DeepWebSolutions\Framework\Settings\SettingsServiceRegisterInterface;
  * @since   1.0.0
  * @version 1.0.0
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
- * @package DeepWebSolutions\WP-Framework\Settings\PluginComponents
+ * @package DeepWebSolutions\WP-Framework\Settings\Functionalities
  */
 abstract class AbstractOptionsPageFunctionality extends AbstractPluginFunctionality implements UninstallableInterface, SettingsServiceAwareInterface {
 	// region TRAITS
@@ -57,29 +57,20 @@ abstract class AbstractOptionsPageFunctionality extends AbstractPluginFunctional
 	}
 
 	/**
-	 * Attempts to return the raw value of a given field.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string  $field_id   The ID of the field to retrieve prefixed by the group_name and a forward slash.
-	 *
-	 * @return  mixed|null
 	 */
 	public function get_option_value( string $field_id ) {
 		return \apply_filters( $this->get_hook_tag( 'get_option_value' ), null, $field_id );
 	}
 
 	/**
-	 * Attempts to update the raw value of a given field.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string  $field_id   The ID of the field to update prefixed by the group_name and a forward slash.
-	 * @param   mixed   $value      The value to set the field to.
-	 *
-	 * @return  bool
 	 */
 	public function update_option_value( string $field_id, $value ): bool {
 		return \apply_filters( $this->get_hook_tag( 'update_option_value' ), false, $field_id, $value );
@@ -148,6 +139,7 @@ abstract class AbstractOptionsPageFunctionality extends AbstractPluginFunctional
 	public function uninstall(): ?UninstallFailureException {
 		global $wpdb;
 
+		/* @noinspection SqlNoDataSourceInspection */
 		$result = $wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$wpdb->prepare(
 				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",

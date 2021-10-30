@@ -1,8 +1,8 @@
 <?php
 
-namespace DeepWebSolutions\Framework\Settings\PluginComponents;
+namespace DeepWebSolutions\Framework\Settings\Functionalities;
 
-use DeepWebSolutions\Framework\Utilities\Actions\Initializable\InitializeValidationServiceTrait;
+use DeepWebSolutions\Framework\Utilities\Validation\Actions\InitializeValidationServiceTrait;
 use DeepWebSolutions\Framework\Utilities\Validation\ValidationServiceAwareInterface;
 
 \defined( 'ABSPATH' ) || exit;
@@ -15,7 +15,7 @@ use DeepWebSolutions\Framework\Utilities\Validation\ValidationServiceAwareInterf
  * @since   1.0.0
  * @version 1.0.0
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
- * @package DeepWebSolutions\WP-Framework\Settings\PluginComponents
+ * @package DeepWebSolutions\WP-Framework\Settings\Functionalities
  */
 abstract class AbstractValidatedOptionsPageFunctionality extends AbstractOptionsPageFunctionality implements ValidationServiceAwareInterface {
 	// region TRAITS

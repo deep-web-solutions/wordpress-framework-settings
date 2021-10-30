@@ -1,10 +1,10 @@
 <?php
 
-namespace DeepWebSolutions\Framework\Settings\PluginComponents;
+namespace DeepWebSolutions\Framework\Settings\Functionalities;
 
 use DeepWebSolutions\Framework\Helpers\DataTypes\Strings;
-use DeepWebSolutions\Framework\Utilities\Actions\Initializable\InitializeValidationServiceTrait;
 use DeepWebSolutions\Framework\Utilities\Hooks\HooksService;
+use DeepWebSolutions\Framework\Utilities\Validation\Actions\InitializeValidationServiceTrait;
 use DeepWebSolutions\Framework\Utilities\Validation\ValidationServiceAwareInterface;
 use DeepWebSolutions\Framework\Utilities\Validation\ValidationServiceAwareTrait;
 
@@ -18,7 +18,7 @@ use DeepWebSolutions\Framework\Utilities\Validation\ValidationServiceAwareTrait;
  * @since   1.0.0
  * @version 1.0.0
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
- * @package DeepWebSolutions\WP-Framework\Settings\PluginComponents
+ * @package DeepWebSolutions\WP-Framework\Settings\Functionalities
  */
 abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOptionsGroupFunctionality implements ValidationServiceAwareInterface {
 	// region TRAITS
@@ -43,8 +43,8 @@ abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOption
 	public function register_hooks( HooksService $hooks_service ): void {
 		parent::register_hooks( $hooks_service );
 
-		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'get_validated_option_value' ), $this, 'maybe_get_validated_option_value', 10, 2, 'internal' );
-		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'validate_option_value' ), $this, 'maybe_validate_option_value', 10, 2, 'internal' );
+		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'get_validated_option_value' ), $this, 'maybe_get_validated_option_value', 10, 2, 'direct' );
+		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'validate_option_value' ), $this, 'maybe_validate_option_value', 10, 2, 'direct' );
 	}
 
 	/**

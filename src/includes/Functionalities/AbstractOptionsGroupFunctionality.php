@@ -1,14 +1,13 @@
 <?php
 
-namespace DeepWebSolutions\Framework\Settings\PluginComponents;
+namespace DeepWebSolutions\Framework\Settings\Functionalities;
 
-use DeepWebSolutions\Framework\Core\Plugin\AbstractPluginFunctionality;
-use DeepWebSolutions\Framework\Foundations\Hierarchy\NodeTrait;
+use DeepWebSolutions\Framework\Core\AbstractPluginFunctionality;
 use DeepWebSolutions\Framework\Helpers\DataTypes\Strings;
-use DeepWebSolutions\Framework\Settings\Actions\Initializable\InitializeSettingsServiceTrait;
+use DeepWebSolutions\Framework\Settings\Actions\InitializeSettingsServiceTrait;
 use DeepWebSolutions\Framework\Settings\SettingsService;
 use DeepWebSolutions\Framework\Settings\SettingsServiceRegisterInterface;
-use DeepWebSolutions\Framework\Utilities\Actions\Setupable\SetupHooksTrait;
+use DeepWebSolutions\Framework\Utilities\Hooks\Actions\SetupHooksTrait;
 use DeepWebSolutions\Framework\Utilities\Hooks\HooksService;
 
 \defined( 'ABSPATH' ) || exit;
@@ -19,7 +18,7 @@ use DeepWebSolutions\Framework\Utilities\Hooks\HooksService;
  * @since   1.0.0
  * @version 1.0.0
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
- * @package DeepWebSolutions\WP-Framework\Settings\PluginComponents
+ * @package DeepWebSolutions\WP-Framework\Settings\Functionalities
  */
 abstract class AbstractOptionsGroupFunctionality extends AbstractPluginFunctionality implements SettingsServiceRegisterInterface {
 	// region TRAITS
@@ -37,12 +36,10 @@ abstract class AbstractOptionsGroupFunctionality extends AbstractPluginFunctiona
 	// region INHERITED METHODS
 
 	/**
-	 * Override this method to enforce that the parent must always be an options page functionality.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @return  AbstractOptionsPageFunctionality|null
 	 */
 	public function get_parent(): ?AbstractOptionsPageFunctionality {
 		/* @noinspection PhpIncompatibleReturnTypeInspection */
@@ -50,24 +47,18 @@ abstract class AbstractOptionsGroupFunctionality extends AbstractPluginFunctiona
 	}
 
 	/**
-	 * Retrieves an option's value in raw format.
+	 * {@inheritDoc}
 	 *
 	 * @since   1.0.0
 	 * @version 1.0.0
-	 *
-	 * @param   string  $field_id   The ID of the options field to retrieve.
-	 *
-	 * @return  mixed
 	 */
 	abstract public function get_option_value( string $field_id );
 
 	/**
-	 * Updates an option's value using the handler of choice.
+	 * {@inheritDoc}
 	 *
-	 * @param   string  $field_id   The ID of the options field to update.
-	 * @param   mixed   $value      The value to update the field to.
-	 *
-	 * @return  mixed
+	 * @since   1.0.0
+	 * @version 1.0.0
 	 */
 	abstract public function update_option_value( string $field_id, $value );
 
@@ -90,9 +81,9 @@ abstract class AbstractOptionsGroupFunctionality extends AbstractPluginFunctiona
 	 * @version 1.0.0
 	 */
 	public function register_hooks( HooksService $hooks_service ): void {
-		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'get_option_value' ), $this, 'maybe_get_option_value', 10, 2, 'internal' );
-		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'update_option_value' ), $this, 'maybe_update_option_value', 10, 3, 'internal' );
-		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'delete_option_value' ), $this, 'maybe_delete_option_value', 10, 2, 'internal' );
+		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'get_option_value' ), $this, 'maybe_get_option_value', 10, 2, 'direct' );
+		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'update_option_value' ), $this, 'maybe_update_option_value', 10, 3, 'direct' );
+		$hooks_service->add_filter( $this->get_parent()->get_hook_tag( 'delete_option_value' ), $this, 'maybe_delete_option_value', 10, 2, 'direct' );
 	}
 
 	/**
