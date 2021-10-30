@@ -1,9 +1,11 @@
 {
     "classes": [],
     "functions": [
+        "add_action",
+        "load_plugin_textdomain",
+        "plugin_basename",
         "apply_filters",
         "did_action",
-        "add_action",
         "add_filter",
         "doing_action",
         "wp_parse_args",
