@@ -16,7 +16,7 @@ use DeepWebSolutions\Framework\Settings\SettingsActionsEnum;
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
  * @package DeepWebSolutions\WP-Framework\Settings\Handlers
  */
-class WordPress_Handler extends AbstractSettingsHandler {
+class WordPressSettingsHandler extends AbstractSettingsHandler {
 	// region MAGIC METHODS
 
 	/**

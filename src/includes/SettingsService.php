@@ -6,7 +6,7 @@ use DeepWebSolutions\Framework\Foundations\Logging\LoggingService;
 use DeepWebSolutions\Framework\Foundations\PluginInterface;
 use DeepWebSolutions\Framework\Foundations\Services\AbstractMultiHandlerService;
 use DeepWebSolutions\Framework\Foundations\Services\HandlerInterface;
-use DeepWebSolutions\Framework\Settings\Handlers\WordPress_Handler;
+use DeepWebSolutions\Framework\Settings\Handlers\WordPressSettingsHandler;
 use DeepWebSolutions\Framework\Utilities\Hooks\HooksService;
 use DeepWebSolutions\Framework\Utilities\Hooks\HooksServiceAwareInterface;
 use DeepWebSolutions\Framework\Utilities\Hooks\HooksServiceAwareTrait;
@@ -205,7 +205,7 @@ class SettingsService extends AbstractMultiHandlerService implements SettingsSer
 	 * @version 1.0.0
 	 */
 	protected function get_default_handlers_classes(): array {
-		return array( WordPress_Handler::class );
+		return array( WordPressSettingsHandler::class );
 	}
 
 	/**
