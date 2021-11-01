@@ -193,19 +193,19 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 			if ( \doing_action( $hook ) && \is_null( $this->is_run( $action ) ) ) {
 				switch ( $action ) {
 					case SettingsActionsEnum::REGISTER_MENU_PAGE:
-						\array_walk( $this->menu_pages, array( $this, 'array_walk_register_menu_page' ) );
+						\array_walk( $this->menu_pages, array( $this, 'array_walk_register_action' ), SettingsActionsEnum::REGISTER_MENU_PAGE );
 						break;
 					case SettingsActionsEnum::REGISTER_SUBMENU_PAGE:
-						\array_walk( $this->submenu_pages, array( $this, 'array_walk_register_submenu_page' ) );
+						\array_walk( $this->submenu_pages, array( $this, 'array_walk_register_action' ), SettingsActionsEnum::REGISTER_SUBMENU_PAGE );
 						break;
 					case SettingsActionsEnum::REGISTER_OPTIONS_GROUP:
-						\array_walk( $this->options_groups, array( $this, 'array_walk_register_options_group' ) );
+						\array_walk( $this->options_groups, array( $this, 'array_walk_register_action' ), SettingsActionsEnum::REGISTER_OPTIONS_GROUP );
 						break;
 					case SettingsActionsEnum::REGISTER_GENERIC_GROUP:
-						\array_walk( $this->generic_groups, array( $this, 'array_walk_register_generic_group' ) );
+						\array_walk( $this->generic_groups, array( $this, 'array_walk_register_action' ), SettingsActionsEnum::REGISTER_GENERIC_GROUP );
 						break;
 					case SettingsActionsEnum::REGISTER_FIELD:
-						\array_walk( $this->fields, array( $this, 'array_walk_register_field' ) );
+						\array_walk( $this->fields, array( $this, 'array_walk_register_action' ), SettingsActionsEnum::REGISTER_FIELD );
 						break;
 					default:
 						continue 2;
@@ -259,7 +259,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 */
 	public function register_menu_page( $page_title, $menu_title, string $menu_slug, string $capability, array $params ) {
 		if ( $this->is_run( SettingsActionsEnum::REGISTER_MENU_PAGE ) || \did_action( $this->get_action_hook( SettingsActionsEnum::REGISTER_MENU_PAGE ) ) ) {
-			return $this->array_walk_register_action( SettingsActionsEnum::REGISTER_MENU_PAGE, \get_defined_vars() );
+			return $this->array_walk_register_action( \get_defined_vars(), -1, SettingsActionsEnum::REGISTER_MENU_PAGE );
 		} else {
 			$this->menu_pages[] = \get_defined_vars();
 		}
@@ -275,7 +275,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 */
 	public function register_submenu_page( string $parent_slug, $page_title, $menu_title, string $menu_slug, string $capability, array $params ) {
 		if ( $this->is_run( SettingsActionsEnum::REGISTER_SUBMENU_PAGE ) || \did_action( $this->get_action_hook( SettingsActionsEnum::REGISTER_SUBMENU_PAGE ) ) ) {
-			return $this->array_walk_register_action( SettingsActionsEnum::REGISTER_SUBMENU_PAGE, \get_defined_vars() );
+			return $this->array_walk_register_action( \get_defined_vars(), -1, SettingsActionsEnum::REGISTER_SUBMENU_PAGE );
 		} else {
 			$this->submenu_pages[] = \get_defined_vars();
 		}
@@ -291,7 +291,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 */
 	public function register_options_group( string $group_id, $group_title, $fields, string $page, array $params ) {
 		if ( $this->is_run( SettingsActionsEnum::REGISTER_OPTIONS_GROUP ) || \did_action( $this->get_action_hook( SettingsActionsEnum::REGISTER_OPTIONS_GROUP ) ) ) {
-			return $this->array_walk_register_action( SettingsActionsEnum::REGISTER_OPTIONS_GROUP, \get_defined_vars() );
+			return $this->array_walk_register_action( \get_defined_vars(), -1, SettingsActionsEnum::REGISTER_OPTIONS_GROUP );
 		} else {
 			$this->options_groups[] = \get_defined_vars();
 		}
@@ -307,7 +307,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 */
 	public function register_generic_group( string $group_id, $group_title, $fields, array $locations, array $params ) {
 		if ( $this->is_run( SettingsActionsEnum::REGISTER_GENERIC_GROUP ) || \did_action( $this->get_action_hook( SettingsActionsEnum::REGISTER_GENERIC_GROUP ) ) ) {
-			return $this->array_walk_register_action( SettingsActionsEnum::REGISTER_GENERIC_GROUP, \get_defined_vars() );
+			return $this->array_walk_register_action( \get_defined_vars(), -1, SettingsActionsEnum::REGISTER_GENERIC_GROUP );
 		} else {
 			$this->generic_groups[] = \get_defined_vars();
 		}
@@ -323,7 +323,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 */
 	public function register_field( string $group_id, string $field_id, $field_title, string $field_type, array $params ) {
 		if ( $this->is_run( SettingsActionsEnum::REGISTER_FIELD ) || \did_action( $this->get_action_hook( SettingsActionsEnum::REGISTER_FIELD ) ) ) {
-			return $this->array_walk_register_action( SettingsActionsEnum::REGISTER_FIELD, \get_defined_vars() );
+			return $this->array_walk_register_action( \get_defined_vars(), -1, SettingsActionsEnum::REGISTER_FIELD );
 		} else {
 			$this->fields[] = \get_defined_vars();
 		}
@@ -401,12 +401,15 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string  $action     Settings action.
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 *
 	 * @param   array   $args       Settings action arguments.
+	 * @param   int     $key        The key of the entry in the array.
+	 * @param   string  $action     Settings action.
 	 *
 	 * @return  mixed|null
 	 */
-	protected function array_walk_register_action( string $action, array $args ) {
+	protected function array_walk_register_action( array $args, int $key, string $action ) {
 		return \call_user_func_array( array( $this->adapter, $action ), $args );
 	}
 
