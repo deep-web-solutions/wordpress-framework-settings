@@ -55,7 +55,7 @@ abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOption
 	 *
 	 * @noinspection PhpParameterNameChangedDuringInheritanceInspection
 	 */
-	public function get_default_value( string $field_id, string $handler_id = 'default' ) {
+	public function get_default_value( string $field_id, string $handler_id = 'settings' ) {
 		return $this->get_default_value_trait( $this->generate_validation_key( $field_id ), $handler_id );
 	}
 
@@ -67,7 +67,7 @@ abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOption
 	 *
 	 * @noinspection PhpParameterNameChangedDuringInheritanceInspection
 	 */
-	public function get_supported_options( string $field_id, string $handler_id = 'default' ) {
+	public function get_supported_options( string $field_id, string $handler_id = 'settings' ) {
 		return $this->get_supported_options_trait( $this->generate_validation_key( $field_id ), $handler_id );
 	}
 
@@ -79,7 +79,7 @@ abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOption
 	 *
 	 * @noinspection PhpParameterNameChangedDuringInheritanceInspection
 	 */
-	protected function validate_value( $value, string $field_id, string $validation_type, string $handler_id = 'default' ) {
+	protected function validate_value( $value, string $field_id, string $validation_type, string $handler_id = 'settings' ) {
 		return $this->validate_value_trait( $value, $this->generate_validation_key( $field_id ), $validation_type, $handler_id );
 	}
 
@@ -91,7 +91,7 @@ abstract class AbstractValidatedOptionsGroupFunctionality extends AbstractOption
 	 *
 	 * @noinspection PhpParameterNameChangedDuringInheritanceInspection
 	 */
-	protected function validate_allowed_value( $value, string $field_id, string $options_key, string $validation_type, string $handler_id = 'default' ) {
+	protected function validate_allowed_value( $value, string $field_id, string $options_key, string $validation_type, string $handler_id = 'settings' ) {
 		return $this->validate_allowed_value_trait( $value, $this->generate_validation_key( $field_id ), $this->generate_validation_key( $options_key ), $validation_type, $handler_id );
 	}
 
