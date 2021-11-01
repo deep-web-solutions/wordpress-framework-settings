@@ -410,7 +410,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @return  mixed|null
 	 */
 	protected function array_walk_register_action( array $args, int $key, string $action ) {
-		return \call_user_func_array( array( $this->adapter, $action ), $args );
+		return \call_user_func_array( array( $this->adapter, $action ), \array_values( $args ) );
 	}
 
 	// endregion
