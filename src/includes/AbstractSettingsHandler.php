@@ -289,7 +289,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 */
-	public function register_options_group( string $group_id, $group_title, array $fields, string $page, array $params ) {
+	public function register_options_group( string $group_id, $group_title, $fields, string $page, array $params ) {
 		if ( $this->is_run( SettingsActionsEnum::REGISTER_OPTIONS_GROUP ) || \did_action( $this->get_action_hook( SettingsActionsEnum::REGISTER_OPTIONS_GROUP ) ) ) {
 			return $this->array_walk_register_action( SettingsActionsEnum::REGISTER_OPTIONS_GROUP, \get_defined_vars() );
 		} else {
@@ -305,7 +305,7 @@ abstract class AbstractSettingsHandler extends AbstractHandler implements Settin
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 */
-	public function register_generic_group( string $group_id, $group_title, array $fields, array $locations, array $params ) {
+	public function register_generic_group( string $group_id, $group_title, $fields, array $locations, array $params ) {
 		if ( $this->is_run( SettingsActionsEnum::REGISTER_GENERIC_GROUP ) || \did_action( $this->get_action_hook( SettingsActionsEnum::REGISTER_GENERIC_GROUP ) ) ) {
 			return $this->array_walk_register_action( SettingsActionsEnum::REGISTER_GENERIC_GROUP, \get_defined_vars() );
 		} else {
