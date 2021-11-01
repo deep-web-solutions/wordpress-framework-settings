@@ -110,7 +110,7 @@ class SettingsService extends AbstractMultiHandlerService implements SettingsSer
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 */
-	public function register_options_group( string $group_id, $group_title, array $fields, string $page, array $params = array(), string $handler_id = 'wordpress' ) { // phpcs:ignore WordPress.WP.CapitalPDangit.Misspelled
+	public function register_options_group( string $group_id, $group_title, $fields, string $page, array $params = array(), string $handler_id = 'wordpress' ) { // phpcs:ignore WordPress.WP.CapitalPDangit.Misspelled
 		return $this->get_handler( $handler_id )->register_options_group( $group_id, $group_title, $fields, $page, $params );
 	}
 
@@ -120,7 +120,7 @@ class SettingsService extends AbstractMultiHandlerService implements SettingsSer
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 */
-	public function register_generic_group( string $group_id, $group_title, array $fields, array $locations, array $params = array(), string $handler_id = 'wordpress' ) { // phpcs:ignore WordPress.WP.CapitalPDangit.Misspelled
+	public function register_generic_group( string $group_id, $group_title, $fields, array $locations, array $params = array(), string $handler_id = 'wordpress' ) { // phpcs:ignore WordPress.WP.CapitalPDangit.Misspelled
 		return $this->get_handler( $handler_id )->register_generic_group( $group_id, $group_title, $fields, $locations, $params );
 	}
 
