@@ -17,7 +17,7 @@ use DeepWebSolutions\Framework\Settings\SettingsAdapterInterface;
  * @author  Antonius Hegyes <a.hegyes@deep-web-solutions.com>
  * @package DeepWebSolutions\WP-Framework\Settings\Adapters
  */
-class WordPress_Adapter implements SettingsAdapterInterface {
+class WordPressSettingsAdapter implements SettingsAdapterInterface {
 	// region CREATE
 
 	/**

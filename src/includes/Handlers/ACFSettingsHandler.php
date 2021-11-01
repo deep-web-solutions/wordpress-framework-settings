@@ -3,7 +3,7 @@
 namespace DeepWebSolutions\Framework\Settings\Handlers;
 
 use DeepWebSolutions\Framework\Settings\AbstractSettingsHandler;
-use DeepWebSolutions\Framework\Settings\Adapters\ACF_Adapter;
+use DeepWebSolutions\Framework\Settings\Adapters\ACFSettingsAdapter;
 use DeepWebSolutions\Framework\Settings\SettingsActionsEnum;
 
 \defined( 'ABSPATH' ) || exit;
@@ -25,11 +25,11 @@ class ACFSettingsHandler extends AbstractSettingsHandler {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string              $handler_id     The ID of the settings handler.
-	 * @param   ACF_Adapter|null    $adapter        Instance of the adapter to the ACF settings framework.
+	 * @param   string                      $handler_id     The ID of the settings handler.
+	 * @param   ACFSettingsAdapter|null     $adapter        Instance of the adapter to the ACF settings framework.
 	 */
-	public function __construct( string $handler_id = 'acf', ?ACF_Adapter $adapter = null ) {
-		parent::__construct( $handler_id, $adapter ?? new ACF_Adapter() );
+	public function __construct( string $handler_id = 'acf', ?ACFSettingsAdapter $adapter = null ) {
+		parent::__construct( $handler_id, $adapter ?? new ACFSettingsAdapter() );
 	}
 
 	// endregion

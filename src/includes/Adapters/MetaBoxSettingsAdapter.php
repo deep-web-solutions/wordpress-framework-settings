@@ -21,7 +21,7 @@ use DeepWebSolutions\Framework\Settings\SettingsAdapterInterface;
  *
  * @see     https://metabox.io/
  */
-class MetaBox_Adapter implements SettingsAdapterInterface {
+class MetaBoxSettingsAdapter implements SettingsAdapterInterface {
 	// region CREATE
 
 	/**

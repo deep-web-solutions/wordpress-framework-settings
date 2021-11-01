@@ -3,7 +3,7 @@
 namespace DeepWebSolutions\Framework\Settings\Handlers;
 
 use DeepWebSolutions\Framework\Settings\AbstractSettingsHandler;
-use DeepWebSolutions\Framework\Settings\Adapters\WordPress_Adapter;
+use DeepWebSolutions\Framework\Settings\Adapters\WordPressSettingsAdapter;
 use DeepWebSolutions\Framework\Settings\SettingsActionsEnum;
 
 \defined( 'ABSPATH' ) || exit;
@@ -25,11 +25,11 @@ class WordPressSettingsHandler extends AbstractSettingsHandler {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @param   string                      $handler_id     The ID of the settings handler.
-	 * @param   WordPress_Adapter|null      $adapter        Instance of the adapter to the WordPress Settings API.
+	 * @param   string                          $handler_id     The ID of the settings handler.
+	 * @param   WordPressSettingsAdapter|null   $adapter        Instance of the adapter to the WordPress Settings API.
 	 */
-	public function __construct( string $handler_id = 'wordpress', ?WordPress_Adapter $adapter = null ) { // phpcs:ignore WordPress.WP.CapitalPDangit.Misspelled
-		parent::__construct( $handler_id, $adapter ?? new WordPress_Adapter() );
+	public function __construct( string $handler_id = 'wordpress', ?WordPressSettingsAdapter $adapter = null ) { // phpcs:ignore WordPress.WP.CapitalPDangit.Misspelled
+		parent::__construct( $handler_id, $adapter ?? new WordPressSettingsAdapter() );
 	}
 
 	// endregion

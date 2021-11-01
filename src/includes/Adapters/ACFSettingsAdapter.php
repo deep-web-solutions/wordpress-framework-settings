@@ -20,7 +20,7 @@ use DeepWebSolutions\Framework\Settings\SettingsAdapterInterface;
  *
  * @see     https://www.advancedcustomfields.com/
  */
-class ACF_Adapter implements SettingsAdapterInterface {
+class ACFSettingsAdapter implements SettingsAdapterInterface {
 	// region CREATE
 
 	/**
