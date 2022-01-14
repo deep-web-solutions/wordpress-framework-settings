@@ -69,7 +69,7 @@ if ( dws_wp_framework_check_php_wp_requirements_met( dws_wp_framework_get_settin
 		\define(
 			__NAMESPACE__ . '\DWS_WP_FRAMEWORK_SETTINGS_INIT',
 			\apply_filters(
-				'dws_wp_framework_settings_init_status',
+				'dws_wp_framework/settings/init_status',
 				dws_wp_framework_get_utilities_init_status(),
 				__NAMESPACE__
 			)
@@ -87,7 +87,7 @@ if ( dws_wp_framework_check_php_wp_requirements_met( dws_wp_framework_get_settin
 
 	// Stop the foundations from initializing if the settings module failed.
 	\add_filter(
-		'dws_wp_framework_foundations_init_status',
+		'dws_wp_framework/foundations/init_status',
 		function( bool $init, string $namespace ) {
 			return ( __NAMESPACE__ === $namespace ) ? false : $init;
 		},
