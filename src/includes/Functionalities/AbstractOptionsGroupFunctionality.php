@@ -126,12 +126,12 @@ abstract class AbstractOptionsGroupFunctionality extends AbstractPluginFunctiona
 	 */
 	public function get_group_name(): string {
 		return Strings::replace_placeholders(
+			self::get_safe_name(),
 			array(
 				'_settings' => '',
 				'_options'  => '',
 				'_'         => '-',
-			),
-			self::get_safe_name()
+			)
 		);
 	}
 
