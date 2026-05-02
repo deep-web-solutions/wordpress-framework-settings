@@ -1,6 +1,7 @@
 {
   "name": "deep-web-solutions/wp-framework-settings",
   "type": "library",
+  "abandoned": "ahegyes/wp-framework-core",
 
   "description": "A set of related classes to create option pages and custom fields in WordPress.",
   "keywords": ["wordpress", "framework", "Deep Web Solutions", "settings"],
